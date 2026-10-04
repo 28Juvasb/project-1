@@ -1,6 +1,6 @@
 # 01_acquire.R -- download GEO series, platform annotations and sample manifests.
 # Raw files in data/raw/ are NEVER overwritten (existing files are skipped).
-# Stage 1a: download + manifests.  Stage 1b (verification) is appended below once
+# Stage 1a: download + manifests (8 series incl. GSE76894, added for protocol v1.1).  Stage 1b (verification) is appended below once
 # the metadata field names have been inspected.
 
 set.seed(42)
@@ -14,7 +14,11 @@ con <- file(here("logs", sprintf("%s_%s.log", script_name, ts)), open = "wt")
 sink(con, split = TRUE); sink(con, type = "message")
 on.exit({ sink(type = "message"); sink(); close(con) }, add = TRUE)
 
-series <- c("GSE41762", "GSE38642", "GSE20966", "GSE81608", "GSE27951", "GSE16415", "GSE71416")
+series <- c("GSE41762", "GSE38642", "GSE20966", "GSE81608", "GSE27951", "GSE16415", "GSE71416", "GSE76894")
+# GSE76894 (protocol v1.1, primary islet external validation): only the CEL archive is fetched.
+# The submitters' GSE76894_DifferentialExpression-T2DvsND.txt.gz (an expression-derived result on a
+# validation set) is deliberately NOT downloaded (CLAUDE.md rule 2).
+supp_filter <- c(GSE76894 = "_RAW\\.tar$")
 platforms <- c("GPL6244", "GPL570", "GPL1352", "GPL2986")
 raw <- here("data", "raw"); dir.create(raw, showWarnings = FALSE, recursive = TRUE)
 dir.create(here("manifest"), showWarnings = FALSE)
@@ -48,7 +52,8 @@ for (g in series) {
   have <- list.files(d, pattern = "RAW|\\.txt\\.gz$|\\.csv", full.names = FALSE)
   have <- setdiff(have, grep("series_matrix", have, value = TRUE))
   if (length(have) == 0) {
-    r <- tryCatch(getGEOSuppFiles(g, baseDir = raw, makeDirectory = TRUE, fetch_files = TRUE),
+    flt <- if (g %in% names(supp_filter)) supp_filter[[g]] else NULL
+    r <- tryCatch(getGEOSuppFiles(g, baseDir = raw, makeDirectory = TRUE, fetch_files = TRUE, filter_regex = flt),
                   error = function(e) { cat("  SUPP DOWNLOAD FAILED:", conditionMessage(e), "\n"); NULL })
     if (!is.null(r)) cat("  supplementary:", paste(basename(rownames(r)), collapse = ", "), "\n")
   } else cat("  supplementary already present:", paste(have, collapse = ", "), "\n")
@@ -113,12 +118,18 @@ x[`clinical status:ch1` == "IGT", group_note := "IGT (impaired glucose tolerance
 # DECISION (PI/user, 2026-10-03): adipose discovery cohort = GSE27951 GPL570 with IGT samples EXCLUDED
 # -> 11 ND vs 12 T2D, n = 23 (plan originally expected 11 ND / 10 T2D, n = 21; observed 11 NGT / 10 IGT / 12 DM = 33).
 # Group is defined by the clinical-status field, not the title. Title/field discordant samples
-# (GSM691135, GSM691139, GSM691140): rule = clinical-status field; awaiting PI confirmation.
+# (GSM691135, GSM691139, GSM691140): rule = clinical-status field; clinical-status field final
+# (protocol v1.0, project-lead decision 2026-10-05).
 x[, excluded_reason := NA_character_]
 x[`clinical status:ch1` == "IGT", excluded_reason := "IGT, user decision 2026-10-03"]
 x[title_status_discordant == TRUE, group_note := paste0(ifelse(is.na(group_note), "", paste0(group_note, "; ")),
    "title says ", status_from_title, " but characteristics say ", `clinical status:ch1`, " (characteristics field used)")]
 m$GSE27951_GPL570 <- x
+# GSE76894 (v1.1 validation; metadata only -- no expression is read here):
+# field `diabetes status (nd (non-diabetic), t2d (type 2 diabetic)):ch1`, observed values exactly "ND" / "T2D".
+x <- rd("GSE76894_samples.csv")
+x[, group := classify(`diabetes status (nd (non-diabetic), t2d (type 2 diabetic)):ch1`, "ND", "T2D")]
+m$GSE76894 <- x
 x2 <- rd("GSE27951_samples_GPL13273.csv"); x2[, group := NA_character_]
 x2[, group_note := "non-human (NMRI mouse) cell-culture subseries on GPL13273; no ND/T2D concept; not classified"]
 wr(x2, "GSE27951_samples_GPL13273.csv")
@@ -144,10 +155,11 @@ fwrite(unique(rbind(old, exn[, lapply(.SD, as.character)])), exf)
 # ---- expected counts (from protocol; DO NOT edit to fit the data)
 # GSE27951_GPL570 expectation = 11 ND / 12 T2D / n=23 after excluding the 10 IGT (user decision 2026-10-03; was 11/10/21).
 expected <- data.table(
-  dataset = c("GSE41762", "GSE38642", "GSE20966", "GSE27951_GPL570", "GSE16415", "GSE71416", "GSE81608"),
-  exp_ND = c(57, 54, 10, 11, 5, 6, 651), exp_T2D = c(20, 9, 10, 12, 5, 14, 949),
-  exp_n = c(77, 63, 20, 23, 10, 20, 1600),
-  exp_platform = c("GPL6244", "GPL6244", "GPL1352", "GPL570", "GPL2986", "GPL570", "GPL16791"))
+  dataset = c("GSE41762", "GSE38642", "GSE20966", "GSE27951_GPL570", "GSE16415", "GSE71416", "GSE81608", "GSE76894"),
+  exp_ND = c(57, 54, 10, 11, 5, 6, 651, 84), exp_T2D = c(20, 9, 10, 12, 5, 14, 949, 19),
+  exp_n = c(77, 63, 20, 23, 10, 20, 1600, 103),
+  exp_platform = c("GPL6244", "GPL6244", "GPL1352", "GPL570", "GPL2986", "GPL570", "GPL16791", "GPL570"))
+# GSE76894 expectation from protocol v1.1 section 1 (84 ND / 19 T2D, n=103, GPL570).
 # GSE81608 expected platform is not given in the protocol ("scRNA-seq"); observed platform is recorded but not asserted.
 chk <- expected[, {
   d <- m[[dataset]]; if ("excluded_reason" %in% names(d)) d <- d[is.na(excluded_reason)]  # excluded samples not counted
@@ -182,11 +194,12 @@ writeLines(c(
  "# Manifest notes (written by scripts/01_acquire.R)", "",
  "- `group` column: derived only from the exact GEO metadata strings listed in scripts/01_acquire.R; NA = could not be classified ND/T2D.",
  "- GSE41762: donors 1-48 and 49-80 were normalised separately by the submitters (per project notes). `submitter_norm_batch` is parsed from the title `ID<n>`; verify against the GEO series description before relying on it.",
- "- GSE38642: shares donors with GSE41762 (overlap to be quantified in Task 2). Not independent validation.",
+ "- GSE38642: retired in protocol v1.1: all 63 CELs byte-identical to GSE41762 arrays (Task 2).",
  "- GSE71416: GEO metadata has no disease characteristic; group is read from sample titles (`OAT_Obese and diabetic` / `OAT_Obese non-diabetic`).",
- "- GSE27951: SuperSeries. GPL570 subseries = 33 human adipose samples with clinical status NGT/IGT/DM (11/10/12); GPL13273 subseries = 12 mouse cell-culture samples (not part of this study). The 10 IGT samples are EXCLUDED (excluded_reason = 'IGT, user decision 2026-10-03'; also in logs/excluded_samples.csv): discovery cohort = 11 ND vs 12 T2D, n=23. Group defined by clinical-status field. Title/field discordant samples GSM691135, GSM691139, GSM691140: rule: clinical-status field; awaiting PI confirmation. See count_verification.csv.",
+ "- GSE27951: SuperSeries. GPL570 subseries = 33 human adipose samples with clinical status NGT/IGT/DM (11/10/12); GPL13273 subseries = 12 mouse cell-culture samples (not part of this study). The 10 IGT samples are EXCLUDED (excluded_reason = 'IGT, user decision 2026-10-03'; also in logs/excluded_samples.csv): discovery cohort = 11 ND vs 12 T2D, n=23. Group defined by clinical-status field. Title/field discordant samples GSM691135, GSM691139, GSM691140: rule: clinical-status field; clinical-status field final (protocol v1.0, project-lead decision 2026-10-05). See count_verification.csv.",
  "- GSE81608: single-cell; manifest has 1600 cells; rpkm matrix columns `Sample_<n>` map to title `Pancreatic islet cell sample <n>`.",
- "- GSE16415: raw archive contains per-sample .txt.gz files (not CEL).") , here("manifest", "NOTES.md"))
+ "- GSE16415: raw archive contains per-sample .txt.gz files (not CEL).",
+ "- GSE76894 (protocol v1.1, primary islet external validation; IMIDIA organ donors, GPL570): group from `diabetes status (nd (non-diabetic), t2d (type 2 diabetic)):ch1` (ND / T2D). VALIDATION SET: metadata only; expression not read. Only GSE76894_RAW.tar is downloaded; the submitters' differential-expression supplement is intentionally not fetched. Donor independence vs GSE41762/GSE20966: manifest/GSE76894_donor_overlap.csv (scripts/02_donor_overlap.R).") , here("manifest", "NOTES.md"))
 
 # ---- file verification + files.csv
 files <- list.files(raw, recursive = TRUE, full.names = TRUE)
@@ -207,11 +220,19 @@ chk_file <- function(f) {
 fl <- rbindlist(lapply(files, chk_file))
 wr(fl, "files.csv"); cat("\n---- files.csv ----\n"); print(as.data.frame(fl[, .(filename, size_bytes, opens_nonempty, check)]))
 if (any(!fl$opens_nonempty)) problems <- c(problems, "Unreadable/empty raw files present")
-need <- c(paste0(c("GSE41762", "GSE38642", "GSE20966", "GSE27951", "GSE16415", "GSE71416"), "/", c("GSE41762", "GSE38642", "GSE20966", "GSE27951", "GSE16415", "GSE71416"), "_RAW.tar"),
+raw_tar_gse <- c("GSE41762", "GSE38642", "GSE20966", "GSE27951", "GSE16415", "GSE71416", "GSE76894")
+need <- c(paste0(raw_tar_gse, "/", raw_tar_gse, "_RAW.tar"),
           "GSE81608/GSE81608_human_islets_rpkm.txt.gz", paste0(platforms, "/", platforms, ".soft.gz"))
 miss <- setdiff(need, fl$filename); if (length(miss)) problems <- c(problems, paste("Missing expected files:", paste(miss, collapse = ", ")))
 sm <- fl[grepl("series_matrix", filename)]; cat("series matrix files:", nrow(sm), "\n")
-if (nrow(sm) != 8) problems <- c(problems, sprintf("expected 8 series_matrix files (7 series; GSE27951 has 2), found %d", nrow(sm)))
+if (nrow(sm) != 9) problems <- c(problems, sprintf("expected 9 series_matrix files (8 series; GSE27951 has 2), found %d", nrow(sm)))
+# GSE76894 RAW.tar must hold one CEL per manifest sample (names only; CEL contents are not read here)
+t76 <- untar(here("data", "raw", "GSE76894", "GSE76894_RAW.tar"), list = TRUE)
+cel76 <- sub("_.*", "", grep("\\.CEL(\\.gz)?$", t76, ignore.case = TRUE, value = TRUE))
+cat(sprintf("GSE76894 RAW.tar: %d members, %d CEL; CEL GSMs matching manifest: %d / %d\n",
+    length(t76), length(cel76), sum(cel76 %in% m$GSE76894$geo_accession), nrow(m$GSE76894)))
+if (length(cel76) != 103 || !setequal(cel76, m$GSE76894$geo_accession))
+  problems <- c(problems, "GSE76894: RAW.tar CEL files do not map 1:1 to the 103 manifest samples")
 
 # ---- final assertions / verdict
 stopifnot(all(file.exists(here("manifest", c("files.csv", "count_verification.csv", "NOTES.md")))))

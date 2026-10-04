@@ -4,7 +4,12 @@
 # Inputs : manifest/GSE41762_samples.csv, manifest/GSE38642_samples.csv,
 #          manifest/GSE20966_samples.csv, data/raw/<GSE>/<GSE>_series_matrix.txt.gz (headers only),
 #          data/raw/GSE38642,GSE41762/*_RAW.tar (read-only; CEL md5 identity check, extracted to tempdir)
+#          manifest/GSE76894_samples.csv, data/raw/GSE76894/GSE76894_series_matrix.txt.gz (headers only),
+#          data/raw/GSE76894,GSE20966/*_RAW.tar (read-only; CEL md5 identity check only)
+#          GSE76894 is a VALIDATION set (protocol v1.1): only metadata and CEL file hashes are used;
+#          no expression value is parsed, normalised or summarised (CLAUDE.md rule 2).
 # Outputs: manifest/GSE38642_donor_overlap.csv, manifest/GSE20966_donor_overlap.csv,
+#          manifest/GSE76894_donor_overlap.csv,
 #          results/stage2/02_donor_overlap.rds, logs/02_donor_overlap_<timestamp>.log
 #
 # MATCHING RULE (primary, decides overlap_status):
@@ -29,9 +34,11 @@ on.exit({ sink(type = "message"); sink(); close(con) }, add = TRUE)
 
 in_files <- c(GSE41762 = "manifest/GSE41762_samples.csv",
               GSE38642 = "manifest/GSE38642_samples.csv",
-              GSE20966 = "manifest/GSE20966_samples.csv")
+              GSE20966 = "manifest/GSE20966_samples.csv",
+              GSE76894 = "manifest/GSE76894_samples.csv")
 out_38642 <- here("manifest", "GSE38642_donor_overlap.csv")
 out_20966 <- here("manifest", "GSE20966_donor_overlap.csv")
+out_76894 <- here("manifest", "GSE76894_donor_overlap.csv")
 out_rds   <- here("results", "stage2", "02_donor_overlap.rds")
 
 cat("Script:", script_name, " run:", ts, "\n")
@@ -156,7 +163,7 @@ cel_md5 <- function(tarf) {
     md <- unname(tools::md5sum(out)); unlink(out); md
   }, character(1))
   unlink(tmp, recursive = TRUE)
-  data.table(gsm = sub("_.*", "", basename(members)), cel_md5 = h)
+  data.table(gsm = sub("[_.].*", "", basename(members)), cel_md5 = h)
 }
 h38 <- cel_md5(here("data", "raw", "GSE38642", "GSE38642_RAW.tar"))
 h41 <- cel_md5(here("data", "raw", "GSE41762", "GSE41762_RAW.tar"))
@@ -224,13 +231,145 @@ if (g_overlap) {
       " ******************************************************************\n")
 } else cat("\n  GSE20966: no sample matches any GSE41762/GSE38642 donor on the covariates available.\n")
 
+
+# ---- 3. GSE76894 (protocol v1.1 primary islet validation) vs GSE41762 and GSE20966 ----
+# Metadata + CEL file hashes only. Rule as above (sex, group, age exact; BMI equal to 0.1).
+# GSE76894 deposits BMI with up to 4 decimals; it is rounded to 0.1 before comparison (the
+# reference series deposit one decimal), and the deposited value is kept in `bmi_deposited`.
+# Where BMI is missing on either side (one GSE20966 donor; GSE76894 GSM2040122, deposited "NA"),
+# sex+group+age is used for that comparison (as in section 2) -- conservative: more possible matches.
+# Status: "possible_overlap" if the primary rule matches any GSE41762/GSE20966 donor OR the CEL is
+# byte-identical to any GSE41762/GSE20966 CEL; otherwise "independent". Near-match diagnostics are
+# reported only. Nothing is removed here (removal before scoring is Task 7, protocol section 7).
+cat("\n==== GSE76894 vs GSE41762 / GSE20966 ====\n")
+v0 <- fread(here(in_files["GSE76894"]), colClasses = "character", na.strings = c("", "NA"))
+sex_map <- c(f = "female", m = "male")
+v <- data.table(gsm = v0$geo_accession, title = v0$title, group = v0$group,
+                sex = unname(sex_map[tolower(v0[["gender (m/f):ch1"]])]),
+                age = num(v0[["age (years):ch1"]]),
+                bmi_deposited = num(v0[["body mass index (bmi):ch1"]]),
+                submitter_batch = v0[["batch:ch1"]])
+v[, bmi := round(bmi_deposited, 1)]
+hb_cols <- grep("hba1c|a1c|glycated", names(v0), ignore.case = TRUE, value = TRUE)
+cat(sprintf("  GSE76894: n=%d  ND=%d T2D=%d  NA: sex=%d age=%d bmi=%d  non-integer ages=%d  HbA1c field: %s\n",
+    nrow(v), sum(v$group == "ND"), sum(v$group == "T2D"), sum(is.na(v$sex)), sum(is.na(v$age)), sum(is.na(v$bmi)),
+    sum(v$age != round(v$age), na.rm = TRUE), if (length(hb_cols)) paste(hb_cols, collapse = ",") else "ABSENT"))
+cat("  other GSE76894 characteristics fields:", paste(setdiff(grep(":ch1$", names(v0), value = TRUE),
+    c("gender (m/f):ch1", "age (years):ch1", "body mass index (bmi):ch1", "batch:ch1",
+      "diabetes status (nd (non-diabetic), t2d (type 2 diabetic)):ch1")), collapse = ", "), "\n")
+cat("  sex x group:\n"); print(v[, .N, by = .(group, sex)][order(group, sex)])
+cat(sprintf("  age range %s-%s; BMI range %.2f-%.2f\n", min(v$age, na.rm = TRUE), max(v$age, na.rm = TRUE),
+    min(v$bmi_deposited, na.rm = TRUE), max(v$bmi_deposited, na.rm = TRUE)))
+
+# matcher: if BMI is missing on either side, that pair is matched on sex+group+age only
+match_v <- function(q, ref, use_group = TRUE, age_tol = 0, bmi_tol = 0) {
+  ok <- ref$sex == q$sex & abs(ref$age - q$age) <= age_tol + 1e-9
+  if (use_group) ok <- ok & ref$group == q$group
+  ok <- ok & (is.na(ref$bmi) | is.na(q$bmi) | abs(ref$bmi - q$bmi) <= bmi_tol + 1e-9)
+  which(ok %in% TRUE)
+}
+refs <- list(GSE41762 = a, GSE20966 = g)
+v_res <- rbindlist(lapply(seq_len(nrow(v)), function(i) {
+  q <- v[i]
+  out <- q[, .(gsm, title, group, sex, age, bmi_deposited, bmi, submitter_batch)]
+  for (nm in names(refs)) {
+    ref <- refs[[nm]]
+    m  <- match_v(q, ref)
+    mg <- match_v(q, ref, use_group = FALSE)
+    mn <- match_v(q, ref, age_tol = 1, bmi_tol = 0.1)
+    out[, (paste0("matched_", nm, "_gsm")) := collapse(ref$gsm[m])]
+    out[, (paste0("n_matches_", nm)) := length(m)]
+    out[, (paste0("diag_ignoring_group_", nm)) := collapse(paste0(ref$gsm[mg], "(", ref$group[mg], ")")[seq_along(mg)])]
+    out[, (paste0("diag_near_age1_bmi0.1_", nm)) := collapse(ref$gsm[mn])]
+  }
+  out
+}))
+
+# CEL byte identity (decompressed md5) against GSE41762 and GSE20966 CELs
+h76 <- cel_md5(here("data", "raw", "GSE76894", "GSE76894_RAW.tar"))
+h20 <- cel_md5(here("data", "raw", "GSE20966", "GSE20966_RAW.tar"))
+ref_md5 <- rbind(h41[, .(gsm, cel_md5, series = "GSE41762")], h20[, .(gsm, cel_md5, series = "GSE20966")])
+v_res[, cel_md5 := h76$cel_md5[match(gsm, h76$gsm)]]
+v_res[, identical_CEL_gsm := ref_md5$gsm[match(cel_md5, ref_md5$cel_md5)]]
+v_res[, identical_CEL_gsm := fifelse(is.na(identical_CEL_gsm), "", identical_CEL_gsm)]
+v_res[, covariates_complete := !is.na(sex) & !is.na(group) & !is.na(age) & !is.na(bmi)]
+v_res[, matched_gsm := {
+  x <- c(strsplit(matched_GSE41762_gsm, ";")[[1]], strsplit(matched_GSE20966_gsm, ";")[[1]], identical_CEL_gsm)
+  collapse(unique(x[x != ""])) }, by = gsm]
+v_res[, overlap_status := ifelse(matched_gsm != "", "possible_overlap", "independent")]
+v_res[, match_rule := fifelse(is.na(bmi), "sex+group+age exact (BMI NA in GSE76894); or identical CEL md5",
+                              "sex+group+age exact & BMI equal to 0.1 (sex+group+age vs reference donors with BMI NA); or identical CEL md5")]
+fwrite(v_res, out_76894)
+
+n_po <- sum(v_res$overlap_status == "possible_overlap")
+cat(sprintf("  primary-rule matches: vs GSE41762 = %d samples, vs GSE20966 = %d samples\n",
+    sum(v_res$n_matches_GSE41762 > 0), sum(v_res$n_matches_GSE20966 > 0)))
+cat(sprintf("  CEL md5 computed: GSE76894 %d, GSE41762 %d, GSE20966 %d; GSE76894 CELs byte-identical to a reference CEL: %d\n",
+    nrow(h76), nrow(h41), nrow(h20), sum(v_res$identical_CEL_gsm != "")))
+cat(sprintf("  duplicated CEL md5 within GSE76894: %d\n", sum(duplicated(h76$cel_md5))))
+cat(sprintf("  samples with incomplete covariates (matched on sex+group+age only): %d (%s)\n", sum(!v_res$covariates_complete),
+    collapse(v_res[covariates_complete == FALSE]$gsm)))
+cat(sprintf("  diagnostics: same sex+age+BMI but opposite group: vs GSE41762 %d, vs GSE20966 %d\n",
+    sum(v_res$diag_ignoring_group_GSE41762 != "" & v_res$n_matches_GSE41762 == 0),
+    sum(v_res$diag_ignoring_group_GSE20966 != "" & v_res$n_matches_GSE20966 == 0)))
+cat(sprintf("  diagnostics: near matches (age +-1, BMI +-0.1, sex & group exact): vs GSE41762 %d, vs GSE20966 %d samples\n",
+    sum(v_res$diag_near_age1_bmi0.1_GSE41762 != ""), sum(v_res$diag_near_age1_bmi0.1_GSE20966 != "")))
+diag_rows <- v_res[diag_ignoring_group_GSE41762 != "" | diag_ignoring_group_GSE20966 != "" |
+                   diag_near_age1_bmi0.1_GSE41762 != "" | diag_near_age1_bmi0.1_GSE20966 != ""]
+if (nrow(diag_rows)) {
+  cat("  near/diagnostic matches (do NOT change overlap_status), with reference covariates:\n")
+  print(diag_rows[, .(gsm, group, sex, age, bmi_deposited, diag_ignoring_group_GSE41762, diag_near_age1_bmi0.1_GSE41762,
+                      diag_ignoring_group_GSE20966, diag_near_age1_bmi0.1_GSE20966)])
+}
+cat(sprintf("  overlap_status: independent = %d, possible_overlap = %d (total %d)\n",
+    sum(v_res$overlap_status == "independent"), n_po, nrow(v_res)))
+if (n_po) {
+  cat("\n  ******************************************************************\n",
+      " *** FLAG: GSE76894 samples with possible donor overlap (NOT removed here; Task 7) ***\n",
+      " ******************************************************************\n")
+  po <- v_res[overlap_status == "possible_overlap"]
+  print(po[, .(gsm, title, group, sex, age, bmi_deposited, matched_GSE41762_gsm, matched_GSE20966_gsm, identical_CEL_gsm, matched_gsm)])
+  for (i in seq_len(nrow(po))) {
+    ids <- strsplit(po$matched_gsm[i], ";")[[1]]
+    cat("   ", po$gsm[i], "matched reference records:\n")
+    print(rbind(a[gsm %in% ids, .(series = "GSE41762", gsm, group, sex, age, bmi, hba1c)],
+                g[gsm %in% ids, .(series = "GSE20966", gsm, group, sex, age, bmi, hba1c = NA_real_)]))
+  }
+} else cat("  GSE76894: no sample matches any GSE41762/GSE20966 donor; no identical CEL.\n")
+
+# provenance (GSE76894 series-matrix headers; extended key set)
+prov_keys76 <- c(prov_keys, "!Series_summary", "!Series_relation", "!Series_contact_name", "!Series_contact_department",
+                 "!Sample_source_name_ch1", "!Sample_title", "!Sample_contact_institute")
+f76 <- here("data", "raw", "GSE76894", "GSE76894_series_matrix.txt.gz")
+l76 <- readLines(gzfile(f76), n = 300)
+l76 <- l76[seq_len(grep("^!series_matrix_table_begin", l76)[1] - 1)]   # header block only; expression table discarded
+l76 <- l76[sub("\t.*", "", l76) %in% prov_keys76]
+prov76 <- data.table(series = "GSE76894", field = sub("^!Sample_", "sample_", sub("^!Series_", "", sub("\t.*", "", l76))),
+                     value = vapply(strsplit(sub("^[^\t]*\t", "", l76), "\t"), function(z) {
+                       z <- unique(gsub('"', "", z)); if (length(z) > 3) paste0(paste(z[1:3], collapse = " | "), " | ... (", length(z), " distinct)") else paste(z, collapse = " | ") }, character(1)))
+prov76 <- prov76[, .(value = paste(value, collapse = " | ")), by = .(series, field)]
+prov76[field == "contributor", value := paste0(value, "  [", lengths(strsplit(value, " \\| ")), " contributors]")]
+cat("\n  GSE76894 provenance (series-matrix headers):\n")
+for (i in seq_len(nrow(prov76))) cat(sprintf("   %-8s %-18s %s\n", prov76$series[i], prov76$field[i], substr(prov76$value[i], 1, 1500)))
+contrib76 <- strsplit(prov76[field == "contributor"]$value, " \\| ")[[1]]
+contrib41 <- strsplit(prov_sum[series == "GSE41762" & field == "contributor"]$value, " \\| ")[[1]]
+contrib20 <- strsplit(prov_sum[series == "GSE20966" & field == "contributor"]$value, " \\| ")[[1]]
+c76 <- sub("  \\[.*", "", contrib76)
+shared_contrib <- list(GSE41762 = intersect(c76, contrib41), GSE20966 = intersect(c76, contrib20))
+for (nm in names(shared_contrib)) cat(sprintf("  contributors shared with %s: %s\n", nm,
+    if (length(shared_contrib[[nm]])) paste(shared_contrib[[nm]], collapse = "; ") else "none"))
+cat("  GSE20966 contact institute / design:", prov_sum[series == "GSE20966" & field %in% c("contact_institute", "contact_country")]$value, "\n")
+cat("  islet-isolation centre / organ-donor source: NOT named in the GSE76894 series-matrix headers\n",
+    "  (headers state: IMIDIA consortium/biobank, organ donors, 'cultured islets', contact SIB Lausanne).\n", sep = "")
+
 saveRDS(list(rule = "sex exact & group exact & age exact & BMI exact (0.1)", gse38642 = res,
-             reverse_ambiguous = rev_amb, gse20966 = g_res, provenance = prov_sum),
+             reverse_ambiguous = rev_amb, gse20966 = g_res, provenance = prov_sum,
+             gse76894 = v_res, provenance_gse76894 = prov76, gse76894_shared_contributors = shared_contrib),
         out_rds)
-cat("\nOutputs:\n  ", out_38642, "\n  ", out_20966, "\n  ", out_rds, "\n", sep = "")
+cat("\nOutputs:\n  ", out_38642, "\n  ", out_20966, "\n  ", out_76894, "\n  ", out_rds, "\n", sep = "")
 
 # ---- assertions ------------------------------------------------------------------
-chk <- fread(out_38642); chk2 <- fread(out_20966)
+chk <- fread(out_38642); chk2 <- fread(out_20966); chk3 <- fread(out_76894, na.strings = c("", "NA"))
 stopifnot(
   nrow(a) == 77, nrow(b) == 63, nrow(g) == 20,
   !anyNA(a[, .(sex, group, age, bmi)]), !anyNA(b[, .(sex, group, age, bmi)]),
@@ -240,7 +379,12 @@ stopifnot(
   all((chk$n_matches > 0) == (chk$overlap_status == "shared")),
   setequal(chk$gsm, b$gsm), !anyDuplicated(chk$gsm),
   nrow(h38) == 63, nrow(h41) == 77,
-  nrow(chk2) == 20, setequal(chk2$gsm, g$gsm), !anyNA(chk2$overlap_status)
+  nrow(chk2) == 20, setequal(chk2$gsm, g$gsm), !anyNA(chk2$overlap_status),
+  nrow(v) == 103, nrow(chk3) == 103, setequal(chk3$gsm, v$gsm), !anyDuplicated(chk3$gsm),
+  !anyNA(chk3$overlap_status), all(chk3$overlap_status %in% c("independent", "possible_overlap")),
+  all((chk3$overlap_status == "possible_overlap") == (!is.na(chk3$matched_gsm) & nzchar(chk3$matched_gsm))),
+  sum(v$group == "ND") == 84, sum(v$group == "T2D") == 19, !anyNA(v$group),
+  nrow(h76) == 103, setequal(h76$gsm, v$gsm), nrow(h20) == 20, !anyNA(chk3$cel_md5)
 )
 cat("\nAll assertions passed.\n\n")
 print(sessionInfo())

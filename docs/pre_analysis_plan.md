@@ -42,6 +42,7 @@ Any change after lock goes to `logs/deviations.md` (CLAUDE.md rule 7).
 | GSE38642 | Retired. All 63 CEL files are byte-identical to GSE41762 arrays; the "unique" donors are relabelled copies. |
 | Islet external validation | GSE76894 primary (84 ND / 19 T2D, whole islets, GPL570); GSE20966 secondary. Donor-overlap check before scoring. |
 | GSE41762 labels | Own status field. Sensitivity rerun excluding the 11 label-discordant donors. |
+| GSE76894 possible overlaps | The 4 covariate-flagged ND donors (GSM2040064, GSM2040077, GSM2040120, GSM2040122) are excluded before scoring (protocol §7), leaving 80 ND / 19 T2D, n=99. None has a CEL match; exclusion is conservative and costs 4 of 84 controls. Decided 2026-10-05, before any expression data from GSE76894 was touched. |
 
 Signed off: Juvas (decision authority), 2026-10-05.
 

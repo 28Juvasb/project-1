@@ -17,5 +17,7 @@ GSE41762/GSE41762_RAW.tar,318515200,c029525bd388a502684e7e7137c42b1b,TRUE,"tar o
 GSE41762/GSE41762_series_matrix.txt.gz,10133532,3245c714573c7bb621cab28096f6107e,TRUE,"gz ok, 22725465 bytes uncompressed"
 GSE71416/GSE71416_RAW.tar,92989440,39c04c729fbb9d5834efc1f29c21104d,TRUE,"tar ok, 40 members"
 GSE71416/GSE71416_series_matrix.txt.gz,3862824,0530f876cccedab8c347c70bd0c863bb,TRUE,"gz ok, 9363275 bytes uncompressed"
+GSE76894/GSE76894_RAW.tar,893982720,ff73df9ee9cf65be3e5508d719af4527,TRUE,"tar ok, 103 members"
+GSE76894/GSE76894_series_matrix.txt.gz,16514968,edc482e314e3f71b5275846459cdab73,TRUE,"gz ok, 36878107 bytes uncompressed"
 GSE81608/GSE81608_human_islets_rpkm.txt.gz,37222002,d0e0d81a6e8cab0f2c6400439b4930e2,TRUE,"gz ok, 177505915 bytes uncompressed"
 GSE81608/GSE81608_series_matrix.txt.gz,44214,de7067dd463eab59341fc6a037834719,TRUE,"gz ok, 2479128 bytes uncompressed"

@@ -1,0 +1,133 @@
+Inputs: GEO accessions GSE41762, GSE38642, GSE20966, GSE81608, GSE27951, GSE16415, GSE71416, GSE76894 
+Platforms: GPL6244, GPL570, GPL1352, GPL2986 
+
+====  GSE41762 
+  manifest GSE41762_samples.csv: 77 samples, platform GPL6244
+  supplementary already present: GSE41762_RAW.tar 
+====  GSE38642 
+  manifest GSE38642_samples.csv: 63 samples, platform GPL6244
+  supplementary already present: GSE38642_RAW.tar 
+====  GSE20966 
+  manifest GSE20966_samples.csv: 20 samples, platform GPL1352
+  supplementary already present: GSE20966_RAW.tar 
+====  GSE81608 
+  manifest GSE81608_samples.csv: 1600 samples, platform GPL16791
+  supplementary already present: GSE81608_human_islets_rpkm.txt.gz 
+====  GSE27951 
+  manifest GSE27951_samples_GPL13273.csv: 12 samples, platform GPL13273
+  manifest GSE27951_samples_GPL570.csv: 33 samples, platform GPL570
+  supplementary already present: GSE27951_RAW.tar 
+====  GSE16415 
+  manifest GSE16415_samples.csv: 10 samples, platform GPL2986
+  supplementary already present: GSE16415_all_data_no_controls.txt.gz, GSE16415_RAW.tar 
+====  GSE71416 
+  manifest GSE71416_samples.csv: 20 samples, platform GPL570
+  supplementary already present: GSE71416_RAW.tar 
+====  GSE76894 
+  manifest GSE76894_samples.csv: 103 samples, platform GPL570
+  supplementary already present: GSE76894_RAW.tar 
+====  GPL6244 
+  already present
+====  GPL570 
+  already present
+====  GPL1352 
+  already present
+====  GPL2986 
+  already present
+
+Stage 1a complete.
+
+==== Stage 1b: group derivation and verification
+
+Samples with group = NA (cannot be classified ND/T2D): 10 
+           dataset     N
+            <char> <int>
+1: GSE27951_GPL570    10
+GSE27951 samples whose title and clinical-status field disagree: 3 
+   geo_accession                      title characteristics_status
+          <char>                     <char>                 <char>
+1:     GSM691135 adipose_tissue_NGT (15661)                     DM
+2:     GSM691139  adipose_tissue_DM (16140)                    IGT
+3:     GSM691140 adipose_tissue_IGT (16155)                     DM
+
+---- Count verification (expected vs observed) ----
+          dataset exp_ND obs_ND exp_T2D obs_T2D exp_n obs_n obs_other_or_NA exp_platform obs_platform PASS
+1        GSE41762     57     57      20      20    77    77               0      GPL6244      GPL6244 TRUE
+2        GSE38642     54     54       9       9    63    63               0      GPL6244      GPL6244 TRUE
+3        GSE20966     10     10      10      10    20    20               0      GPL1352      GPL1352 TRUE
+4 GSE27951_GPL570     11     11      12      12    23    23               0       GPL570       GPL570 TRUE
+5        GSE16415      5      5       5       5    10    10               0      GPL2986      GPL2986 TRUE
+6        GSE71416      6      6      14      14    20    20               0       GPL570       GPL570 TRUE
+7        GSE81608    651    651     949     949  1600  1600               0     GPL16791     GPL16791 TRUE
+8        GSE76894     84     84      19      19   103   103               0       GPL570       GPL570 TRUE
+
+GSE27951 full breakdown (GPL570 human subseries), by clinical status field:
+
+ DM IGT NGT 
+ 12  10  11 
+GSE27951 by status implied in sample title:
+
+ DM IGT NGT 
+ 11  10  12 
+GSE27951 other subseries GPL13273 (mouse): n = 12 
+
+GSE81608 rpkm matrix: 1600 sample columns (+ gene.id), 39851 gene rows
+  matrix columns matching manifest titles: 1600 of 1600 
+
+---- files.csv ----
+                                          filename size_bytes opens_nonempty                               check
+1                          GPL1352/GPL1352.soft.gz   55749609           TRUE  gz ok, 55749609 bytes uncompressed
+2                          GPL2986/GPL2986.soft.gz    7930413           TRUE   gz ok, 7930413 bytes uncompressed
+3                            GPL570/GPL570.soft.gz   85642560           TRUE  gz ok, 85642560 bytes uncompressed
+4                          GPL6244/GPL6244.soft.gz  100752587           TRUE gz ok, 100752587 bytes uncompressed
+5    GSE16415/GSE16415_all_data_no_controls.txt.gz   10700699           TRUE  gz ok, 30869556 bytes uncompressed
+6                        GSE16415/GSE16415_RAW.tar    4700160           TRUE                  tar ok, 10 members
+7           GSE16415/GSE16415_series_matrix.txt.gz    1818325           TRUE   gz ok, 4160310 bytes uncompressed
+8                        GSE20966/GSE20966_RAW.tar   94638080           TRUE                  tar ok, 20 members
+9           GSE20966/GSE20966_series_matrix.txt.gz    3247995           TRUE   gz ok, 8601528 bytes uncompressed
+10                       GSE27951/GSE27951_RAW.tar  157931520           TRUE                  tar ok, 45 members
+11 GSE27951/GSE27951-GPL13273_series_matrix.txt.gz     248931           TRUE    gz ok, 603300 bytes uncompressed
+12   GSE27951/GSE27951-GPL570_series_matrix.txt.gz    9939025           TRUE  gz ok, 22206735 bytes uncompressed
+13                       GSE38642/GSE38642_RAW.tar  261437440           TRUE                  tar ok, 63 members
+14          GSE38642/GSE38642_series_matrix.txt.gz    1872293           TRUE   gz ok, 6113723 bytes uncompressed
+15                       GSE41762/GSE41762_RAW.tar  318515200           TRUE                  tar ok, 77 members
+16          GSE41762/GSE41762_series_matrix.txt.gz   10133532           TRUE  gz ok, 22725465 bytes uncompressed
+17                       GSE71416/GSE71416_RAW.tar   92989440           TRUE                  tar ok, 40 members
+18          GSE71416/GSE71416_series_matrix.txt.gz    3862824           TRUE   gz ok, 9363275 bytes uncompressed
+19                       GSE76894/GSE76894_RAW.tar  893982720           TRUE                 tar ok, 103 members
+20          GSE76894/GSE76894_series_matrix.txt.gz   16514968           TRUE  gz ok, 36878107 bytes uncompressed
+21      GSE81608/GSE81608_human_islets_rpkm.txt.gz   37222002           TRUE gz ok, 177505915 bytes uncompressed
+22          GSE81608/GSE81608_series_matrix.txt.gz      44214           TRUE   gz ok, 2479128 bytes uncompressed
+series matrix files: 9 
+GSE76894 RAW.tar: 103 members, 103 CEL; CEL GSMs matching manifest: 103 / 103
+
+==== Stage 1b verdict
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN        LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN    LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C         LC_TELEPHONE=C       LC_MEASUREMENT=en_IN
+[12] LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] data.table_1.18.6.1 GEOquery_2.78.0     Biobase_2.70.0      BiocGenerics_0.56.0 generics_0.1.4      here_1.0.2         
+
+loaded via a namespace (and not attached):
+ [1] Matrix_1.7-4                limma_3.66.0                jsonlite_2.0.0              dplyr_1.2.1                 compiler_4.5.2              BiocManager_1.30.27         renv_1.3.0                  tidyselect_1.2.1           
+ [9] SummarizedExperiment_1.40.0 xml2_1.6.0                  GenomicRanges_1.62.1        tidyr_1.3.2                 rentrez_1.2.4               IRanges_2.44.0              Seqinfo_1.0.0               statmod_1.5.2              
+[17] lattice_0.22-9              readr_2.2.0                 R6_2.6.1                    XVector_0.50.0              S4Arrays_1.10.1             XML_3.99-0.25               tibble_3.3.1                DelayedArray_0.36.1        
+[25] MatrixGenerics_1.22.0       rprojroot_2.1.1             tzdb_0.5.0                  pillar_1.11.1               R.utils_2.13.0              rlang_1.3.0                 SparseArray_1.10.10         cli_3.6.6                  
+[33] withr_3.0.3                 magrittr_2.0.5              grid_4.5.2                  hms_1.1.4                   lifecycle_1.0.5             R.oo_1.27.1                 R.methodsS3_1.8.2           S4Vectors_0.48.1           
+[41] vctrs_0.7.3                 glue_1.8.1                  abind_1.4-8                 stats4_4.5.2                purrr_1.2.2                 matrixStats_1.5.0           tools_4.5.2                 pkgconfig_2.0.3            
+Stage 1b PASSED: all counts and files verified.
