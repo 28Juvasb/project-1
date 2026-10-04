@@ -1,6 +1,7 @@
 # Methodology Protocol v1 — Cross-Tissue Senescence Hub Genes in Type 2 Diabetes
 
-**Version:** 1.0, locked 2026-10-05 (git tag `protocol-v1`)
+**Version:** 1.1 (amendment 2026-10-05, tag `protocol-v1.1`); v1.0 locked 2026-10-05 (tag `protocol-v1`)
+**Amendment 1.1 (made before any expression analysis):** GSE38642 retired (63/63 CEL files are byte-identical to GSE41762 arrays; no independent data). GSE76894 added as primary islet external validation; GSE20966 becomes secondary. Sensitivity analysis added for the 11 GSE41762/GSE38642 label-discordant donors. See §1 and §7 and `logs/deviations.md`.
 **Decision authority:** Juvas (project lead). Supervisor: Dr. Thirumurugan.
 **Status of data at lock time (stated plainly):** all GEO files had been downloaded and the *sample metadata* (counts, group labels, covariates) inspected. **No expression values had been normalised, plotted or analysed.** Every analytical choice below was fixed before seeing any expression result.
 
@@ -15,14 +16,17 @@ Two parallel arms (islet, adipose). Each arm: discovery → nested-CV-validated 
 | Role | Accession | Tissue | Platform | Groups used | n |
 |---|---|---|---|---|---|
 | Islet discovery | GSE41762 | Whole islets | GPL6244 (HuGene 1.0 ST) | 57 ND / 20 T2D | 77 |
-| Islet sensitivity (direction only) | GSE38642, non-overlapping donors only | Whole islets | GPL6244 | determined in Task 2 | ~12 |
-| Islet external validation | GSE20966 | LCM beta-cells | GPL1352 (U133 X3P) | 10 ND / 10 T2D | 20 |
+| ~~Islet sensitivity~~ **retired (v1.1)** | GSE38642 | Whole islets | GPL6244 | same 63 arrays as GSE41762 (identical CEL MD5); not used | 0 |
+| **Islet external validation, primary (v1.1)** | GSE76894 (IMIDIA organ donors) | Whole islets | GPL570 | 84 ND / 19 T2D | 103 |
+| Islet external validation, secondary | GSE20966 | LCM beta-cells | GPL1352 (U133 X3P) | 10 ND / 10 T2D | 20 |
 | Islet single-cell | GSE81608 | Islet cells | GPL16791 (SMARTer) | 651 ND / 949 T2D cells | 1600 cells |
 | Adipose discovery | GSE27951 (GPL570 subseries) | Subcutaneous | GPL570 | 11 ND / 12 T2D (10 IGT excluded) | 23 |
 | Adipose external validation | GSE71416 | Omental, morbidly obese | GPL570 | 6 ND / 14 T2D | 20 |
 | Adipose sanity (direction only) | GSE16415 | Visceral | GPL2986 | 5 ND / 5 T2D | 10 |
 
-**Group definitions.** GSE27951: the `clinical status` field (NGT → ND, DM → T2D, IGT excluded). Three samples have title/field discordance (GSM691135, GSM691139, GSM691140); the field is used, and a sensitivity rerun excludes GSM691135 and GSM691140 (GSM691139 is IGT by field and already excluded). GSE71416: sample titles (no disease field in GEO). All other series: the GEO status field.
+**Group definitions.** GSE27951: the `clinical status` field (NGT → ND, DM → T2D, IGT excluded). Three samples have title/field discordance (GSM691135, GSM691139, GSM691140); the field is used, and a sensitivity rerun excludes GSM691135 and GSM691140 (GSM691139 is IGT by field and already excluded). GSE71416: sample titles (no disease field in GEO). GSE76894: the GEO status field (ND/T2D). All other series: the GEO status field.
+
+**GSE41762 labels (v1.1).** GSE41762's own status field is used. 11 donors carry a different diabetes label in GSE38642 (10 ND→T2D, 1 T2D→ND) and donor ID30 a different sex. Pre-specified sensitivity analysis: rerun the islet nested CV excluding these 11 donors. ID30's sex is resolved by the expression sex check (§2.4).
 
 **Fixed rules** (from CLAUDE.md): discovery cohorts never merged; validation sets scored once with a frozen model; no batch correction across cohorts; nested-CV AUC is the headline and is always reported beside the apparent AUC; all AUCs carry a 95% CI (`pROC::ci.auc`, 2000 stratified bootstrap replicates); `set.seed(42)`.
 
@@ -32,8 +36,8 @@ Two parallel arms (islet, adipose). Each arm: discovery → nested-CV-validated 
 
 ### 2.1 Normalisation
 Each GSE is normalised **separately**, from raw files where available.
-- GPL6244 (GSE41762, GSE38642): `oligo::rma()` on CEL files, transcript-cluster level (`target = "core"`). GSE41762: all 77 CELs normalised together; the submitters' donor 1–48 / 49–80 split is kept as the covariate `submitter_norm_batch`. Before use, the batch split parsed from titles is verified against the GEO series description; if it cannot be verified, that is logged and the covariate is still used as parsed.
-- GPL570 (GSE27951, GSE71416): `affy::rma()` on CEL files. GSE27951: only the 23 included samples (11 ND + 12 T2D) are normalised; the excluded IGT samples are not used anywhere.
+- GPL6244 (GSE41762): `oligo::rma()` on CEL files, transcript-cluster level (`target = "core"`). GSE41762: all 77 CELs normalised together; the submitters' donor 1–48 / 49–80 split is kept as the covariate `submitter_norm_batch`. Before use, the batch split parsed from titles is verified against the GEO series description; if it cannot be verified, that is logged and the covariate is still used as parsed.
+- GPL570 (GSE27951, GSE71416, GSE76894): `affy::rma()` on CEL files. GSE27951: only the 23 included samples (11 ND + 12 T2D) are normalised; the excluded IGT samples are not used anywhere.
 - GPL1352 (GSE20966): `affy::rma()` on CEL files with `u133x3pcdf`.
 - GPL2986 (GSE16415): submitter matrix (`GSE16415_all_data_no_controls.txt.gz`). If values are not already log-scale (max > 50), apply log2(x + 1); then `limma::normalizeBetweenArrays(method = "quantile")`.
 - No ComBat or any cross-cohort batch correction.
@@ -51,7 +55,7 @@ Each GSE is normalised **separately**, from raw files where available.
 
 ### 2.4 Sex check and covariates
 - Expression-based sex: XIST vs mean(RPS4Y1, DDX3Y, KDM5D, UTY where present), classified by k-means (k = 2).
-- Where sex is recorded (GSE41762, GSE38642, GSE20966 if available), mismatches are reported and flagged. They are not auto-excluded; the project lead decides.
+- Where sex is recorded (GSE41762, GSE76894, GSE20966 if available), mismatches are reported and flagged. They are not auto-excluded; the project lead decides.
 - **GSE27951 has no sex field in GEO.** Expression-inferred sex is used as its sex covariate.
 - **limma model, both arms:** `~ status + age + sex`; GSE41762 also includes `submitter_norm_batch`. Pre-specified sensitivity analysis: add BMI.
 
@@ -130,7 +134,7 @@ Full-cohort limma, reported for description only and **never fed into selection*
 1. Candidates: shared panel genes; if none, the islet final panel.
 2. Each candidate must pass all of:
    - (a) nested-CV selection frequency ≥ 50%
-   - (b) same direction of effect in external validation (GSE20966 for islet; GSE71416 for adipose-specific)
+   - (b) same direction of effect in external validation (GSE76894 for islet; GSE71416 for adipose-specific)
    - (c) a usable structure (§6.1)
 3. Rank by selection frequency. Dock the top 1, or the top 2 if tied.
 4. If no candidate passes, docking is reported as not performed under the rule. The rule is not relaxed.
@@ -160,10 +164,11 @@ Ligand, best ΔG, mean ± SD ΔG across seeds, decoy percentile, contact residue
 
 ## 7. External validation
 - Models frozen after §3.2: the panel genes, ridge coefficients, and the training means and SDs.
-- **Islet → GSE20966** (cross-platform): match by HGNC symbol and z-score each gene within GSE20966. Panel genes absent from U133 X3P are reported. The model is refit on the available genes using the **discovery data only** (no validation labels), and that refit is reported.
+- **Islet → GSE76894 (primary, v1.1):** whole islets, GPL570 (cross-platform from GPL6244): match by HGNC symbol, z-score each gene within GSE76894, apply the frozen model. Before scoring, donor independence from GSE41762 and GSE20966 is checked on age, sex, BMI and provenance; overlapping donors are removed from GSE76894 and reported.
+- **Islet → GSE20966 (secondary)** (cross-platform): match by HGNC symbol and z-score each gene within GSE20966. For both islet cohorts, panel genes absent from the platform are reported. The model is refit on the available genes using the **discovery data only** (no validation labels), and that refit is reported.
 - **Adipose → GSE71416** (same platform): z-score within dataset, apply the frozen model.
 - AUC with 95% CI (2000 bootstraps) and ROC with confidence bands. **One pass, no tuning.**
-- **Direction only, no AUC:** GSE38642 unique donors (islet) and GSE16415 (adipose). Report per-gene direction concordance, with a sign test.
+- **Direction only, no AUC:** GSE16415 (adipose). (GSE38642 retired in v1.1.) Report per-gene direction concordance, with a sign test.
 - Pre-stated expectation: intervals will be wide at n=20; that is reported as-is.
 
 ---
@@ -171,6 +176,6 @@ Ligand, best ΔG, mean ± SD ΔG across seeds, decoy percentile, contact residue
 ## 8. Reporting and deviations
 - For each arm, report the nested-CV AUC (headline) and the apparent AUC side by side, each with a 95% CI.
 - Report the fallback frequencies (§3), excluded samples with reasons, and the outcome of the adipose stability rule.
-- **Sensitivity analyses (pre-specified):** + BMI covariate (§2.4); GSE27951 excluding GSM691135 and GSM691140.
+- **Sensitivity analyses (pre-specified):** + BMI covariate (§2.4); GSE27951 excluding GSM691135 and GSM691140; GSE41762 excluding the 11 label-discordant donors (v1.1).
 - Limitations stated without softening (see IMPLEMENTATION_PLAN Task 11).
 - Every deviation from this document goes in `logs/deviations.md` (date, item, original, new, reason) and is listed in the report.

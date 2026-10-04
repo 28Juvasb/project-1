@@ -31,7 +31,7 @@ Use the separate acquisition prompt (`Claude_Science_Dataset_Acquisition_Prompt.
 Write and run scripts/01_acquire.R to download into data/raw/:
 
 GEO series (raw CEL where available, plus series matrix, plus sample metadata):
-GSE41762, GSE38642, GSE20966, GSE81608, GSE27951, GSE16415, GSE71416
+GSE41762, GSE38642, GSE20966, GSE81608, GSE27951, GSE16415, GSE71416 (GSE38642 retired in protocol v1.1; GSE76894 added)
 
 Platform annotations: GPL6244, GPL570, GPL1352, GPL2986
 

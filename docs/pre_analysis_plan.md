@@ -35,6 +35,16 @@ Any change after lock goes to `logs/deviations.md` (CLAUDE.md rule 7).
 | B9 | SenMayo [3.1] | Paper's 125-gene list if retrievable; else MSigDB 124 with the missing gene named. |
 | B10 | Discordant GSE27951 labels [1] | Clinical-status field is final. Sensitivity rerun excluding GSM691135 and GSM691140. |
 
+## B11. Amendment v1.1 (2026-10-05, before any expression analysis)
+
+| Item | Locked value |
+|---|---|
+| GSE38642 | Retired. All 63 CEL files are byte-identical to GSE41762 arrays; the "unique" donors are relabelled copies. |
+| Islet external validation | GSE76894 primary (84 ND / 19 T2D, whole islets, GPL570); GSE20966 secondary. Donor-overlap check before scoring. |
+| GSE41762 labels | Own status field. Sensitivity rerun excluding the 11 label-discordant donors. |
+
+Signed off: Juvas (decision authority), 2026-10-05.
+
 ## C. Open inputs (do not block analysis)
 - LSC structure from the lab. Docking of the other three ligands proceeds without it.
 - Proposal v3 text: update n=21 → 23 and remove ComBat at the next revision.

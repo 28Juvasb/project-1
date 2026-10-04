@@ -1,0 +1,247 @@
+Script: 02_donor_overlap  run: 20261005_001050 
+Inputs:
+  manifest/GSE41762_samples.csv md5=b05d05d87154fb58b14d2cf94aa300ad
+  manifest/GSE38642_samples.csv md5=0794a8cb55815f0b8fefa6f13f0830d8
+  manifest/GSE20966_samples.csv md5=020ba920f436edee89b6c0f01bcdccef
+
+Parameters:
+  primary rule : sex exact & group exact & age exact (integer) & BMI exact to 0.1
+  HbA1c        : not required; agreement (to 0.1) reported where both present
+  diagnostics  : (a) same rule ignoring group; (b) age +-1, BMI +-0.1, sex & group exact
+
+Covariate formats / completeness:
+  GSE41762: n=77  ND=57 T2D=20  NA: sex=0 age=0 bmi=0 hba1c=14  non-integer ages=0  bmi decimals>1=0
+  GSE38642: n=63  ND=54 T2D=9  NA: sex=0 age=0 bmi=0 hba1c=12  non-integer ages=0  bmi decimals>1=0
+  GSE20966: n=20  ND=10 T2D=10  NA: sex=0 age=0 bmi=1  HbA1c field: ABSENT
+
+==== GSE38642 vs GSE41762 (primary rule) ====
+  shared = 52   unique = 11   (total 63)
+  unique subset by group:
+    group     N
+   <char> <int>
+1:     ND    10
+2:    T2D     1
+  shared subset by group:
+    group     N
+   <char> <int>
+1:     ND    44
+2:    T2D     8
+  ambiguous (GSE38642 sample -> >1 GSE41762 donor): 0
+  ambiguous (GSE41762 donor <- >1 GSE38642 sample): 1
+     gsm41762     n            gsm38642
+       <char> <int>              <char>
+1: GSM1023671     2 GSM946716;GSM946750
+  duplicated (sex,group,age,bmi) profiles within GSE41762:
+Empty data.table (0 rows and 6 cols): sex,group,age,bmi,n,gsms
+  duplicated (sex,group,age,bmi) profiles within GSE38642:
+      sex  group   age   bmi     n                gsms
+   <char> <char> <num> <num> <int>              <char>
+1:   male     ND    61  24.7     2 GSM946716;GSM946750
+  HbA1c: shared samples with HbA1c comparable in both = 41; agree = 39; disagree = 2; not comparable = 11
+         gsm hba1c matched_GSE41762_gsm matched_GSE41762_hba1c
+      <char> <num>               <char>                 <char>
+1: GSM946744   5.9           GSM1023700                    5.6
+2: GSM946750   8.0           GSM1023671                    4.6
+  shared samples whose GSE41762 match has a DIFFERENT title ID:
+         gsm title_id matched_GSE41762_gsm matched_GSE41762_title_id hba1c
+      <char>    <int>               <char>                    <char> <num>
+1: GSM946750       54           GSM1023671                        19     8
+   matched_GSE41762_hba1c
+                   <char>
+1:                    4.6
+  NOTE: 10 of 11 'unique' samples match a GSE41762 donor exactly on sex+age+BMI but with the OPPOSITE group label
+  title 'IDn' of GSE38642 sample equals title ID of a matched GSE41762 donor: 51 / 52 shared
+  unique samples (full detail incl. diagnostics):
+          gsm title_id  group    sex   age   bmi hba1c
+       <char>    <int> <char> <char> <num> <num> <num>
+ 1: GSM946717       20     ND   male    57  23.9   6.1
+ 2: GSM946725       28     ND female    59  36.6   6.2
+ 3: GSM946727       30     ND   male    57  26.2   5.5
+ 4: GSM946728       31     ND   male    59  26.3   6.2
+ 5: GSM946732       35     ND female    64  28.4   7.0
+ 6: GSM946735       38     ND female    54  27.0   8.6
+ 7: GSM946745       49    T2D   male    62  24.8    NA
+ 8: GSM946752       56     ND female    64  27.0   6.2
+ 9: GSM946757       61     ND   male    62  36.9   6.2
+10: GSM946758       62     ND female    57  32.5   6.2
+11: GSM946759       63     ND   male    62  25.3   6.4
+         diag_matches_ignoring_group diag_near_matches_age1_bmi0.1
+                              <char>                        <char>
+ 1: GSM1023672(T2D, hba1c=6.1, ID20)                              
+ 2: GSM1023680(T2D, hba1c=6.2, ID28)                              
+ 3:                                                               
+ 4: GSM1023683(T2D, hba1c=6.2, ID31)                              
+ 5:   GSM1023687(T2D, hba1c=7, ID35)                              
+ 6: GSM1023690(T2D, hba1c=8.6, ID38)                              
+ 7:   GSM1023701(ND, hba1c=NA, ID49)                    GSM1023706
+ 8: GSM1023708(T2D, hba1c=6.2, ID56)                              
+ 9: GSM1023713(T2D, hba1c=6.2, ID61)                              
+10: GSM1023714(T2D, hba1c=6.2, ID62)                              
+11: GSM1023715(T2D, hba1c=6.4, ID63)                              
+  vs expectation (~51 shared / ~12 unique / ~1 T2D unique): CONSISTENT
+
+==== Supplementary identity evidence (does not change overlap_status) ====
+  GSE38642 samples whose title ID exists in GSE41762: 63 / 63
+  ... of those, sex+age+BMI identical: 62; group label discordant: 11
+  CEL files byte-identical (decompressed md5) to a GSE41762 CEL: 63 / 63 (CEL md5 computed: GSE38642 63, GSE41762 77)
+  identical CEL belongs to the same-title-ID GSE41762 sample: 63 / 63
+  samples where same-ID record differs on any covariate or group:
+          gsm title_id  group    sex   age   bmi hba1c sameID_GSE41762_gsm
+       <char>    <int> <char> <char> <num> <num> <num>              <char>
+ 1: GSM946717       20     ND   male    57  23.9   6.1          GSM1023672
+ 2: GSM946725       28     ND female    59  36.6   6.2          GSM1023680
+ 3: GSM946727       30     ND   male    57  26.2   5.5          GSM1023682
+ 4: GSM946728       31     ND   male    59  26.3   6.2          GSM1023683
+ 5: GSM946732       35     ND female    64  28.4   7.0          GSM1023687
+ 6: GSM946735       38     ND female    54  27.0   8.6          GSM1023690
+ 7: GSM946744       48     ND female    56  27.5   5.9          GSM1023700
+ 8: GSM946745       49    T2D   male    62  24.8    NA          GSM1023701
+ 9: GSM946750       54     ND   male    61  24.7   8.0          GSM1023706
+10: GSM946752       56     ND female    64  27.0   6.2          GSM1023708
+11: GSM946757       61     ND   male    62  36.9   6.2          GSM1023713
+12: GSM946758       62     ND female    57  32.5   6.2          GSM1023714
+13: GSM946759       63     ND   male    62  25.3   6.4          GSM1023715
+    sameID_GSE41762_group                        sameID_covariates
+                   <char>                                   <char>
+ 1:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+ 2:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+ 3:                    ND SEX_DIFF(female);age=;bmi=;hba1c=;group=
+ 4:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+ 5:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+ 6:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+ 7:                    ND         sex=;age=;bmi=;HBA1C_DIFF;group=
+ 8:                    ND       sex=;age=;bmi=;hba1c_NA;GROUP_DIFF
+ 9:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+10:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+11:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+12:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+13:                   T2D         sex=;age=;bmi=;hba1c=;GROUP_DIFF
+    identical_CEL_GSE41762_gsm overlap_status
+                        <char>         <char>
+ 1:                 GSM1023672         unique
+ 2:                 GSM1023680         unique
+ 3:                 GSM1023682         unique
+ 4:                 GSM1023683         unique
+ 5:                 GSM1023687         unique
+ 6:                 GSM1023690         unique
+ 7:                 GSM1023700         shared
+ 8:                 GSM1023701         unique
+ 9:                 GSM1023706         shared
+10:                 GSM1023708         unique
+11:                 GSM1023713         unique
+12:                 GSM1023714         unique
+13:                 GSM1023715         unique
+
+  *** FLAG: every GSE38642 array is a byte-identical copy of a GSE41762 array. The 'unique' samples
+   *** under the covariate rule are the SAME arrays with a different diabetes label (or sex label).
+   *** GSE38642 contains no donor or array independent of GSE41762.
+
+==== GSE20966 vs GSE41762 / GSE38642 ====
+  GSE20966 covariates available: sex, age (integer), BMI (0.1; one sample NA), group.  HbA1c: not deposited.
+          gsm sample_id  group    sex   age   bmi n_matches_GSE41762
+       <char>    <char> <char> <char> <num> <num>              <int>
+ 1: GSM524151       H13     ND female    67  39.0                  0
+ 2: GSM524152     H16_2     ND female    65  34.0                  0
+ 3: GSM524153       H03     ND female    62  22.4                  0
+ 4: GSM524154       H18     ND   male    60  31.0                  0
+ 5: GSM524155        H6     ND   male    59  36.4                  0
+ 6: GSM524156        H7     ND   male    52  26.0                  0
+ 7: GSM524157        H8     ND   male    54  34.2                  0
+ 8: GSM524158       H14     ND female    64  27.1                  0
+ 9: GSM524159       H16     ND   male    57  27.7                  0
+10: GSM524160       H22     ND   male    63  28.5                  0
+11: GSM524161        D2    T2D   male    74  26.0                  0
+12: GSM524162        D3    T2D female    68  29.4                  0
+13: GSM524163        D1    T2D   male    63  29.4                  0
+14: GSM524164       DM2    T2D   male    64    NA                  0
+15: GSM524165        D6    T2D female    74  28.6                  0
+16: GSM524166        D7    T2D   male    69  33.6                  0
+17: GSM524167        D8    T2D   male    61  27.8                  0
+18: GSM524168        D9    T2D   male    79  25.9                  0
+19: GSM524169       D11    T2D   male    56  31.0                  0
+20: GSM524170       D12    T2D female    65  46.0                  0
+          gsm sample_id  group    sex   age   bmi n_matches_GSE41762
+       <char>    <char> <char> <char> <num> <num>              <int>
+    n_matches_GSE38642 diag_near_GSE41762 diag_near_GSE38642     overlap_status
+                 <int>             <char>             <char>             <char>
+ 1:                  0                                       no_covariate_match
+ 2:                  0                                       no_covariate_match
+ 3:                  0                                       no_covariate_match
+ 4:                  0                                       no_covariate_match
+ 5:                  0                                       no_covariate_match
+ 6:                  0                                       no_covariate_match
+ 7:                  0                                       no_covariate_match
+ 8:                  0                             GSM946752 no_covariate_match
+ 9:                  0                                       no_covariate_match
+10:                  0                                       no_covariate_match
+11:                  0                                       no_covariate_match
+12:                  0                                       no_covariate_match
+13:                  0                                       no_covariate_match
+14:                  0                                       no_covariate_match
+15:                  0                                       no_covariate_match
+16:                  0                                       no_covariate_match
+17:                  0                                       no_covariate_match
+18:                  0                                       no_covariate_match
+19:                  0                                       no_covariate_match
+20:                  0                                       no_covariate_match
+    n_matches_GSE38642 diag_near_GSE41762 diag_near_GSE38642     overlap_status
+                 <int>             <char>             <char>             <char>
+
+  Provenance (series-matrix headers):
+   GSE41762 title              Expression data from human pancreatic islets
+   GSE41762 pubmed_id          23140642 | 25298321
+   GSE41762 overall_design     Islets from cadaver donors (57 non-diabetic and 20 diabetic) were provided by the Nordic Islet Transplantation Programme (www.nordicislets.org), Uppsala University. The microarrays were performed using GeneChip® Human Gene 1.0 ST whole transcript according to Affymetrix standard protocol.
+   GSE41762 contributor        Anders,,Rosengren | Leif,,Groop | Erik,,Renström
+   GSE41762 contact_institute  Lund University
+   GSE41762 contact_city       Malmo
+   GSE41762 contact_country    Sweden
+   GSE38642 title              Expression data from human pancreatic islets
+   GSE38642 pubmed_id          22768844 | 23707792 | 23935095 | 26742564
+   GSE38642 overall_design     Islets from cadaver donors (54 non-diabetic and 9 diabetic) were provided by the Nordic Islet Transplantation Programme (www.nordicislets.org), Uppsala University. The microarrays were performed using GeneChip® Human Gene 1.0 ST whole transcript according to Affymetrix standard protocol.
+   GSE38642 contributor        João,,Fadista | Jalal,,Taneera
+   GSE38642 contact_institute  Lund University Diabetes Centre
+   GSE38642 contact_city       Malmö
+   GSE38642 contact_country    Sweden
+   GSE20966 title              Gene expression profiles of beta-cell enriched tissue obtained by Laser Capture Microdissection from subjects with type 2 diabetes
+   GSE20966 pubmed_id          20644627
+   GSE20966 overall_design     The gene expression profile of beta-cells obtained from cadaver pancreases of 10 control and 10 type 2 diabetic subjects was evaluated. Beta-cells were acquired from pancreatic tissue sections using the laser capture microdissection technique. RNA was extracted, amplified, biotinylated and hybridize
+   GSE20966 contributor        Lorella,,Marselli | Jeffrey,,Thorne | Sonika,,Dahiya | Dennis,C,Sgroi | Arun,,Sharma | Susan,,Bonner-Weir | Piero,,Marchetti | Gordon,C,Weir
+   GSE20966 contact_institute  Harvard Medical School
+   GSE20966 contact_city       Boston
+   GSE20966 contact_country    USA
+
+  GSE20966: no sample matches any GSE41762/GSE38642 donor on the covariates available.
+
+Outputs:
+  /run/media/juvaasbollini/My Files/Senescence-Diabetes-Study/manifest/GSE38642_donor_overlap.csv
+  /run/media/juvaasbollini/My Files/Senescence-Diabetes-Study/manifest/GSE20966_donor_overlap.csv
+  /run/media/juvaasbollini/My Files/Senescence-Diabetes-Study/results/stage2/02_donor_overlap.rds
+
+All assertions passed.
+
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] data.table_1.18.6.1 here_1.0.2         
+
+loaded via a namespace (and not attached):
+[1] BiocManager_1.30.27 compiler_4.5.2      rprojroot_2.1.1    
+[4] tools_4.5.2         renv_1.3.0         

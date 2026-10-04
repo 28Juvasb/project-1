@@ -1,0 +1,21 @@
+gsm,sample_id,group,sex,age,bmi,matched_GSE41762_gsm,n_matches_GSE41762,diag_near_GSE41762,matched_GSE38642_gsm,n_matches_GSE38642,diag_near_GSE38642,match_rule,overlap_status
+GSM524151,H13,ND,female,67,39,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524152,H16_2,ND,female,65,34,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524153,H03,ND,female,62,22.4,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524154,H18,ND,male,60,31,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524155,H6,ND,male,59,36.4,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524156,H7,ND,male,52,26,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524157,H8,ND,male,54,34.2,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524158,H14,ND,female,64,27.1,"",0,"","",0,GSM946752,sex+group+age+BMI,no_covariate_match
+GSM524159,H16,ND,male,57,27.7,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524160,H22,ND,male,63,28.5,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524161,D2,T2D,male,74,26,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524162,D3,T2D,female,68,29.4,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524163,D1,T2D,male,63,29.4,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524164,DM2,T2D,male,64,,"",0,"","",0,"",sex+group+age only (BMI missing in GSE20966),no_covariate_match
+GSM524165,D6,T2D,female,74,28.6,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524166,D7,T2D,male,69,33.6,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524167,D8,T2D,male,61,27.8,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524168,D9,T2D,male,79,25.9,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524169,D11,T2D,male,56,31,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
+GSM524170,D12,T2D,female,65,46,"",0,"","",0,"",sex+group+age+BMI,no_covariate_match
