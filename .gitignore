@@ -1,0 +1,8 @@
+data/raw/
+data/processed/
+renv/library/
+renv/staging/
+.Rproj.user/
+.Rhistory
+.RData
+__pycache__/

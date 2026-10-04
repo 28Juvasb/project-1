@@ -1,0 +1,7 @@
+Inputs: GEO accessions GSE41762, GSE38642, GSE20966, GSE81608, GSE27951, GSE16415, GSE71416 
+Platforms: GPL6244, GPL570, GPL1352, GPL2986 
+
+====  GSE41762 
+Error in open.connection(x, "rb") : cannot open the connection
+Calls: getGEO ... getAndParseGSEMatrices -> getDirListing -> <Anonymous> -> read_html.default
+Execution halted

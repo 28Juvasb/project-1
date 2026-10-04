@@ -1,0 +1,17 @@
+path,size_bytes,md5
+genesets/CellAge.csv,43272,89ad251b484dd7f215aab3c1a0cf5f15
+genesets/GenAge_human.csv,7071,c823d7cb16044a20c35cd9b6b032579d
+genesets/SOURCES.md,1166,a1188da456dc1419a6af43eef43d9fc5
+genesets/SenMayo.csv,850,e1cf63fd67e69e3f790f4617f0d5d3b6
+genesets/source_files/SAUL_SEN_MAYO.gmt,794,322420ebe32478d2403dbc3de2fa6600
+genesets/source_files/cellage3.tsv,73627,76c1805060c0e7ddac8398b33b5b4866
+genesets/source_files/genage_human.csv,22778,23021ea25e98da6eda03e86604e9c5c7
+genesets/source_files/release.html,2545,2a89f89e2db61c934b5c96ba7131cb90
+ligands/LSC_NEEDED_FROM_LAB.md,476,6806d4187e0f50ce5d66238245a52c74
+ligands/SOURCES.md,468,5cbf7d3c1f2bc5a4ed61f1f8768ccd35
+ligands/embelin_CID3218_3D.sdf,7123,ab137826b962a4edf87ac6b05c66f2fe
+ligands/embelin_CID3218_smiles.csv,113,6f1c93780690dce7c18cdca0d25de12a
+ligands/naringenin_CID932_3D.sdf,6359,de2b8f28e40791ac8c45d5cdc2cadc6d
+ligands/naringenin_CID932_smiles.csv,128,fa85d3834082257dfd55679f4097d53e
+ligands/rutin_CID5280805_3D.sdf,11052,1c9e14a10f5d248cdd76b29bb1e6e285
+ligands/rutin_CID5280805_smiles.csv,269,78bea87e3bca53c21a4b589d6780ea37

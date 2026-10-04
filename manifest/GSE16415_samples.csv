@@ -1,0 +1,11 @@
+geo_accession,title,platform_id,disease state:ch1,characteristics_ch1,group
+GSM412607,HB007WT,GPL2986,control,disease state: control,ND
+GSM412608,HB007WZ,GPL2986,control,disease state: control,ND
+GSM412609,HB0084U,GPL2986,control,disease state: control,ND
+GSM412610,HB008CZ,GPL2986,control,disease state: control,ND
+GSM412611,HBOOGA7,GPL2986,control,disease state: control,ND
+GSM412612,HB00CY3,GPL2986,type-2 diabetes mellitus,disease state: type-2 diabetes mellitus,T2D
+GSM412613,HB007WP,GPL2986,type-2 diabetes mellitus,disease state: type-2 diabetes mellitus,T2D
+GSM412614,HB007WX,GPL2986,type-2 diabetes mellitus,disease state: type-2 diabetes mellitus,T2D
+GSM412615,HB008CQ,GPL2986,type-2 diabetes mellitus,disease state: type-2 diabetes mellitus,T2D
+GSM412616,HB00GAH,GPL2986,type-2 diabetes mellitus,disease state: type-2 diabetes mellitus,T2D

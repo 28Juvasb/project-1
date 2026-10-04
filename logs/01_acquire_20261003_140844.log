@@ -1,0 +1,50 @@
+Inputs: GEO accessions GSE41762, GSE38642, GSE20966, GSE81608, GSE27951, GSE16415, GSE71416 
+Platforms: GPL6244, GPL570, GPL1352, GPL2986 
+
+====  GSE41762 
+Found 1 file(s)
+GSE41762_series_matrix.txt.gz
+  manifest GSE41762_samples.csv: 77 samples, platform GPL6244
+  supplementary: GSE41762_RAW.tar 
+====  GSE38642 
+Found 1 file(s)
+GSE38642_series_matrix.txt.gz
+  manifest GSE38642_samples.csv: 63 samples, platform GPL6244
+  supplementary: GSE38642_RAW.tar 
+====  GSE20966 
+Found 1 file(s)
+GSE20966_series_matrix.txt.gz
+  manifest GSE20966_samples.csv: 20 samples, platform GPL1352
+  supplementary: GSE20966_RAW.tar 
+====  GSE81608 
+Found 1 file(s)
+GSE81608_series_matrix.txt.gz
+  manifest GSE81608_samples.csv: 1600 samples, platform GPL16791
+  supplementary: GSE81608_human_islets_rpkm.txt.gz 
+====  GSE27951 
+Found 2 file(s)
+GSE27951-GPL13273_series_matrix.txt.gz
+GSE27951-GPL570_series_matrix.txt.gz
+  manifest GSE27951_samples_GPL13273.csv: 12 samples, platform GPL13273
+  manifest GSE27951_samples_GPL570.csv: 33 samples, platform GPL570
+  supplementary: GSE27951_RAW.tar 
+====  GSE16415 
+Found 1 file(s)
+GSE16415_series_matrix.txt.gz
+  manifest GSE16415_samples.csv: 10 samples, platform GPL2986
+  supplementary: GSE16415_RAW.tar, GSE16415_all_data_no_controls.txt.gz 
+====  GSE71416 
+Found 1 file(s)
+GSE71416_series_matrix.txt.gz
+  manifest GSE71416_samples.csv: 20 samples, platform GPL570
+  supplementary: GSE71416_RAW.tar 
+====  GPL6244 
+  ok
+====  GPL570 
+  ok
+====  GPL1352 
+  ok
+====  GPL2986 
+  ok
+
+Stage 1a complete.
