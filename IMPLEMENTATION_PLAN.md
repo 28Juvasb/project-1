@@ -1,5 +1,7 @@
 # Implementation Plan — Claude Code task sequence
 
+> **Status note (2026-10-06):** this plan predates protocol v1.1/v1.2. Where it conflicts with `docs/Methodology_Protocol_v1.md` or CLAUDE.md, the protocol wins: GSE38642 is retired (arrays byte-identical to GSE41762); islet validation is GSE76894 (primary) + GSE20966 (secondary); docking (Task 10) is governed by protocol §5.4 and was NOT performed (only candidate IL1R1 fails the stability >= 0.5 criterion); Task 11 report content follows the executed analyses. See `logs/deviations.md`.
+
 How to use: put `CLAUDE.md` in the repo root and the proposal + protocol in `docs/`. Then feed the tasks below into Claude Code **one at a time, in order**. Each is self-contained. Do not skip ahead — later tasks assume earlier outputs exist and have passed their checks.
 
 After each task, read the acceptance checks yourself before moving on. Claude Code will tell you they passed; verify at least the sample counts and AUCs by eye.

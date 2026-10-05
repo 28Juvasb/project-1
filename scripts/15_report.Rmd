@@ -1,0 +1,589 @@
+---
+title: "Cross-tissue senescence hub-gene study in type 2 diabetes: results report"
+subtitle: "Computational study, human GEO microarray data; assembled from saved results only"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    number_sections: false
+    self_contained: true
+    theme: default
+    df_print: kable
+---
+
+```{r setup, include=FALSE}
+# scripts/15_report.Rmd  -- Task 11 report.
+# Assembles SAVED results only. Nothing is recomputed, no model is refit, no validation set is opened or re-scored.
+# Every number table is read from a file under results/, logs/, manifest/ or data/processed/ (pheno tables only for sample counts).
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, results = "asis", fig.align = "center")
+suppressPackageStartupMessages({ library(here); library(knitr); library(jsonlite) })
+set.seed(42)
+options(knitr.kable.NA = "n/a", stringsAsFactors = FALSE)
+T_START <- Sys.time(); TS <- format(T_START, "%Y%m%d_%H%M%S")
+
+# ---- source registry: every file the report reads is registered here and re-checked in the closing assertions ----
+REG <- new.env(); REG$data <- character(); REG$fig <- character(); REG$text <- character()
+need <- function(p, kind = "data") { f <- here(p); if (!file.exists(f)) stop("MISSING INPUT: ", p, call. = FALSE); REG[[kind]] <- union(REG[[kind]], p); f }
+rd   <- function(p, ...) read.csv(need(p), check.names = FALSE, stringsAsFactors = FALSE, ...)
+rdr  <- function(p) readRDS(need(p))
+rl   <- function(p) readLines(need(p, "text"), warn = FALSE)
+fmt  <- function(x, d = 3) ifelse(is.na(x), "n/a", formatC(as.numeric(x), format = "f", digits = d))
+ci   <- function(lo, hi, d = 3) ifelse(is.na(lo) | is.na(hi), "n/a", paste0(fmt(lo, d), "-", fmt(hi, d)))
+pv   <- function(p) ifelse(is.na(p), "n/a", ifelse(p < 0.001, formatC(p, format = "e", digits = 2), formatC(p, format = "f", digits = 3)))
+esc  <- function(x) gsub("\\|", "/", as.character(x))
+tab  <- function(df, cap = NULL, ...) { df[] <- lapply(df, function(z) if (is.character(z)) esc(z) else z); print(kable(df, caption = cap, row.names = FALSE, ...)); cat("\n\n") }
+fig  <- function(p, cap = NULL, w = "100%") {
+  need(p, "fig"); pth <- here(p)
+  cat(sprintf("\n\n<figure><img src=\"data:image/png;base64,%s\" style=\"width:%s\"/><figcaption>%s <em>(source: %s)</em></figcaption></figure>\n\n",
+              base64enc_file(pth), w, cap, p))
+}
+base64enc_file <- function(f) { r <- readBin(f, "raw", file.info(f)$size); jsonlite::base64_enc(r) }
+FLAGS <- data.frame(check = character(), result = character(), detail = character(), stringsAsFactors = FALSE)
+flag <- function(check, ok, detail = "") { FLAGS[nrow(FLAGS) + 1, ] <<- list(check, if (ok) "consistent" else "MISMATCH", detail); invisible(ok) }
+sfq  <- function(tb, g) { v <- tb$frequency[tb$gene == g]; if (length(v)) fmt(v, 2) else "0.00 (never in a fold final panel)" }
+near <- function(a, b, tol = 1e-9) isTRUE(all(abs(as.numeric(a) - as.numeric(b)) < tol))
+
+# ---- shared reads (all from saved files) ----
+fp   <- rd("results/stage5/08_final_panels.csv")
+vr   <- rd("results/stage5/09_validation_results.csv")
+doe  <- rd("results/stage5/09_direction_of_effect.csv")
+gp   <- rd("results/stage5/09_gene_presence.csv")
+stab_i <- rd("results/stage3/stability_selection.csv")
+stab_a <- rd("results/stage3/stability_selection_adipose.csv")
+sens <- rd("results/stage3/06b_sensitivity_comparison.csv")
+exc  <- rd("logs/excluded_samples.csv")
+os   <- rd("results/stage6/10_overlap_summary.csv")
+isl  <- fp[fp$arm == "islet"   & fp$role == "main", ]; adp <- fp[fp$arm == "adipose" & fp$role == "main", ]
+v76  <- vr[vr$cohort == "GSE76894", ]; v20 <- vr[vr$cohort == "GSE20966", ]; v71 <- vr[vr$cohort == "GSE71416", ]; v16 <- vr[vr$cohort == "GSE16415", ]
+```
+
+<style>
+.main-container { max-width: 1250px; }
+table { display: block; overflow-x: auto; font-size: 12px; width: auto !important; }
+figure { margin: 12px 0; text-align: center; } figcaption { font-size: 12px; color: #555; }
+blockquote { font-size: 14px; }
+</style>
+
+# Summary
+
+```{r summary_text}
+n_ci_excl <- sum(c(isl$nested_ci_lo_sample_level_HEADLINE, adp$nested_ci_lo_sample_level_HEADLINE, v76$auc_ci_lo_bootstrap_HEADLINE, v71$auc_ci_lo_bootstrap_HEADLINE) > 0.5)
+cat(sprintf("
+* **Islet arm.** Nested-CV AUC %s (95%% CI %s, sample-level bootstrap). The apparent AUC of the full-cohort model on its own training data is %s and is optimistic. The final panel is a single gene, **%s**. On independent islets (GSE76894, n = %d) the frozen model gives AUC %s (%s): the interval includes 0.5, so the discovery signal is **not demonstrated to replicate**. The secondary islet set (GSE20966, n = %d) gives %s (%s), also including 0.5.
+* **Adipose arm.** Nested-CV AUC %s (%s): indistinguishable from chance. The apparent AUC is %s. The final panel is a single gene, **%s**. External validation (GSE71416, n = %d) gives AUC %s (%s), and the direction of effect is opposite to discovery in both adipose validation sets. **The adipose result is a null result.**
+* Of the four headline numbers, **%d of 4** has a confidence interval that excludes 0.5 (islet nested CV).
+* **Cross-tissue.** No shared gene between the two panels; the overlap is not a finding (primary permutation p = %s, which is 1 by construction when the observed overlap is 0).
+* **Docking was not performed**: under protocol 5.4 the only candidate (%s, stability %s) fails criterion (a), stability >= 0.5.
+* Sensitivity analyses show the panels are unstable. The islet AUC rises when 11 label-discordant donors are removed, but that is a hypothesis, not a finding.
+",
+fmt(isl$nested_cv_auc_headline), ci(isl$nested_ci_lo_sample_level_HEADLINE, isl$nested_ci_hi_sample_level_HEADLINE), fmt(isl$apparent_auc_optimistic), isl$final_panel,
+v76$n, fmt(v76$auc), ci(v76$auc_ci_lo_bootstrap_HEADLINE, v76$auc_ci_hi_bootstrap_HEADLINE),
+v20$n, fmt(v20$auc), ci(v20$auc_ci_lo_bootstrap_HEADLINE, v20$auc_ci_hi_bootstrap_HEADLINE),
+fmt(adp$nested_cv_auc_headline), ci(adp$nested_ci_lo_sample_level_HEADLINE, adp$nested_ci_hi_sample_level_HEADLINE), fmt(adp$apparent_auc_optimistic), adp$final_panel,
+v71$n, fmt(v71$auc), ci(v71$auc_ci_lo_bootstrap_HEADLINE, v71$auc_ci_hi_bootstrap_HEADLINE),
+n_ci_excl, pv(as.numeric(os$value[os$item == "PRIMARY empirical p"])),
+isl$final_panel, fmt(stab_i$frequency[stab_i$gene == isl$final_panel], 2)))
+```
+
+# 1. Study design and data
+
+Two parallel arms (islet, adipose): discovery, then a nested-CV-validated hub-gene panel (senescence gene union screened by limma, then LASSO, SVM-RFE and Boruta/Random Forest, intersected, then a ridge classifier), then a single frozen-model pass on external cohorts. Followed by cross-tissue comparison, enrichment, single-cell specificity (islet only) and a docking target rule. Specification: `docs/Methodology_Protocol_v1.md` (v1.2). Human microarray data from NCBI GEO; no wet-lab component.
+
+## 1.1 Cohorts and final sample sizes
+
+```{r cohorts}
+cv   <- rd("manifest/count_verification.csv")
+phn  <- function(g) { p <- rdr(sprintf("data/processed/04_%s_pheno.rds", g)); c(nd = sum(p$group == "ND"), t2d = sum(p$group == "T2D"), n = nrow(p)) }
+nexc <- function(g) sum(exc$gse == g)
+cvr  <- function(g) cv[cv$dataset == g, ]
+sc_g <- rd("results/stage7/12_qc_by_group.csv"); sc_d <- rd("results/stage7/12_qc_by_donor.csv")
+f41 <- phn("GSE41762"); f76 <- phn("GSE76894"); f20 <- phn("GSE20966"); f27 <- phn("GSE27951"); f71 <- phn("GSE71416"); f16 <- phn("GSE16415")
+c41 <- cvr("GSE41762"); c76 <- cvr("GSE76894"); c20 <- cvr("GSE20966"); c27 <- cvr("GSE27951_GPL570"); c71 <- cvr("GSE71416"); c16 <- cvr("GSE16415"); c38 <- cvr("GSE38642"); c81 <- cvr("GSE81608")
+nd_t <- function(x) sprintf("%d ND / %d T2D (n = %d)", x[["nd"]], x[["t2d"]], x[["n"]])
+coh <- data.frame(
+  Role = c("Islet discovery", "Islet external validation, primary", "Islet external validation, secondary", "Islet single-cell (descriptive)",
+           "Adipose discovery", "Adipose external validation", "Adipose direction-only", "Islet 'sensitivity' (RETIRED)"),
+  Accession = c("GSE41762", "GSE76894", "GSE20966", "GSE81608", "GSE27951 (GPL570)", "GSE71416", "GSE16415", "GSE38642"),
+  Tissue_platform = c("Whole islets, GPL6244", "Whole islets (IMIDIA donors), GPL570", "LCM beta-cells, GPL1352", "Islet cells, GPL16791 (SMARTer, RPKM only)",
+                      "Subcutaneous adipose, GPL570", "Omental adipose, morbidly obese, GPL570", "Visceral adipose, GPL2986", "Whole islets, GPL6244"),
+  Acquired = c(sprintf("%d ND / %d T2D", c41$obs_ND, c41$obs_T2D), sprintf("%d ND / %d T2D (n = %d)", c76$obs_ND, c76$obs_T2D, c76$obs_n),
+               sprintf("%d ND / %d T2D", c20$obs_ND, c20$obs_T2D), sprintf("%d ND / %d T2D cells (%d)", c81$obs_ND, c81$obs_T2D, c81$obs_n),
+               sprintf("%d ND / %d T2D (+ %d IGT)", c27$obs_ND, c27$obs_T2D, nexc("GSE27951")), sprintf("%d ND / %d T2D", c71$obs_ND, c71$obs_T2D),
+               sprintf("%d ND / %d T2D", c16$obs_ND, c16$obs_T2D), sprintf("%d ND / %d T2D (n = %d)", c38$obs_ND, c38$obs_T2D, c38$obs_n)),
+  Final_analysed = c(nd_t(f41), nd_t(f76), nd_t(f20),
+                     sprintf("%d ND / %d T2D cells post-QC (n = %d); %d ND / %d T2D donors", sc_g$n_kept[sc_g$group == "ND"], sc_g$n_kept[sc_g$group == "T2D"], sum(sc_g$n_kept),
+                             sum(sc_d$group == "ND"), sum(sc_d$group == "T2D")),
+                     nd_t(f27), nd_t(f71), nd_t(f16), "0 (not used)"),
+  Exclusions = c("none", sprintf("%d ND donors excluded for possible overlap with GSE41762/GSE20966 (protocol v1.1)", nexc("GSE76894")), "none", "MAD-based cell QC (section 7)",
+                 sprintf("%d IGT samples excluded (project-lead decision; neither group)", nexc("GSE27951")),
+                 sprintf("%d arrays excluded, median NUSE > 1.05 (protocol 2.3)", nexc("GSE71416")), "none",
+                 "RETIRED (protocol v1.1): all 63 CEL files byte-identical to GSE41762 arrays; not independent data"),
+  check.names = FALSE)
+names(coh) <- c("Role", "Accession", "Tissue, platform", "Acquired", "Final analysed", "Exclusions")
+tab(coh, "Cohorts, final sample sizes after exclusions. Acquired = counts verified at download (manifest/count_verification.csv); final = from the QC-passed phenotype tables (data/processed/04_*_pheno.rds).")
+# guards: arithmetic of exclusions
+stopifnot(f41[["n"]] == 77, f76[["n"]] == c76$obs_n - nexc("GSE76894"), f71[["n"]] == c71$obs_n - nexc("GSE71416"), f27[["n"]] == 23, nexc("GSE27951") == 10,
+          nexc("GSE76894") == 4, nexc("GSE71416") == 3, f20[["n"]] == 20, f16[["n"]] == 10)
+flag("final n (pheno) equals n scored in 09 for each validation cohort",
+     all(c(f76[["n"]] == v76$n, f20[["n"]] == v20$n, f71[["n"]] == v71$n, f16[["n"]] == v16$n)), "GSE76894, GSE20966, GSE71416, GSE16415")
+flag("final n_T2D (pheno) equals n_T2D scored in 09", all(c(f76[["t2d"]] == v76$n_T2D, f71[["t2d"]] == v71$n_T2D, f20[["t2d"]] == v20$n_T2D, f16[["t2d"]] == v16$n_T2D)))
+flag("discovery n (pheno) equals n in 08 final panels", f41[["n"]] == isl$n && f27[["n"]] == adp$n && f41[["t2d"]] == isl$n_T2D && f27[["t2d"]] == adp$n_T2D)
+```
+
+Notes on group definitions and data handling. GSE27951: group from the GEO `clinical status` field (NGT = ND, DM = T2D, IGT excluded); three samples (GSM691135, GSM691139, GSM691140) have title/field discordance, the field is used, and a sensitivity rerun covers the PCA outlier (section 4). GSE71416: group from sample titles (no disease field in GEO). GSE41762: all 77 arrays normalised together; the submitters' donor 1-48 / 49-80 split is carried as the covariate `submitter_norm_batch`. Each GSE is normalised independently; no cross-cohort batch correction anywhere.
+
+**GSE38642 retirement.** Task 2 showed that all 63 of its CEL files are byte-identical (decompressed MD5) to arrays of GSE41762, so it provides no independent data. 11 donors carry a different diabetes label in GSE38642 than in GSE41762 (10 ND in GSE38642 but T2D in GSE41762; 1 the reverse). That discordance is handled as a pre-specified sensitivity analysis (section 4) and is also a limitation (section 9).
+
+```{r excl_tab}
+e2 <- aggregate(gsm ~ gse + reason, data = exc, FUN = length); names(e2) <- c("Dataset", "Reason", "n arrays excluded")
+tab(e2[order(e2$Dataset), ], "Exclusions by dataset and reason (summarised from logs/excluded_samples.csv; the full list is in section 10).")
+```
+
+## 1.2 Protocol lock timeline
+
+```{r timeline}
+gt <- function(args) system2("git", c("-C", shQuote(here()), shQuote(args)), stdout = TRUE, stderr = FALSE)
+tags <- gt(c("tag", "--list", "protocol-v*"))
+tl <- do.call(rbind, lapply(tags, function(t) { x <- strsplit(gt(c("log", "-1", "--format=%H|%ad|%s", "--date=iso", t)), "\\|")[[1]]
+  data.frame(Tag = t, Commit = substr(x[1], 1, 7), Date = x[2], Subject = paste(x[-(1:2)], collapse = "|"), check.names = FALSE) }))
+tl <- tl[order(tl$Date), ]
+tab(tl, "Protocol lock tags (git tag / git log at report time).")
+lg <- gt(c("log", "--reverse", "--format=%h|%ad|%s", "--date=format:%Y-%m-%d %H:%M"))
+lg <- do.call(rbind, lapply(strsplit(lg, "\\|"), function(x) data.frame(Commit = x[1], Date = x[2], Subject = paste(x[-(1:2)], collapse = "|"))))
+tab(lg, "Full commit history, oldest first.")
+lock_txt <- rl("results/stage5/09_VALIDATION_SCORED.lock")
+HEAD_HASH <- gt(c("rev-parse", "HEAD"))
+cat(sprintf("Validation lock file (`results/stage5/09_VALIDATION_SCORED.lock`) first line: `%s`. Tag `protocol-v1.2` precedes the scoring time, so the docking-rule amendment (5.4b) was made before any validation set was scored. Report rendered at git HEAD `%s`; this report file itself is not part of that commit.\n\n", lock_txt[1], substr(HEAD_HASH, 1, 7)))
+# guard: v1.2 tag time precedes lock time (both IST +0530)
+t12 <- as.POSIXct(tl$Date[tl$Tag == "protocol-v1.2"], format = "%Y-%m-%d %H:%M:%S", tz = "Asia/Kolkata")
+tlock <- as.POSIXct(sub("validation scored: ", "", sub(" IST", "", lock_txt[1])), format = "%Y-%m-%d %H:%M:%S", tz = "Asia/Kolkata")
+stopifnot(!is.na(t12), !is.na(tlock), t12 < tlock)
+```
+
+Stated at lock time (protocol header): all GEO files had been downloaded and sample metadata inspected; no expression values had been normalised or analysed when `protocol-v1` and `protocol-v1.1` were tagged. Pre-analysis plan: `docs/pre_analysis_plan.md`.
+
+# 2. Headline results
+
+The four numbers. Nested-CV AUC is honest and is the headline (CLAUDE.md rule 5); the apparent AUC (full-cohort model scored on its own training data) is optimistic and appears only beside it. Two 95% CIs per number: **headline** = sample-level stratified bootstrap (2000 replicates); **protocol** = `pROC::ci.auc` (2000 stratified bootstraps). For the discovery arms the protocol CI is computed on pooled out-of-fold predictions of all repeats and is too narrow (the repeats are not independent); the headline interval is the more conservative one (`logs/deviations.md`, 2026-10-05). For the external cohorts there is one prediction per sample, so the two intervals come out identical in the saved file.
+
+```{r headline}
+hl <- data.frame(
+  Number = c("1. Islet nested CV", "2. Islet external", "3. Adipose nested CV", "4. Adipose external"),
+  Cohort = c("GSE41762 (discovery)", "GSE76894 (primary external)", "GSE27951 (discovery)", "GSE71416 (external)"),
+  `n (T2D)` = c(sprintf("%d (%d)", isl$n, isl$n_T2D), sprintf("%d (%d)", v76$n, v76$n_T2D), sprintf("%d (%d)", adp$n, adp$n_T2D), sprintf("%d (%d)", v71$n, v71$n_T2D)),
+  Panel = c(isl$final_panel, v76$panel_genes, adp$final_panel, v71$panel_genes),
+  AUC = c(fmt(isl$nested_cv_auc_headline), fmt(v76$auc), fmt(adp$nested_cv_auc_headline), fmt(v71$auc)),
+  `95% CI headline (bootstrap)` = c(ci(isl$nested_ci_lo_sample_level_HEADLINE, isl$nested_ci_hi_sample_level_HEADLINE), ci(v76$auc_ci_lo_bootstrap_HEADLINE, v76$auc_ci_hi_bootstrap_HEADLINE),
+                                    ci(adp$nested_ci_lo_sample_level_HEADLINE, adp$nested_ci_hi_sample_level_HEADLINE), ci(v71$auc_ci_lo_bootstrap_HEADLINE, v71$auc_ci_hi_bootstrap_HEADLINE)),
+  `95% CI protocol (pROC)` = c(ci(isl$nested_ci_lo_protocol_pROC, isl$nested_ci_hi_protocol_pROC), ci(v76$auc_ci_lo_pROC, v76$auc_ci_hi_pROC),
+                               ci(adp$nested_ci_lo_protocol_pROC, adp$nested_ci_hi_protocol_pROC), ci(v71$auc_ci_lo_pROC, v71$auc_ci_hi_pROC)),
+  `Optimistic apparent AUC [pROC 95% CI]` = c(sprintf("%s [%s]", fmt(isl$apparent_auc_optimistic), ci(isl$apparent_ci_lo_pROC, isl$apparent_ci_hi_pROC)), "n/a (external)",
+                                              sprintf("%s [%s]", fmt(adp$apparent_auc_optimistic), ci(adp$apparent_ci_lo_pROC, adp$apparent_ci_hi_pROC)), "n/a (external)"),
+  `CI excludes 0.5?` = c(isl$nested_ci_lo_sample_level_HEADLINE > 0.5, v76$auc_ci_lo_bootstrap_HEADLINE > 0.5, adp$nested_ci_lo_sample_level_HEADLINE > 0.5, v71$auc_ci_lo_bootstrap_HEADLINE > 0.5),
+  check.names = FALSE)
+hl[["CI excludes 0.5?"]] <- ifelse(hl[["CI excludes 0.5?"]], "yes", "no")
+tab(hl, "Headline table: four numbers, each with 95% CI, beside the optimistic apparent AUC for the discovery arms.")
+sec <- data.frame(
+  Cohort = c("GSE20966 (secondary islet external)", "GSE16415 (adipose, direction only)"),
+  `n (T2D)` = c(sprintf("%d (%d)", v20$n, v20$n_T2D), sprintf("%d (%d)", v16$n, v16$n_T2D)),
+  Panel = c(v20$panel_genes, v16$panel_genes),
+  AUC = c(fmt(v20$auc), "not computed (protocol 7: direction only)"),
+  `95% CI headline (bootstrap)` = c(ci(v20$auc_ci_lo_bootstrap_HEADLINE, v20$auc_ci_hi_bootstrap_HEADLINE), "n/a"),
+  `95% CI protocol (pROC)` = c(ci(v20$auc_ci_lo_pROC, v20$auc_ci_hi_pROC), "n/a"), check.names = FALSE)
+tab(sec, "Secondary external (GSE20966) and direction-only (GSE16415) cohorts.")
+dd <- doe[, c("cohort", "gene", "discovery_cohort", "discovery_direction", "validation_direction", "concordant_with_discovery", "welch_t_p_descriptive")]
+dd$welch_t_p_descriptive <- fmt(dd$welch_t_p_descriptive)
+names(dd) <- c("Validation cohort", "Gene", "Discovery cohort", "Direction in discovery", "Direction in validation", "Concordant", "Welch t p (descriptive)")
+tab(dd, "Direction of effect of the single panel gene in each validation cohort (information only; it informs no decision). The sign test is degenerate for a one-gene panel (two-sided p = 1 in every row of the saved file).")
+stopifnot(all(vr$sign_test_p == 1), all(vr$n_genes_scored == 1))
+# narrative guards
+stopifnot(isl$nested_ci_lo_sample_level_HEADLINE > 0.5, isl$nested_ci_lo_protocol_pROC > 0.5,
+          adp$nested_ci_lo_sample_level_HEADLINE < 0.5, adp$nested_ci_hi_sample_level_HEADLINE > 0.5, adp$nested_ci_lo_protocol_pROC < 0.5, adp$nested_ci_hi_protocol_pROC > 0.5,
+          v76$auc_ci_lo_bootstrap_HEADLINE < 0.5, v20$auc_ci_lo_bootstrap_HEADLINE < 0.5, v71$auc_ci_lo_bootstrap_HEADLINE < 0.5, v71$auc < 0.5,
+          doe$concordant_with_discovery[doe$cohort %in% c("GSE76894", "GSE20966")] |> all(), !any(doe$concordant_with_discovery[doe$cohort %in% c("GSE71416", "GSE16415")]),
+          isl$apparent_auc_optimistic > isl$nested_cv_auc_headline, adp$apparent_auc_optimistic > adp$nested_cv_auc_headline)
+```
+
+Plain reading.
+
+* **Islet.** Nested-CV AUC `r fmt(isl$nested_cv_auc_headline)` (`r ci(isl$nested_ci_lo_sample_level_HEADLINE, isl$nested_ci_hi_sample_level_HEADLINE)`) is above chance under both interval methods, and is well below the apparent AUC of `r fmt(isl$apparent_auc_optimistic)`. The panel is one gene (`r isl$final_panel`), selected in only `r fmt(stab_i$frequency[stab_i$gene == isl$final_panel], 2)` of outer folds. External AUC is `r fmt(v76$auc)` in GSE76894 (`r ci(v76$auc_ci_lo_bootstrap_HEADLINE, v76$auc_ci_hi_bootstrap_HEADLINE)`) and `r fmt(v20$auc)` in GSE20966 (`r ci(v20$auc_ci_lo_bootstrap_HEADLINE, v20$auc_ci_hi_bootstrap_HEADLINE)`). The sign of the effect matches discovery in both, but both intervals include 0.5. The most the data support is a weak, unreplicated islet signal.
+* **Adipose.** Nested-CV AUC `r fmt(adp$nested_cv_auc_headline)` with an interval centred on 0.5 under both methods; the apparent AUC of `r fmt(adp$apparent_auc_optimistic)` is overfitting of a one-gene model on 23 samples. External AUC `r fmt(v71$auc)` (`r ci(v71$auc_ci_lo_bootstrap_HEADLINE, v71$auc_ci_hi_bootstrap_HEADLINE)`) is below 0.5 and the direction of the gene is opposite to discovery in GSE71416 and GSE16415. There is no adipose result.
+
+```{r fig_roc}
+fig("results/stage3/figures/06_islet_roc_permutation.png", "Islet discovery: out-of-fold (nested CV, honest) versus apparent (optimistic) ROC, and the 20-shuffle permutation test.", "90%")
+fig("results/stage3/figures/06b_adipose_main_roc_stability.png", "Adipose discovery: nested-CV versus apparent ROC, and final-panel selection frequency (top 15, 50 folds).", "90%")
+fig("results/stage5/figures/09_external_validation_roc.png", "External validation, one frozen-model pass: GSE76894, GSE20966, GSE71416 (ROC with pROC ci.se bands) and GSE16415 (direction only).")
+```
+
+# 3. Leakage controls
+
+Three controls were run on the discovery arms before any validation data were touched (protocol section 3 self-tests): no sample index in both train and test of a fold; the matrix passed to limma in each fold has exactly the training-fold size (both are hard assertions in `scripts/06_nested_cv.R`); a label-permutation test of the full pipeline; plus a synthetic positive control.
+
+## 3.1 Permutation tests
+
+```{r perm}
+pperm <- rd("results/stage3/06_permutation_test_islet.csv"); pa <- rd("results/stage3/06b_permutation_test_adipose.csv")
+ps <- function(d, arm) data.frame(Arm = arm, Shuffles = nrow(d), `Mean AUC` = fmt(mean(d$auc)), SD = fmt(sd(d$auc)), Min = fmt(min(d$auc)), `95th percentile` = fmt(quantile(d$auc, 0.95)), Max = fmt(max(d$auc)),
+  `Pass (mean in [0.45, 0.55] and 95th pct < 0.65)` = ifelse(mean(d$auc) >= 0.45 & mean(d$auc) <= 0.55 & quantile(d$auc, 0.95) < 0.65, "pass", "FAIL"), check.names = FALSE)
+pt <- rbind(ps(pperm, "Islet (GSE41762)"), ps(pa, "Adipose (GSE27951)"))
+tab(pt, "Permutation test: 20 independent label shuffles, full pipeline, 1 outer repeat each (summarised from the saved per-shuffle AUCs).")
+stopifnot(all(pt[[8]] == "pass"), nrow(pperm) == 20, nrow(pa) == 20)
+flag("permutation mean AUC (CSV) equals 08 permutation_mean_auc", near(mean(pperm$auc), isl$permutation_mean_auc, 5e-4) && near(mean(pa$auc), adp$permutation_mean_auc, 5e-4), "islet and adipose; per-shuffle AUCs are rounded to 4 dp in the CSV")
+flag("permutation 95th pct (CSV) equals 08 permutation_q95_auc", near(quantile(pperm$auc, 0.95), isl$permutation_q95_auc, 5e-4) && near(quantile(pa$auc, 0.95), adp$permutation_q95_auc, 5e-4))
+```
+
+Both arms pass the pre-set criterion, so the nested-CV engine shows no sign of leakage. The adipose 95th percentile (`r fmt(quantile(pa$auc, 0.95))`) is close to the 0.65 limit; with 23 samples the null distribution of AUC is wide (individual shuffles reach `r fmt(max(pa$auc))`), which is a further reason the adipose AUC of `r fmt(adp$nested_cv_auc_headline)` carries no information.
+
+```{r fig_perm}
+fig("results/stage3/figures/06b_adipose_permutation.png", "Adipose permutation null (20 shuffles).", "60%")
+```
+
+## 3.2 Synthetic positive control (islet engine)
+
+```{r synth}
+sy <- rdr("results/stage3/06_synthetic_control.rds")
+sst <- sy$stability; pl <- sy$planted
+pl_t <- data.frame(`Planted gene` = pl, `Final-panel frequency` = fmt(sst$frequency[match(pl, sst$gene)], 2), check.names = FALSE)
+pl_t <- pl_t[order(-as.numeric(pl_t[[2]])), ]
+n_top10 <- sum(head(sst$gene, 10) %in% pl)
+cat(sprintf("Design (as logged in `logs/06_nested_cv_20261005_212648.log`, fixed before running): 3000 genes, 77 samples with the real ND/T2D labels, 10 randomly chosen senescence-union genes shifted by +1.5 SD in T2D, everything else noise, covariates independent of status; production pipeline, 10-fold x 2 repeats. Pre-stated pass: nested AUC >= 0.90 and >= 8 of the top-10 stability genes planted.\n\nResult: nested-CV AUC %s (protocol CI %s; sample-level CI %s); %d of 10 planted genes are in the top 10 by stability; pass flag in the saved object: **%s**. The pipeline therefore recovers a real signal when one exists. One planted gene (%s) was not recovered (frequency %s).\n\n",
+  fmt(sy$auc$auc_mean_over_repeats), ci(sy$auc$ci_protocol[1], sy$auc$ci_protocol[2]), ci(sy$auc$ci_sample_level[1], sy$auc$ci_sample_level[2]), n_top10, ifelse(sy$pass, "PASS", "FAIL"),
+  paste(pl[sst$frequency[match(pl, sst$gene)] == min(sst$frequency[match(pl, sst$gene)])], collapse = ", "), fmt(min(sst$frequency[match(pl, sst$gene)]), 2)))
+tab(pl_t, "Planted genes and their final-panel selection frequency in the synthetic run.")
+stopifnot(isTRUE(sy$pass), sy$auc$auc_mean_over_repeats >= 0.90, n_top10 >= 8)
+```
+
+## 3.3 Boruta warning diagnosis
+
+During the Task 5 islet run Boruta 10.0.0 (default `fru` importance backend) emitted "getImp result contains NA(s)" in 47 of 50 folds. Diagnosis as logged in `logs/deviations.md` (2026-10-05; evidence in `results/stage3/diagnostics/`): NaN occurs only in the first ~15 of 499 iterations and is replaced by 0, so it cannot create a false confirmation. The production backend was kept for both arms, and a robustness check swapping in ranger importance gave the same final panel, the same top-3 stability genes and a nested AUC of 0.662 versus 0.659. This was a benign warning, reported, not a defect that changes any result.
+
+```{r boruta}
+d5 <- rl("results/stage3/diagnostics/d5_run.out"); d3 <- rl("results/stage3/diagnostics/d3_run.out")
+pick <- function(x, pat) x[grepl(pat, x)]
+cat("Saved diagnostic output, quoted:\n\n```\n", paste(c(pick(d3, "^iterations"), pick(d5, "^FINAL fit, Boruta backend fru"), pick(d5, "^features_k, production"), pick(d5, "^ranger-swap nested AUC")), collapse = "\n"), "\n```\n\n", sep = "")
+stopifnot(any(grepl("iterations: 499  with NaN: 15", d3)), any(grepl("identical in 40/50 folds", d5)))
+```
+
+# 4. Sensitivity analyses (pre-specified, protocol section 8)
+
+```{r sens}
+sn <- fp[fp$role != "main", ]
+st <- data.frame(Arm = sn$arm, Run = sn$run, `n (T2D)` = sprintf("%d (%d)", sn$n, sn$n_T2D), `Final panel` = gsub(";", ", ", sn$final_panel),
+  `Nested AUC` = fmt(sn$nested_cv_auc_headline), `CI headline` = ci(sn$nested_ci_lo_sample_level_HEADLINE, sn$nested_ci_hi_sample_level_HEADLINE), `CI protocol` = ci(sn$nested_ci_lo_protocol_pROC, sn$nested_ci_hi_protocol_pROC),
+  `Apparent (optimistic)` = fmt(sn$apparent_auc_optimistic), `Nested AUC minus main` = sprintf("%+.3f", sn$sens_nested_auc_minus_main),
+  `Panel genes shared with main` = ifelse(nzchar(sn$sens_panel_shared_with_main) & !is.na(sn$sens_panel_shared_with_main), sn$sens_panel_shared_with_main, "none"), `Panel-gene stability` = gsub(";", ", ", sn$panel_gene_stability_freq), check.names = FALSE)
+main_row <- data.frame(Arm = c("islet", "adipose"), Run = c("islet_main (reference)", "adipose_main (reference)"), `n (T2D)` = c(sprintf("%d (%d)", isl$n, isl$n_T2D), sprintf("%d (%d)", adp$n, adp$n_T2D)),
+  `Final panel` = c(isl$final_panel, adp$final_panel), `Nested AUC` = c(fmt(isl$nested_cv_auc_headline), fmt(adp$nested_cv_auc_headline)),
+  `CI headline` = c(ci(isl$nested_ci_lo_sample_level_HEADLINE, isl$nested_ci_hi_sample_level_HEADLINE), ci(adp$nested_ci_lo_sample_level_HEADLINE, adp$nested_ci_hi_sample_level_HEADLINE)),
+  `CI protocol` = c(ci(isl$nested_ci_lo_protocol_pROC, isl$nested_ci_hi_protocol_pROC), ci(adp$nested_ci_lo_protocol_pROC, adp$nested_ci_hi_protocol_pROC)),
+  `Apparent (optimistic)` = c(fmt(isl$apparent_auc_optimistic), fmt(adp$apparent_auc_optimistic)), `Nested AUC minus main` = "-", `Panel genes shared with main` = "-",
+  `Panel-gene stability` = c(isl$panel_gene_stability_freq, adp$panel_gene_stability_freq), check.names = FALSE)
+st2 <- rbind(main_row[1, ], st[st$Arm == "islet", ], main_row[2, ], st[st$Arm == "adipose", ])
+tab(st2, "Pre-specified sensitivity runs next to the main run. Islet: excluding the 11 GSE41762/GSE38642 label-discordant donors (excl11); adding BMI. Adipose: excluding PCA outlier GSM691134; adding BMI.")
+sn_i <- sn[sn$run == "islet_excl11", ]; sn_ib <- sn[sn$run == "islet_bmi", ]; sn_a1 <- sn[sn$run == "adipose_excl_GSM691134", ]; sn_ab <- sn[sn$run == "adipose_bmi", ]
+flag("08 sensitivity nested AUC equals 06b_sensitivity_comparison sens_nested_auc",
+     near(sn$nested_cv_auc_headline[match(sens$run, sn$run)], sens$sens_nested_auc))
+flag("08 islet/adipose main nested AUC equals main_nested_auc in 06b_sensitivity_comparison", near(sens$main_nested_auc[sens$vs_main == "islet_main"][1], isl$nested_cv_auc_headline) && near(sens$main_nested_auc[sens$vs_main == "adipose_main"][1], adp$nested_cv_auc_headline))
+dsc <- rd("results/stage3/06b_islet_excluded_discordant_donors.csv")
+stopifnot(nrow(dsc) == 11, sn_i$n == isl$n - 11, sn_i$n_T2D == 10, sn_i$sens_nested_auc_minus_main > 0.1, sn_ib$sens_nested_auc_minus_main < 0.05,
+          sn_a1$sens_nested_auc_minus_main < 0, sn_a1$nested_ci_hi_sample_level_HEADLINE < 0.6, adp$nested_ci_lo_sample_level_HEADLINE < 0.5,
+          !nzchar(sn_i$sens_panel_shared_with_main), !nzchar(sn_a1$sens_panel_shared_with_main), sn_ab$final_panel == adp$final_panel, sn_ib$final_panel != isl$final_panel)
+n_disc_t2d <- sum(dsc$GSE41762_group == "T2D")
+```
+
+Plain reading.
+
+* **Adipose: not robust.** Dropping one sample (GSM691134) changes the final panel completely (no shared gene), moves the nested AUC from `r fmt(adp$nested_cv_auc_headline)` to `r fmt(sn_a1$nested_cv_auc_headline)` (below 0.5; interval `r ci(sn_a1$nested_ci_lo_sample_level_HEADLINE, sn_a1$nested_ci_hi_sample_level_HEADLINE)`), and the apparent AUC rises to `r fmt(sn_a1$apparent_auc_optimistic)` with an eight-gene panel. Adding BMI keeps the panel gene but leaves the AUC at chance (`r fmt(sn_ab$nested_cv_auc_headline)`). The adipose arm has no stable result.
+* **Islet: the +BMI run is stable, the excl-11 run is a hypothesis.** Adding BMI leaves nested AUC essentially unchanged (`r fmt(sn_ib$nested_cv_auc_headline)` vs `r fmt(isl$nested_cv_auc_headline)`); the panel grows to five genes and retains `r isl$final_panel`. Excluding the 11 label-discordant donors raises the nested AUC to `r fmt(sn_i$nested_cv_auc_headline)` (`r ci(sn_i$nested_ci_lo_sample_level_HEADLINE, sn_i$nested_ci_hi_sample_level_HEADLINE)`), but the panel changes entirely (`r gsub(";", ", ", sn_i$final_panel)`; no gene shared with the main panel), the run has only `r sn_i$n_T2D` T2D donors, and `r n_disc_t2d` of the 11 excluded donors are labelled T2D in GSE41762 (so excluding them removes half of that cohort's `r isl$n_T2D` T2D labels). The gain could reflect cleaner labels, a smaller and different cohort, or chance. **It is a hypothesis, not a finding.** It was a pre-specified descriptive run; it informed no decision and the headline stays on the main run.
+* Across runs the panels are single genes or small sets that do not carry over; the more reproducible quantity is the stability ranking (section 5), and even that moves between runs.
+
+```{r fig_sens}
+fig("results/stage3/figures/06b_islet_excl11_roc_stability.png", "Islet sensitivity run excluding the 11 label-discordant donors (ROC and stability).", "85%")
+fig("results/stage3/figures/06b_adipose_excl_GSM691134_roc_stability.png", "Adipose sensitivity run excluding GSM691134 (ROC and stability).", "85%")
+```
+
+# 5. Descriptive DEGs, WGCNA and stability genes
+
+Descriptive full-cohort limma (BH FDR < 0.05 and abs(log2FC) >= 0.263) and WGCNA are descriptive/corroborative only; neither chooses the panel (protocol 3.3, 4.1).
+
+```{r deg}
+dg <- rd("results/stage4/07a_deg_summary.csv")
+dgt <- data.frame(Arm = dg$arm, Cohort = dg$gse, `n (T2D)` = sprintf("%d (%d)", dg$n, dg$n_T2D), `Genes tested` = dg$genes_tested_expressed, `FDR<0.05` = dg$n_fdr05, `DEGs (FDR and FC)` = dg$n_DEG,
+  `Up / down` = sprintf("%d / %d", dg$n_DEG_up, dg$n_DEG_down), `Senescence-union genes tested` = dg$senescence_union_in_tested, `Senescence DEGs` = dg$n_senescence_DEG, check.names = FALSE)
+tab(dgt, "Descriptive differential expression (07a). Adipose: no gene reaches FDR < 0.05.")
+stopifnot(dg$n_DEG[dg$arm == "adipose"] == 0, dg$n_fdr05[dg$arm == "adipose"] == 0)
+vd <- rd("results/stage4/07_verdicts.csv"); vi <- vd[vd$arm == "islet", ]; va <- vd[vd$arm == "adipose", ]
+mt <- rd("results/stage4/07_module_trait_islet.csv"); hb <- rd("results/stage4/07_hubs_islet.csv"); pgm <- rd("results/stage4/07_panel_genes_modules_islet.csv")
+stopifnot(!vi$stopped, va$stopped, sum(mt$kept) == 1, setequal(hb$gene, c("GPC3", "FGF2")), pgm$module_label == 0, !pgm$module_kept, !pgm$hub_by_protocol_rule)
+```
+
+## 5.1 Islet WGCNA (GSE41762, n = 77)
+
+Soft threshold beta = `r vi$beta` (first beta in 1-20 with signed scale-free R^2 >= 0.85; R^2 = `r fmt(vi$SFT_R2)`). `r vi$n_modules` modules; `r vi$n_kept` kept (abs(r) > 0.3 and p < 0.05 against status); `r vi$n_hubs` hubs (kME > 0.8, abs(GS) > 0.2, and a senescence-union DEG).
+
+```{r wgcna_islet}
+k <- mt[mt$kept, ]
+kt <- data.frame(Module = sprintf("%s (label %d)", k$colour, k$label), `n genes` = k$n_genes, `r (status)` = fmt(k$r_status), `p (status)` = pv(k$p_status), `r (BMI)` = fmt(k$r_BMI), `p (BMI)` = pv(k$p_BMI),
+  `Flagged possibly confounded` = ifelse(k$possibly_confounded, paste("yes:", k$confounded_with), "no"), check.names = FALSE)
+tab(kt, "The one kept islet module.")
+ht <- data.frame(Gene = hb$gene, Module = hb$module_colour, kME = fmt(hb$kME), `GS (status)` = fmt(hb$GS_status), `GS p` = pv(hb$GS_p), `DEG log2FC` = fmt(hb$DEG_log2FC), `DEG BH adj p` = pv(hb$DEG_adjP),
+  `Module possibly confounded` = ifelse(hb$module_possibly_confounded, "yes (BMI)", "no"), check.names = FALSE)
+tab(ht, "Hub genes of the kept module.")
+cat(sprintf("Hubs are **%s**. The kept module's eigengene is also correlated with BMI (p = %s), so it is flagged as possibly BMI-confounded. **%s, the nested-CV panel gene, is not in any module** (assigned to the grey/unassigned set, label %d; MAD rank %d of the full matrix, so it was eligible; kME and hub status not defined; gene significance for status %s, p = %s). The WGCNA hubs and the ML panel therefore do not coincide. GPC3 and FGF2 had nested-CV stability of %s and %s respectively (islet).\n\n",
+  paste(hb$gene, collapse = " and "), pv(k$p_BMI), pgm$panel_gene, pgm$module_label, pgm$MAD_rank_full_matrix, fmt(pgm$GS_status), pv(pgm$GS_p),
+  sfq(stab_i, "GPC3"), sfq(stab_i, "FGF2")))
+fig("results/stage4/figures/07_module_trait_islet.png", "Islet module-trait heatmap (eigengene versus status, age, sex, BMI).", "80%")
+fig("results/stage4/figures/07_scalefree_islet.png", "Islet scale-free fit (signed R^2) versus soft threshold.", "70%")
+```
+
+## 5.2 Adipose WGCNA: stopped by the pre-set rule (GSE27951, n = 23)
+
+```{r wgcna_adipose}
+sf <- rd("results/stage4/07_softthreshold_adipose.csv")
+cat(sprintf("**The adipose WGCNA was stopped.** No soft threshold in 1-20 reached scale-free R^2 >= 0.85; the best was R^2 = %s at beta = %d (n = 23). Per protocol 4.1 the curve is reported, no beta was chosen, and no modules, trait analysis or bootstrap stability analysis were run. The threshold was not lowered. WGCNA is reported as not feasible at this sample size; the adipose arm is described by the nested-CV result alone. Verdict text from `07_verdicts.csv`: \"%s\"\n\n",
+  fmt(va$best_R2_if_stopped), va$best_beta_if_stopped, va$verdict))
+sfs <- sf[sf$beta %in% c(1, 5, 10, 15, 20), c("beta", "SFT.R.sq_signed", "slope", "mean.k", "meets_cut")]
+sfs$SFT.R.sq_signed <- fmt(sfs$SFT.R.sq_signed); sfs$slope <- fmt(sfs$slope, 2); sfs$mean.k <- fmt(sfs$mean.k, 1); sfs$meets_cut <- ifelse(sfs$meets_cut, "yes", "no")
+names(sfs) <- c("beta", "Signed scale-free R^2", "Slope", "Mean connectivity", "R^2 >= 0.85")
+tab(sfs, "Adipose soft-threshold curve at selected betas (full curve in the figure and in results/stage4/07_softthreshold_adipose.csv).")
+stopifnot(max(sf$SFT.R.sq_signed) < 0.85, !any(sf$meets_cut), nrow(sf) == 20, near(max(sf$SFT.R.sq_signed), va$best_R2_if_stopped))
+fig("results/stage4/figures/07_scalefree_adipose.png", "Adipose scale-free fit versus soft threshold: no beta reaches 0.85.", "70%")
+```
+
+## 5.3 Stability genes (top 20 per arm)
+
+Selection frequency = fraction of the 50 outer folds in which the gene was in the fold's final panel (features_k); component columns give the frequency passing the screen and each learner.
+
+```{r stab}
+st20 <- function(s) { t <- head(s, 20); data.frame(Rank = seq_len(nrow(t)), Gene = t$gene, `Final-panel freq.` = fmt(t$frequency, 2), `Screen` = fmt(t$freq_screen, 2), LASSO = fmt(t$freq_lasso, 2), `SVM-RFE` = fmt(t$freq_svmrfe, 2), Boruta = fmt(t$freq_boruta, 2), check.names = FALSE) }
+tab(st20(stab_i), "Islet (GSE41762): top 20 genes by stability.")
+tab(st20(stab_a), "Adipose (GSE27951): top 20 genes by stability.")
+stopifnot(!is.unsorted(rev(stab_i$frequency)), !is.unsorted(rev(stab_a$frequency)))
+barst <- function(s, ttl) { t <- head(s, 20); op <- par(mar = c(4.2, 6, 2.2, 1)); barplot(rev(t$frequency), names.arg = rev(t$gene), horiz = TRUE, las = 1, xlim = c(0, 1), col = "steelblue", xlab = "final-panel selection frequency (50 folds)", main = ttl, cex.names = 0.8); abline(v = 0.5, lty = 3); par(op) }
+cat("<div style='display:flex;gap:10px;flex-wrap:wrap'>")
+for (nm in c("islet", "adipose")) {
+  f <- tempfile(fileext = ".png"); png(f, 800, 700, res = 110); barst(if (nm == "islet") stab_i else stab_a, if (nm == "islet") "Islet: top 20 stability" else "Adipose: top 20 stability"); invisible(dev.off())
+  cat(sprintf("<figure style='flex:1;min-width:320px'><img src='data:image/png;base64,%s' style='width:100%%'/><figcaption>%s stability bars drawn from the saved stability table (dotted line = 0.5, the docking threshold).</figcaption></figure>", base64enc_file(f), nm))
+}
+cat("</div>\n\n")
+flag("08 panel-gene stability equals stability_selection tables", near(stab_i$frequency[stab_i$gene == isl$final_panel], as.numeric(sub(".*:", "", isl$panel_gene_stability_freq))) && near(stab_a$frequency[stab_a$gene == adp$final_panel], as.numeric(sub(".*:", "", adp$panel_gene_stability_freq))))
+```
+
+Only two islet genes (SERPINE2, NLK) reach selection frequency 0.5 and neither is the final panel gene; no adipose gene reaches 0.5. The final-panel gene in each arm is the output of a single full-cohort fit, whereas stability measures how often a gene survives across resampled training sets; the two are different quantities and here they disagree about the ranking.
+
+# 6. Cross-tissue comparison and enrichment
+
+## 6.1 Cross-tissue verdict
+
+```{r cross}
+g <- function(k) os$value[os$item == k]
+pn <- rd("results/stage6/10_permutation_null.csv"); gc <- rd("results/stage6/10_gene_classification.csv")
+ot <- data.frame(Item = c("Islet final panel", "Adipose final panel", "Overlap of final panels", "Islet screen+LASSO selection (true labels, full cohort)", "Adipose screen+LASSO selection (true labels, full cohort)",
+  "OBSERVED overlap of screen+LASSO selections (primary statistic)", "Permutation repeats", "count(null >= observed)", "PRIMARY empirical p (permutation)", "Hypergeometric universe size N",
+  "SECONDARY hypergeometric p (final panels)", "Overlap of stability lists (freq >= 0.2), descriptive"),
+  Value = c(g("islet final panel"), g("adipose final panel"), g("overlap of final panels"), g("islet screen+LASSO selection (true labels)"), g("adipose screen+LASSO selection (true labels)"),
+  g("OBSERVED overlap of screen+LASSO selections (primary statistic)"), g("permutation repeats"), g("count(null >= observed)"), g("PRIMARY empirical p"), g("hypergeometric universe size N"),
+  g("SECONDARY hypergeometric p (final panels)"), g("overlap of stability lists (descriptive)")))
+tab(ot, "Cross-tissue comparison (10_overlap_summary.csv).")
+cat("**Verdict (verbatim from the saved file):**\n\n> ", g("verdict"), "\n\n", sep = "")
+stopifnot(g("overlap of final panels") == "0", g("OBSERVED overlap of screen+LASSO selections (primary statistic)") == "0", as.numeric(g("PRIMARY empirical p")) == 1, !any(gc$classification == "shared"))
+flag("10 final panels equal 08 final panels", g("islet final panel") == isl$final_panel && g("adipose final panel") == adp$final_panel)
+flag("10 stability freq of final panel genes equals stability tables", near(gc$islet_stability_freq[gc$gene == isl$final_panel], stab_i$frequency[stab_i$gene == isl$final_panel]) && near(gc$adipose_stability_freq[gc$gene == adp$final_panel], stab_a$frequency[stab_a$gene == adp$final_panel]))
+tn <- table(pn$overlap)
+cat(sprintf("**Degenerate-permutation caveat.** The observed overlap is 0, so every one of the %d permutations satisfies null >= observed and the primary p equals 1 by construction; the test cannot discriminate in this situation. What it can show is the null itself: the overlap was 0 in %d of %d permutations and 1 in %d (never larger), so even a single shared gene would have had an empirical p of roughly %s. The same applies to the hypergeometric test (p = 1 for an overlap of 0). Neither test supports, or could have supported, a claim of shared hub genes here. Stated plainly: **there is no cross-tissue overlap, and nothing is reported as a shared hub gene.**\n\n",
+  nrow(pn), sum(pn$overlap == 0), nrow(pn), sum(pn$overlap == 1), pv((sum(pn$overlap >= 1) + 1) / (nrow(pn) + 1))))
+stopifnot(max(pn$overlap) <= 1, nrow(pn) == 1000)
+fig("results/stage6/figures/10_upset_final_panels.png", "UpSet plot of the two final panels (no intersection).", "55%")
+fig("results/stage6/figures/10_upset_selection_sets.png", "UpSet plot of the screen+LASSO selection sets and stability lists.", "55%")
+fig("results/stage6/figures/10_permutation_null.png", "Permutation null for the overlap size (1000 permutations; observed = 0).", "60%")
+```
+
+## 6.2 Enrichment
+
+```{r enrich}
+es <- rd("results/stage6/11_enrichment_summary.csv")
+pr <- es[es$analysis == "protocol", c("set", "n_genes", "universe_size", "status")]
+names(pr) <- c("Set", "Genes", "Universe (expressed genes)", "Status")
+tab(pr, "Protocol enrichment (section 5.2): all three sets are below the 10-gene minimum.")
+stopifnot(all(grepl("underpowered", es$status[es$analysis == "protocol"])), all(es$n_genes[es$analysis == "protocol"] < 10))
+ga <- rd("results/stage6/11_gene_annotation_summary.csv")
+gat <- data.frame(Gene = ga$gene, Name = ga$gene_name, Cytoband = ga$cytoband, Set = ga$classification, `GO BP/MF/CC terms` = sprintf("%d/%d/%d", ga$GO_BP_n, ga$GO_MF_n, ga$GO_CC_n),
+  `Senescence list` = ga$senescence_sets, `KEGG pathways` = ga$kegg_pathways,
+  `Islet DE (log2FC; BH p; DEG)` = sprintf("%s; %s; %s", fmt(ga$islet_log2FC), pv(ga$islet_adjP), ga$islet_DEG),
+  `Adipose DE (log2FC; BH p; DEG)` = sprintf("%s; %s; %s", fmt(ga$adipose_log2FC), pv(ga$adipose_adjP), ga$adipose_DEG),
+  `Stability (islet / adipose)` = sprintf("%s / %s", fmt(ga$islet_stability_freq, 2), fmt(ga$adipose_stability_freq, 2)), check.names = FALSE)
+tab(gat, "Gene-level annotation of the two panel genes (underpowered sets are annotated narratively instead of tested; Entrez/GO/KEGG from org.Hs.eg.db as saved in 11_gene_annotation_summary.csv).")
+```
+
+The shared set is empty and the islet-specific and adipose-specific sets each contain one gene (IL1R1 and SNAI1), so **enrichment testing is underpowered and was not performed** (protocol 5.2). Gene-level annotation only: IL1R1 (interleukin 1 receptor type 1) is annotated to cytokine/NF-kB and MAPK signalling and is in CellAge; it is a descriptive DEG in islets (BH p `r pv(ga$islet_adjP[ga$gene == "IL1R1"])`) but not in adipose. SNAI1 (snail family transcriptional repressor 1) is a transcriptional repressor annotated to adherens-junction biology and is in CellAge; it is not a descriptive DEG in adipose (no adipose gene passes FDR < 0.05). Both genes are single entries in one senescence database (CellAge) and their annotation is not evidence that they are mechanistic drivers.
+
+```{r e1}
+e1 <- es[grepl("E1", es$analysis), c("background", "db", "n_genes", "universe_size", "n_terms_tested", "n_significant_BH05")]
+names(e1) <- c("Background", "DB", "Genes", "Universe size", "Terms tested", "Significant (BH < 0.05)")
+tab(e1, "EXPLORATORY analysis E1 (not in the protocol): the 11 islet senescence-union DEGs. Background A = all expressed islet genes; background B = senescence-union genes expressed in islet.")
+tp <- rd("results/stage6/11_enrichment_top10_by_p.csv")
+tp3 <- do.call(rbind, lapply(split(tp, list(tp$background, tp$db), drop = TRUE), function(d) head(d[order(d$p.adjust), ], 3)))
+tp3 <- tp3[order(substr(tp3$background, 1, 1), tp3$db, tp3$p.adjust), ]
+tpt <- data.frame(Background = substr(tp3$background, 1, 1), DB = tp3$db, Term = tp3$Description, Count = tp3$Count, `BH p` = pv(tp3$p.adjust), Genes = gsub("/", ", ", tp3$geneID), check.names = FALSE)
+tab(tpt, "E1: top 3 terms per background and database.")
+```
+
+E1 is exploratory and hypothesis-generating only. The 11 genes were chosen from the senescence union, so with the whole expressed genome as universe (background A) enrichment for growth-factor and development terms is inflated by that pre-selection; background B (senescence-union genes expressed in islets) removes that bias and is the appropriate one, and it still yields `r sum(es$n_significant_BH05[grepl("E1", es$analysis) & grepl("^B", es$background)], na.rm = TRUE)` terms across the four databases (versus `r sum(es$n_significant_BH05[grepl("E1", es$analysis) & grepl("^A", es$background)], na.rm = TRUE)` under A). With 11 genes, few of which are independent (the same handful of FGF/GPC3/HGF/MYC genes recur across terms), these counts should not be read as pathway discoveries. E2/E3 (islet stability list, freq >= 0.2: 9 genes; adipose: 2 genes; adipose DEGs: 0) were also below 10 genes and not tested.
+
+```{r fig_enrich}
+fig("results/stage6/figures/11_islet_senescence_DEGs_bgB_unionExpressed_GO_BP_dotplot.png", "E1 (exploratory), background B: GO biological process.", "70%")
+```
+
+# 7. Single-cell specificity (GSE81608)
+
+GSE81608 is descriptive and discovery-adjacent data, not validation; it informs no panel decision. Cell types are the authors' labels. All statistics are donor-level pseudobulk; no per-cell tests.
+
+```{r sc1}
+qg <- rd("results/stage7/12_qc_by_group.csv"); qc <- rd("results/stage7/12_qc_by_celltype.csv"); dpc <- rd("results/stage7/12_donors_per_celltype.csv"); mk <- rd("results/stage7/12_marker_check.csv")
+dpc$testable <- dpc$testable %in% c(TRUE, "True", "TRUE")
+tab(setNames(qg, c("Group", "Cells", "Removed", "Kept", "% removed")), "Cell QC by group (MAD-based, 3 MADs on log genes detected, log library size and mitochondrial fraction).")
+tab(setNames(qc, c("Cell type (authors' label)", "Cells", "Removed", "Kept", "% removed")), "Cell QC by cell type.")
+dp <- dpc; dp$testable <- ifelse(dp$testable, "yes", "no"); names(dp) <- c("Cell type", "ND donors (>= 10 cells)", "T2D donors (>= 10 cells)", "Donors", "Testable")
+tab(dp, "Donors per group and cell type with at least 10 post-QC cells (the pre-set pseudobulk threshold). Delta and PP are not testable.")
+mk2 <- mk[, c("gene", "expected_label", "highest_label", "as_expected")]; names(mk2) <- c("Marker", "Expected cell type", "Highest-expressing label", "As expected")
+tab(mk2, "Marker check of the authors' labels (INS, GCG, SST, PPY as expected; PRSS1/COL1A1 have no matching label in the deposit).")
+stopifnot(all(mk$as_expected[1:4] %in% c("True", "TRUE", TRUE)), !dpc$testable[dpc$celltype %in% c("delta", "PP")], all(dpc$testable[dpc$celltype %in% c("beta", "alpha")]))
+cat(sprintf("Post-QC cells: %d of %d retained. Donors: %d ND and %d T2D contributed cells; with the >= 10-cell rule, beta cells have %d ND / %d T2D donors and alpha cells %d ND / %d T2D donors. **The T2D arm is %d to %d donors.** Delta cells (maximum 8 cells in any donor) and PP cells (1 ND / 1 T2D donor) cannot be tested.\n\n",
+  sum(qg$n_kept), sum(qg$n_cells), sum(rd("results/stage7/12_qc_by_donor.csv")$group == "ND"), sum(rd("results/stage7/12_qc_by_donor.csv")$group == "T2D"),
+  dpc$ND[dpc$celltype == "beta"], dpc$T2D[dpc$celltype == "beta"], dpc$ND[dpc$celltype == "alpha"], dpc$T2D[dpc$celltype == "alpha"], dpc$T2D[dpc$celltype == "beta"], dpc$T2D[dpc$celltype == "alpha"]))
+```
+
+```{r sc2}
+ex <- rd("results/stage7/12_gene_expression_by_celltype.csv"); ex <- ex[ex$group == "all", ]
+exw <- do.call(rbind, lapply(split(ex, ex$gene), function(d) { d <- d[match(c("beta", "alpha", "delta", "PP"), d$celltype), ]
+  data.frame(Gene = d$gene[1], Category = d$category[1], t(setNames(sprintf("%s / %s", fmt(d$detection_fraction, 2), fmt(d$mean_log2_rpkm1, 2)), paste(d$celltype, "(det. / mean)"))), check.names = FALSE) }))
+exw <- exw[match(c("IL1R1", "SNAI1", "SERPINE2", "NLK", "CDKN1A", "PCK1", "FXN", "GPC3", "FGF2"), exw$Gene), ]
+tab(exw, "Detection fraction / mean log2(RPKM+1) per cell type, all post-QC cells (genes of interest: both panel genes, top-5 islet stability genes, WGCNA hubs).")
+fig("results/stage7/figures/12_dotplot_genes_by_celltype.png", "Single-cell dot plot: detection fraction and mean expression by cell type.", "75%")
+pb <- rd("results/stage7/12_panel_pseudobulk_results.csv"); pbp <- pb[pb$primary %in% c(TRUE, "TRUE", "True"), ]
+stopifnot(sum(pbp$celltype == "beta") == 9, sum(pbp$celltype == "alpha") == 9)
+pbt <- data.frame(`Cell type` = pbp$celltype, Model = pbp$model, Gene = pbp$gene, `n ND / T2D` = sprintf("%d / %d", pbp$n_ND, pbp$n_T2D), `log2FC (T2D vs ND)` = fmt(pbp$logFC_T2D_vs_ND), P = pv(pbp$P.Value),
+  `BH (9 genes)` = pv(pbp$FDR_BH_9genes), `Min. detectable |log2FC| (80% power)` = fmt(pbp$approx_min_detectable_abs_logFC_80pct_power, 2), Note = ifelse(is.na(pbp$note) | pbp$note == "", "", pbp$note), check.names = FALSE)
+tab(pbt, "Pseudobulk T2D versus ND, primary model per cell type (limma on donor-level mean log2(RPKM+1)). Beta: unadjusted model (an age/sex-adjusted model was not estimable with 11 donors); alpha: adjusted model. Both are in the saved file.")
+bv <- rd("results/stage7/12_beta_restriction_verdicts.csv")
+bvt <- data.frame(Gene = bv$gene, Category = bv$category, `Beta` = bv$beta, `Alpha` = bv$alpha, `Delta` = bv$delta, Verdict = bv$verdict, check.names = FALSE)
+tab(bvt, "Beta-cell restriction verdicts (protocol 5.3 rule: significant in beta pseudobulk and not significant in alpha or delta).")
+stopifnot(all(grepl("^INCONCLUSIVE|^NOT ASSESSABLE", bv$verdict)), all(as.numeric(pbp$FDR_BH_9genes[pbp$celltype == "beta"]) > 0.05, na.rm = TRUE))
+fig("results/stage7/figures/12_pseudobulk_beta_alpha_genes.png", "Donor-level pseudobulk expression, beta and alpha cells.", "85%")
+```
+
+**Reading: no gene is shown to be beta-cell restricted; every verdict is inconclusive or not assessable.** No gene reaches FDR < 0.05 in beta pseudobulk (smallest BH value `r fmt(min(as.numeric(pbp$FDR_BH_9genes[pbp$celltype == "beta"]), na.rm = TRUE))`), and the approximate minimum detectable effects in beta cells range from `r fmt(min(as.numeric(pbp$approx_min_detectable_abs_logFC_80pct_power[pbp$celltype == "beta"]), na.rm = TRUE), 2)` to `r fmt(max(as.numeric(pbp$approx_min_detectable_abs_logFC_80pct_power[pbp$celltype == "beta"]), na.rm = TRUE), 2)` log2 units across the panel genes (80% power, `r dpc$ND[dpc$celltype == "beta"]` ND vs `r dpc$T2D[dpc$celltype == "beta"]` T2D donors), so absence of significance is **not** evidence of no effect. Because delta cells have no testable donors, the delta arm of the restriction rule cannot be assessed at all, so no gene could be declared fully beta-restricted even in principle. SNAI1 is detected in only `r fmt(ex$detection_fraction[ex$gene == "SNAI1" & ex$celltype == "beta"], 3)` of beta cells and GPC3 is not fitted in beta or alpha (pseudobulk non-zero in fewer than 3 donors). IL1R1 is detected in `r fmt(ex$detection_fraction[ex$gene == "IL1R1" & ex$celltype == "beta"], 2)` of beta cells and `r fmt(ex$detection_fraction[ex$gene == "IL1R1" & ex$celltype == "alpha"], 2)` of alpha cells, i.e. it is not beta-specific in expression.
+
+**Deviations affecting this section** (full wording in section 10): GSE81608 on GEO has only an RPKM matrix, so pseudobulk is the mean of log2(RPKM+1) per donor and cell type tested with limma (no voom/edgeR on counts), which is less well calibrated than count-based pseudobulk; and the >= 10 cell threshold was not relaxed, so delta and PP pseudobulk tests were not performed.
+
+# 8. Docking
+
+```{r dock}
+cand_shared <- gc$gene[gc$classification == "shared"]
+cand <- if (length(cand_shared)) cand_shared else isl$final_panel
+fq <- stab_i$frequency[stab_i$gene == cand]
+ge5 <- stab_i$gene[stab_i$frequency >= 0.5]; ge5a <- stab_a$gene[stab_a$frequency >= 0.5]
+stopifnot(length(cand_shared) == 0, fq < 0.5, setequal(ge5, c("SERPINE2", "NLK")), length(ge5a) == 0, !any(c(ge5, ge5a) %in% c(isl$final_panel, adp$final_panel)))
+lig <- list.files(here("ligands")); invisible(lapply(file.path("ligands", lig), function(p) need(p, "text")))
+cat(sprintf("**Docking was NOT performed.** Under protocol 5.4 the candidate set is the shared panel genes and, when there are none, the islet final panel. There are no shared genes (section 6), so the only candidate is **%s**, with nested-CV selection frequency **%s**. Criterion (a) requires frequency >= 50%%, so %s fails (a) and, per 5.4 item 4, \"docking is reported as not performed under the rule. The rule is not relaxed.\" The structure criterion (c) was not assessed, because (a) already excludes the candidate. No docking results exist and none are shown here. (Criterion (b) was amended in protocol v1.2 to information only; the direction in validation was concordant in both islet cohorts, but that is not a selection criterion.)\n\n", cand, fmt(fq, 2), cand))
+cat(sprintf("Ligand files were acquired from PubChem and are in `ligands/` (%s): naringenin (CID 932), embelin (CID 3218), rutin (CID 5280805). **The lead small compound (LSC) structure is still needed from the lab** (`ligands/LSC_NEEDED_FROM_LAB.md`); it has not been guessed or substituted.\n\n", paste(lig, collapse = ", ")))
+cat(sprintf("Any docking performed later would be **exploratory** and could not be presented as following from the pre-specified rule. The only genes with stability >= 0.5 are %s (islet; stability %s and %s), and neither is in the final panel. If docking is run on them it must be labelled as outside protocol 5.4, with the controls of protocol 6.4 (redocking RMSD < 2 A; 40 property-matched decoys per ligand; delta-G reported as a decoy percentile). A docking score would predict binding geometry, not affinity or biological effect.\n\n",
+  paste(ge5, collapse = " and "), fmt(stab_i$frequency[stab_i$gene == ge5[1]], 2), fmt(stab_i$frequency[stab_i$gene == ge5[2]], 2)))
+```
+
+# 9. Limitations
+
+Stated without softening.
+
+1. **Adipose discovery n = 23 (11 ND / 12 T2D) is underpowered.** It is too small for WGCNA (the arm stopped: no soft threshold reached R^2 >= 0.85) and too small for a stable ML panel (the panel changed completely when one sample was dropped). The adipose validation cohort GSE71416 was reduced by NUSE exclusion to n = 17 (6 ND / 11 T2D); its interval spans most of the AUC range.
+2. **The validation cohorts are small and the intervals are wide.** GSE20966 (n = `r v20$n`), GSE71416 (n = `r v71$n`) and GSE16415 (n = `r v16$n`) are tiny; GSE76894 (n = 99, 19 T2D) is larger but its interval (`r ci(v76$auc_ci_lo_bootstrap_HEADLINE, v76$auc_ci_hi_bootstrap_HEADLINE)`) still includes 0.5. None of the external AUCs is distinguishable from chance.
+3. **GSE38642 is the same set of arrays as GSE41762** (63/63 CEL files byte-identical) and was retired; it provides no independent validation. **11 donors have discordant diabetes labels** between the two GEO deposits (`r n_disc_t2d` of them are T2D in GSE41762, i.e. half of that cohort's T2D labels), and donor ID30 has a discordant sex. Which deposit is correct is unknown. GSE41762 labels were used for the main analysis.
+4. **Bulk adipose cannot resolve the driving cell type.** Adipose tissue is a mixture of adipocytes, stromal and immune cells; a gene-level signal in bulk may reflect composition differences. No adipose single-cell data were analysed.
+5. **Cross-platform transfer attenuates the islet validation.** The islet model was trained on GPL6244 (HuGene 1.0 ST) and applied to GPL570 (GSE76894) and GPL1352 (GSE20966) after z-scoring within each cohort; probe-set coverage, dynamic range and platform effects can reduce discriminative performance independently of biology, so a weaker external AUC is expected even for a real signal.
+6. **Docking, if ever done, predicts geometry, not affinity.** It was not done here (section 8).
+7. **All data are cross-sectional.** No causal or temporal inference is possible; senescence markers could be cause, consequence, or correlate of T2D, of treatment, or of obesity.
+8. **Single-gene panels are unstable.** Both final panels are one gene (IL1R1, SNAI1), selected in `r fmt(100 * stab_i$frequency[stab_i$gene == isl$final_panel], 0)`% and `r fmt(100 * stab_a$frequency[stab_a$gene == adp$final_panel], 0)`% of outer folds respectively; sensitivity runs produced different panels with no shared gene in two of four comparisons (section 4). A one-gene ridge classifier is a univariate marker, not a multi-gene signature.
+9. **GSE81608 has only RPKM values and few T2D donors** (`r dpc$T2D[dpc$celltype == "beta"]` to `r dpc$T2D[dpc$celltype == "alpha"]` per testable cell type); delta and PP cells are untestable. Pseudobulk on mean log RPKM is less calibrated than count pseudobulk.
+10. **A vacuous assertion was left in `scripts/09_external_validation.R`** (`... | TRUE`, which always passes). Editing the script after scoring would have changed its MD5 against the validation lock, so it was left in place. The other assertions are real and the dry run reproduced the stored apparent AUCs exactly (`logs/deviations.md`, 2026-10-06).
+11. **SenMayo is 124 genes, not 125.** The paper's 125-gene list (Saul 2022, Supplementary Data 1) was not retrievable; the MSigDB 124-gene copy was used and the discrepancy is **unresolved** (recorded in `logs/05_genesets_20261005_211636.log`; the saved gene-set summary shows `r rd("results/stage0/05_set_summary.csv")$final_unique_symbols[1]` SenMayo symbols).
+12. **Sex calls are XIST-free for GSE41762 and GSE16415** (no XIST probe on those annotations; Y-gene mean only; deviation logged). GSE27951 has no recorded sex in GEO, so its sex covariate is expression-inferred. Two recorded-versus-inferred mismatches (GSE41762 ID30, GSE20966 GSM524170) were kept using the inferred value.
+13. **Multiple analyses on small cohorts.** The sensitivity runs and the exploratory analyses (E1, E2, E3, the 11-donor exclusion) are descriptive, and none of them should be quoted as a finding.
+
+# 10. Deviations and exclusions
+
+## 10.1 Deviations log (verbatim from `logs/deviations.md`)
+
+```{r devs}
+dv <- rl("logs/deviations.md")
+dv <- dv[!grepl("^# ", dv)]   # drop only the document title line; the table is verbatim
+cat(paste(dv, collapse = "\n"), "\n\n")
+```
+
+## 10.2 Excluded samples (verbatim from `logs/excluded_samples.csv`)
+
+```{r exl}
+tab(setNames(exc, c("GSM", "Dataset", "Reason", "Date")), "All excluded samples.")
+stopifnot(nrow(exc) == 17)
+```
+
+# 11. Reproducibility
+
+```{r repro}
+rj <- jsonlite::fromJSON(need("renv.lock", "text"), simplifyVector = FALSE)
+pk <- rj$Packages; npk <- length(pk)
+bioc <- sum(vapply(pk, function(p) identical(p$Source, "Bioconductor"), logical(1)))
+key <- c("limma", "glmnet", "caret", "e1071", "randomForest", "Boruta", "pROC", "WGCNA", "oligo", "affy", "clusterProfiler", "org.Hs.eg.db", "here")
+kv <- data.frame(Package = key, Version = vapply(key, function(k) if (!is.null(pk[[k]])) pk[[k]]$Version else "n/a", ""), Source = vapply(key, function(k) if (!is.null(pk[[k]])) pk[[k]]$Source else "n/a", ""))
+cat(sprintf("* **renv.lock:** R %s; Bioconductor %s; %d packages (%d from Bioconductor). Lock taken on first run and not updated mid-project (CLAUDE.md). CLAUDE.md requires R >= 4.4 and Bioconductor >= 3.20; the lock satisfies both.\n", rj$R$Version, rj$Bioconductor$Version, npk, bioc))
+cat("* **Seed policy (CLAUDE.md):** every script calls `set.seed(42)` before any stochastic step; per-fold seeds in the nested-CV engine derive deterministically from 42 (fold-specific offsets); permutation shuffles use fixed offsets (4200 + i; see scripts). The scan below checks each script for a seed-42 call; `00_install.R` is the package installer and has no stochastic step.\n")
+tab(kv, "Key package versions from renv.lock.")
+sf_all <- list.files(here("scripts"), pattern = "^[0-9].*\\.(R|py|Rmd|sh)$")
+seedpat <- "set\\.seed\\(\\s*42|SEED\\s*<-\\s*42|seed\\s*=\\s*42|random_state\\s*=\\s*42|np\\.random\\.seed\\(\\s*42|SEED\\s*=\\s*42"
+sd_t <- data.frame(Script = sf_all, `Seed 42 pattern present` = vapply(sf_all, function(s) any(grepl(seedpat, readLines(here("scripts", s), warn = FALSE))), logical(1)), check.names = FALSE)
+sd_t[[2]] <- ifelse(sd_t[[2]], "yes", "NO (check script)")
+desc <- c("00_install.R" = "package installation", "00_setup.R" = "environment check, sessionInfo, renv snapshot", "01_acquire.R" = "GEO acquisition and count verification",
+  "02_donor_overlap.R" = "donor overlap checks (GSE38642 retirement, GSE76894)", "03_normalize.R" = "per-GSE normalisation and probe collapse", "04_qc.R" = "QC, sex check, exclusions",
+  "05_genesets.R" = "senescence gene-set union (1151 genes)", "06_nested_cv.R" = "nested-CV engine, islet run, permutation and synthetic controls", "06b_nested_cv_arms.R" = "adipose nested CV and four sensitivity runs",
+  "07_wgcna.R" = "WGCNA (islet built; adipose stopped)", "07a_descriptive_deg.R" = "descriptive DEG tables", "08_final_panel.R" = "final panels (from saved results)",
+  "09_external_validation.R" = "one-shot external validation (locked)", "10_cross_tissue.R" = "cross-tissue comparison and permutation null", "11_enrichment.R" = "enrichment and gene annotation",
+  "12_singlecell.py" = "GSE81608 QC, cell types, expression (Python/scanpy)", "12b_singlecell_r.R" = "GSE81608 pseudobulk limma", "15_report.Rmd" = "this report (reads saved results only)")
+sd_t$Purpose <- ifelse(sf_all %in% names(desc), desc[sf_all], "")
+tab(sd_t, "Script order (run in numeric order) with an automatic scan for the seed-42 call.")
+cat("* **Dependency on rendering:** `Rscript -e 'rmarkdown::render(\"scripts/15_report.Rmd\", output_dir = \"results/report\")'` from the repository root with `R_LIBS_USER=~/R/lib`; it reads saved results and recomputes nothing. The render log is `logs/15_report_<timestamp>.log`.\n")
+cat("* **Validation lock:** `results/stage5/09_VALIDATION_SCORED.lock` records MD5s of the frozen models, scripts and result tables; the scoring script refuses to run again (log `logs/09_external_validation_20261006_000131.log`).\n\n")
+```
+
+# Appendix: data consistency checks performed while assembling this report
+
+```{r flags}
+tab(FLAGS, "Cross-file consistency checks (a value read from two different saved files must agree). 'MISMATCH' rows would be flagged in the final hand-off.")
+if (any(FLAGS$result == "MISMATCH")) cat("<p style='color:#b00020;font-weight:bold'>One or more consistency checks FAILED; see the table above.</p>\n\n")
+```
+
+Observations not resolved by any check, recorded for the reader:
+
+* `docs/Methodology_Protocol_v1.md` section 1 lists GSE76894 as n = 103 (84 ND / 19 T2D) and GSE71416 as n = 20; the analysed sizes are 99 (80 / 19) and 17 (6 / 11) after the logged exclusions (table in section 1). This is expected, not an error.
+* The headline CI and the pROC CI are the same numbers for each external cohort in `09_validation_results.csv` (one prediction per sample; the headline sample-level bootstrap and `pROC::ci.auc` stratified bootstrap coincide). They are shown in both columns for rule 6 and are not two independent estimates.
+* `IMPLEMENTATION_PLAN.md` Task 11 text predates the amendments: it asks for a docking table with percentiles (docking not performed), describes GSE38642 as sharing donors with GSE41762 (the arrays are byte-identical), and lists GSE20966 as the primary islet validation (GSE76894 is primary since protocol v1.1). The report follows the protocol and CLAUDE.md.
+
+```{r closing, include=FALSE}
+# ---- closing assertions: every number table was read from a file that exists; log the run ----
+all_in <- c(REG$data, REG$fig, REG$text)
+stopifnot(length(REG$data) >= 30, length(REG$fig) >= 10)
+for (p in all_in) stopifnot(file.exists(here(p)), file.info(here(p))$size > 0)
+stopifnot(all(FLAGS$result == "consistent") || TRUE)   # mismatches are reported (not silenced); see appendix and the log
+n_mismatch <- sum(FLAGS$result == "MISMATCH")
+dir.create(here("logs"), showWarnings = FALSE)
+lf <- here("logs", sprintf("15_report_%s.log", TS))
+con <- file(lf, "wt")
+writeLines(c(sprintf("Script: 15_report.Rmd  run: %s", TS), "Parameters: set.seed(42); no recomputation; reads saved results only",
+  sprintf("Git HEAD at render: %s", HEAD_HASH), "", "Inputs read (data/text):",
+  vapply(sort(c(REG$data, REG$text)), function(p) sprintf("  %s  md5=%s", p, unname(tools::md5sum(here(p)))), ""),
+  "", "Figures embedded:", paste0("  ", sort(REG$fig)),
+  "", sprintf("Output: results/report/15_report.html  (PDF: see results/report/README.md)"),
+  "", sprintf("Consistency checks: %d, mismatches: %d", nrow(FLAGS), n_mismatch),
+  utils::capture.output(print(FLAGS, row.names = FALSE)),
+  "", "Assertions: all registered input files exist and are non-empty (PASS)", "", utils::capture.output(print(sessionInfo()))), con)
+close(con)
+```

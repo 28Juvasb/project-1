@@ -1,0 +1,135 @@
+Script: 15_report.Rmd  run: 20261006_004040
+Parameters: set.seed(42); no recomputation; reads saved results only
+Git HEAD at render: a57cf16e0958f96ed94fe2622bfafacba60d871a
+
+Inputs read (data/text):
+  data/processed/04_GSE16415_pheno.rds  md5=f21a5ddb8bacd0fda0bd012a9106fe20
+  data/processed/04_GSE20966_pheno.rds  md5=fb334c014e1958246dc1ffa9c3a40486
+  data/processed/04_GSE27951_pheno.rds  md5=10cb1ccbb5b64909ae79053f63a21bfb
+  data/processed/04_GSE41762_pheno.rds  md5=266de90b470e5e28ccbd78e98af37232
+  data/processed/04_GSE71416_pheno.rds  md5=db2577b255f48ae8f97d470f93a440aa
+  data/processed/04_GSE76894_pheno.rds  md5=221a76ff6cebfc19e99590c4be02a5ae
+  ligands/embelin_CID3218_3D.sdf  md5=ab137826b962a4edf87ac6b05c66f2fe
+  ligands/embelin_CID3218_smiles.csv  md5=6f1c93780690dce7c18cdca0d25de12a
+  ligands/LSC_NEEDED_FROM_LAB.md  md5=6806d4187e0f50ce5d66238245a52c74
+  ligands/naringenin_CID932_3D.sdf  md5=de2b8f28e40791ac8c45d5cdc2cadc6d
+  ligands/naringenin_CID932_smiles.csv  md5=fa85d3834082257dfd55679f4097d53e
+  ligands/rutin_CID5280805_3D.sdf  md5=1c9e14a10f5d248cdd76b29bb1e6e285
+  ligands/rutin_CID5280805_smiles.csv  md5=78bea87e3bca53c21a4b589d6780ea37
+  ligands/SOURCES.md  md5=5cbf7d3c1f2bc5a4ed61f1f8768ccd35
+  logs/deviations.md  md5=7605da2ef4bb45cde2b025251366f504
+  logs/excluded_samples.csv  md5=025ecb9e95292fbb7f30d1466612072d
+  manifest/count_verification.csv  md5=b95adf0005c079e96357c3f2c392799b
+  renv.lock  md5=60fd7ff7465521738b916058b82ed728
+  results/stage0/05_set_summary.csv  md5=4c7cb801c0e3e6b86c77e2cf55afb3c4
+  results/stage3/06_permutation_test_islet.csv  md5=badc02d527c0f4f45121b1e81356a1a8
+  results/stage3/06_synthetic_control.rds  md5=246677757309d78723d6cce1e9434041
+  results/stage3/06b_islet_excluded_discordant_donors.csv  md5=8d0bbf7c45aaec0f6cbeddc03574e10f
+  results/stage3/06b_permutation_test_adipose.csv  md5=1355b585ff5ee0091bed64069d3bb8fe
+  results/stage3/06b_sensitivity_comparison.csv  md5=0455a245a3a1b929b2908950ace639f9
+  results/stage3/diagnostics/d3_run.out  md5=95174dad87d51040458929c5e4364557
+  results/stage3/diagnostics/d5_run.out  md5=483117b3b6157a6d33d9add566fba633
+  results/stage3/stability_selection_adipose.csv  md5=191692a8aebb00317fa51f0406cfc40c
+  results/stage3/stability_selection.csv  md5=4ca1cb1f92e6a40a64afa08c1c97a55f
+  results/stage4/07_hubs_islet.csv  md5=05c119d8b131d3ceda22e9832f24120a
+  results/stage4/07_module_trait_islet.csv  md5=65b95e6b574d3cd3229f799cd5f86a39
+  results/stage4/07_panel_genes_modules_islet.csv  md5=32b2cefb0e0a08165c72e8269d3d687d
+  results/stage4/07_softthreshold_adipose.csv  md5=88a8c97406dfbed462da0f5fe32b5e0d
+  results/stage4/07_verdicts.csv  md5=9da8b181f8284fd34727ca7297948eb0
+  results/stage4/07a_deg_summary.csv  md5=3df250c9a0511b17043fb46dbd6e9005
+  results/stage5/08_final_panels.csv  md5=074cd39ad6e9e2bf6116d077c8ca5701
+  results/stage5/09_direction_of_effect.csv  md5=794a99fc218baacaae581c3b33819804
+  results/stage5/09_gene_presence.csv  md5=db36ae60a3a409ac6786a55ad1252d1c
+  results/stage5/09_validation_results.csv  md5=7c5e6731582fd2b9b5bd4da17e9771c4
+  results/stage5/09_VALIDATION_SCORED.lock  md5=807efa2d51535370255c0344071eed47
+  results/stage6/10_gene_classification.csv  md5=b9125ed0f41c271dca07b95c8108f69a
+  results/stage6/10_overlap_summary.csv  md5=d4d22a3f5ad8152efa29bcfcdbfeeffb
+  results/stage6/10_permutation_null.csv  md5=522ebafe6feac6388a50437b58eb697a
+  results/stage6/11_enrichment_summary.csv  md5=4a0727fe3a36d9bedbb2460d94699a25
+  results/stage6/11_enrichment_top10_by_p.csv  md5=aceef49a2ec9493814cf9fa5e6bab8cb
+  results/stage6/11_gene_annotation_summary.csv  md5=f9784123322338ddc9173b8523c90362
+  results/stage7/12_beta_restriction_verdicts.csv  md5=534ca48f291e2b92cb01bf8d514147f0
+  results/stage7/12_donors_per_celltype.csv  md5=836058a0fc8e5cf6960ee7f6e1a35412
+  results/stage7/12_gene_expression_by_celltype.csv  md5=d0e48a6420eeb771f19b8e914319ed15
+  results/stage7/12_marker_check.csv  md5=462ebde37a9bebe83f1839c2da209e1c
+  results/stage7/12_panel_pseudobulk_results.csv  md5=73045bc3f9d5549b621faf619e254d4f
+  results/stage7/12_qc_by_celltype.csv  md5=2d64964ce6c45cee6a657a9b2ee3b2b6
+  results/stage7/12_qc_by_donor.csv  md5=5cf2f6d42a4128692de0382e28e035f9
+  results/stage7/12_qc_by_group.csv  md5=f7e177610b585dfa418f541477032c45
+
+Figures embedded:
+  results/stage3/figures/06_islet_roc_permutation.png
+  results/stage3/figures/06b_adipose_excl_GSM691134_roc_stability.png
+  results/stage3/figures/06b_adipose_main_roc_stability.png
+  results/stage3/figures/06b_adipose_permutation.png
+  results/stage3/figures/06b_islet_excl11_roc_stability.png
+  results/stage4/figures/07_module_trait_islet.png
+  results/stage4/figures/07_scalefree_adipose.png
+  results/stage4/figures/07_scalefree_islet.png
+  results/stage5/figures/09_external_validation_roc.png
+  results/stage6/figures/10_permutation_null.png
+  results/stage6/figures/10_upset_final_panels.png
+  results/stage6/figures/10_upset_selection_sets.png
+  results/stage6/figures/11_islet_senescence_DEGs_bgB_unionExpressed_GO_BP_dotplot.png
+  results/stage7/figures/12_dotplot_genes_by_celltype.png
+  results/stage7/figures/12_pseudobulk_beta_alpha_genes.png
+
+Output: results/report/15_report.html  (PDF: see results/report/README.md)
+
+Consistency checks: 10, mismatches: 0
+                                                                                 check
+                      final n (pheno) equals n scored in 09 for each validation cohort
+                                         final n_T2D (pheno) equals n_T2D scored in 09
+                                       discovery n (pheno) equals n in 08 final panels
+                             permutation mean AUC (CSV) equals 08 permutation_mean_auc
+                              permutation 95th pct (CSV) equals 08 permutation_q95_auc
+           08 sensitivity nested AUC equals 06b_sensitivity_comparison sens_nested_auc
+ 08 islet/adipose main nested AUC equals main_nested_auc in 06b_sensitivity_comparison
+                             08 panel-gene stability equals stability_selection tables
+                                                 10 final panels equal 08 final panels
+                        10 stability freq of final panel genes equals stability tables
+     result                                                             detail
+ consistent                             GSE76894, GSE20966, GSE71416, GSE16415
+ consistent                                                                   
+ consistent                                                                   
+ consistent islet and adipose; per-shuffle AUCs are rounded to 4 dp in the CSV
+ consistent                                                                   
+ consistent                                                                   
+ consistent                                                                   
+ consistent                                                                   
+ consistent                                                                   
+ consistent                                                                   
+
+Assertions: all registered input files exist and are non-empty (PASS)
+
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] jsonlite_2.0.0 knitr_1.52     here_1.0.2    
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.39       R6_2.6.1            fastmap_1.2.0      
+ [4] xfun_0.61           cachem_1.1.0        htmltools_0.5.9    
+ [7] rmarkdown_2.32      lifecycle_1.0.5     cli_3.6.6          
+[10] sass_0.4.10         renv_1.3.0          jquerylib_0.1.4    
+[13] compiler_4.5.2      rprojroot_2.1.1     tools_4.5.2        
+[16] evaluate_1.0.5      bslib_0.12.0        yaml_2.3.12        
+[19] BiocManager_1.30.27 rlang_1.3.0        
