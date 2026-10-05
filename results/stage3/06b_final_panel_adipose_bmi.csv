@@ -1,0 +1,2 @@
+"gene","ridge_coef_z","train_mean","train_sd","fallback_level"
+"SNAI1",-1.51064991360273,5.14467980450792,0.207547542282944,"L1_>=2of3"

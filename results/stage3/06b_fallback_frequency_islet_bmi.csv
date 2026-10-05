@@ -1,0 +1,7 @@
+"kind","level","n_folds","frequency"
+"fallback_level","L0_intersection",37,0.74
+"fallback_level","L1_>=2of3",13,0.26
+"fallback_level","L2_top5_LASSO",0,0
+"fallback_level","L3_top5_screen",0,0
+"other","screen_fallback_top30 (<10 pass p<0.05)",0,0
+"other","LASSO_empty",12,0.24
