@@ -1,0 +1,92 @@
+Allowing multi-threading with up to 8 threads.
+Script: 07_wgcna  run: 20261005_235129  cores: 8  WGCNA 1.74 
+ROLE: descriptive / corroborative only (protocol 4.1, plan B4). Nothing here feeds the ML panel or the nested CV.
+
+Inputs:
+  data/processed/04_GSE41762_expr.rds md5=00b63bc09d54a5deeebf6a9fb6d42144
+  data/processed/04_GSE41762_pheno.rds md5=266de90b470e5e28ccbd78e98af37232
+  data/processed/04_GSE27951_expr.rds md5=ae1851b209c367e0082f2a21d020d6cc
+  data/processed/04_GSE27951_pheno.rds md5=10cb1ccbb5b64909ae79053f63a21bfb
+  genesets/senescence_union.rds md5=ae4394bb94e0ee3f04a9715c404aaeb9
+  results/stage4/07a_deg_islet.csv md5=b127245505b537d777064d3cd0485a1f
+  results/stage4/07a_deg_adipose.csv md5=289f24e147394cccd916aa74d1316441
+  results/stage3/06_final_panel_islet.csv md5=6fa28a3f211cbd0ae0ec67d441ddc190
+  results/stage3/06b_final_panel_adipose_main.csv md5=9e28ef300014db9eefefb208cf09b498
+  scripts/lib/stage4_wgcna_helpers.R md5=80bec6c8d4508d4e96e807ad98b877ec
+  (validation cohorts GSE76894, GSE20966, GSE71416, GSE16415 and GSE38642 expression are NOT loaded)
+
+Parameters: top 5000 genes by MAD; powers 1..20; R2 cut 0.85 (SFT.R.sq, signed R^2); network signed hybrid, TOM signed, corType bicor maxPOutliers 0.05; minModuleSize 30; mergeCutHeight 0.25; deepSplit 2; maxBlockSize 6000
+Module-trait: Pearson; keep abs(r) > 0.3 & p < 0.05 vs status; confounding flag p < 0.05 vs age/sex/BMI. Hubs: kME > 0.8 & abs(GS) > 0.2 & senescence-union DEG (07a).
+Adipose stability (only if beta criterion met): 100 stratified bootstrap resamples; nPermutations = 200 (script parameter, not a deviation); Zsummary > 2 = preserved; retain if preserved in > 70%.
+
+
+################ ISLET arm (GSE41762) ################
+n=77 (57 ND / 20 T2D); matrix genes=18807; WGCNA input = top 5000 by MAD (MAD range 0.322..1.847); senescence-union genes in input: 378
+   Power SFT.R.sq  slope truncated.R.sq mean.k. median.k. max.k.
+1      1    0.161  0.531          0.821 719.000   690.000 1310.0
+2      2    0.174 -0.481          0.838 296.000   278.000  736.0
+3      3    0.507 -1.010          0.893 148.000   130.000  471.0
+4      4    0.658 -1.270          0.932  83.300    66.900  327.0
+5      5    0.689 -1.510          0.920  50.700    36.900  237.0
+6      6    0.744 -1.610          0.939  32.600    21.400  177.0
+7      7    0.737 -1.710          0.927  21.900    13.000  136.0
+8      8    0.781 -1.710          0.951  15.200     8.280  106.0
+9      9    0.792 -1.750          0.955  10.800     5.400   84.4
+10    10    0.812 -1.760          0.967   7.870     3.590   68.0
+11    11    0.829 -1.760          0.975   5.850     2.440   55.4
+12    12    0.843 -1.750          0.982   4.420     1.680   45.6
+13    13    0.858 -1.790          0.988   3.380     1.180   39.0
+14    14    0.844 -1.860          0.974   2.620     0.826   33.5
+15    15    0.855 -1.860          0.977   2.060     0.593   28.9
+16    16    0.861 -1.890          0.989   1.630     0.428   25.1
+17    17    0.860 -1.920          0.986   1.300     0.309   21.9
+18    18    0.869 -1.930          0.986   1.050     0.226   19.2
+19    19    0.868 -1.940          0.979   0.854     0.167   16.9
+20    20    0.876 -1.940          0.979   0.698     0.125   14.9
+pickSoftThreshold: 8.9 s
+Scale-free fit (SFT.R.sq = signed R^2, 10 bins; mean.k = mean connectivity):
+ beta SFT.R.sq  slope mean.k median.k  max.k
+    1    0.161  0.531  718.5    690.4 1306.5
+    2    0.174 -0.481  295.9    277.8  736.1
+    3    0.507 -1.005  148.2    130.3  471.3
+    4    0.658 -1.273   83.3     66.9  326.7
+    5    0.689 -1.506   50.7     36.9  236.7
+    6    0.744 -1.607   32.6     21.4  177.1
+    7    0.737 -1.707   21.9     13.0  135.8
+    8    0.781 -1.707   15.2      8.3  106.2
+    9    0.792 -1.746   10.8      5.4   84.4
+   10    0.812 -1.755    7.9      3.6   68.0
+   11    0.829 -1.758    5.8      2.4   55.4
+   12    0.843 -1.755    4.4      1.7   45.6
+   13    0.858 -1.787    3.4      1.2   39.0
+   14    0.844 -1.863    2.6      0.8   33.5
+   15    0.855 -1.863    2.1      0.6   28.9
+   16    0.861 -1.891    1.6      0.4   25.1
+   17    0.860 -1.925    1.3      0.3   21.9
+   18    0.869 -1.929    1.1      0.2   19.2
+   19    0.868 -1.944    0.9      0.2   16.9
+   20    0.876 -1.936    0.7      0.1   14.9
+
+Chosen beta = 13 (lowest power with SFT.R.sq >= 0.85; SFT.R.sq = 0.858, slope = -1.79, mean k = 3.4)
+blockwiseModules: 22.5 s; modules (excl. unassigned) = 16; unassigned genes = 2352
+ label       colour n_genes
+     1    turquoise     642
+     2         blue     550
+     3        brown     255
+     4       yellow     244
+     5        green     203
+     6          red     165
+     7        black     141
+     8         pink      92
+     9      magenta      59
+    10       purple      58
+    11  greenyellow      57
+    12          tan      42
+    13       salmon      38
+    14         cyan      35
+    15 midnightblue      34
+    16    lightcyan      33
+Error in run_arm("GSE41762", "islet", 77L, 20L, 57L, "results/stage3/06_final_panel_islet.csv") : 
+  identical(rownames(traits), rownames(datExpr)) is not TRUE
+Calls: run_arm -> stopifnot
+Execution halted

@@ -1,0 +1,3 @@
+"arm","stopped","beta","SFT_R2","best_R2_if_stopped","best_beta_if_stopped","n_modules","n_kept","n_hubs","verdict"
+"islet",FALSE,13,0.857735113024521,NA,NA,16,1,2,"network built"
+"adipose",TRUE,NA,NA,0.764261476941259,20,NA,NA,NA,"ADIPOSE ARM STOPPED at the soft-threshold step (STOP: no beta in 1..20 reaches scale-free R^2 >= 0.85 (signed R^2); best = 0.764 at beta = 20. Curve saved; NO beta chosen; no modules, no trait analysis, no stability run.) Stability analysis (100 bootstraps) and adipose module-trait analysis NOT run; adipose WGCNA therefore yields no modules and is not reported (protocol §4.1: never pick a beta silently)."

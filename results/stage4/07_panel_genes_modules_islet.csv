@@ -1,0 +1,2 @@
+"arm","panel_gene","in_matrix","MAD_rank_full_matrix","in_top5000","module_label","module_colour","kME","GS_status","GS_p","module_kept","module_possibly_confounded","kME_GS_pass","senescence_DEG_07a","hub_by_protocol_rule"
+"islet","IL1R1",TRUE,1088,TRUE,0,"grey",NA,0.431651025701859,8.86911158104715e-05,FALSE,FALSE,FALSE,TRUE,FALSE

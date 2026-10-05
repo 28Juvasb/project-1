@@ -17,7 +17,7 @@ Any change after lock goes to `logs/deviations.md` (CLAUDE.md rule 7).
 | 3 | WGCNA [4.1] | Signed hybrid, bicor, top 5000 by MAD, minModuleSize 30, mergeCutHeight 0.25, deepSplit 2, lowest beta ≤ 20 with R² ≥ 0.85 (else stop), module abs(r) > 0.3 and p < 0.05, hub kME > 0.8 and abs(GS) > 0.2. | Standard published settings. |
 | 4 | Adipose stop rule [4.1] | Retain a module only if Zsummary > 2 in > 70% of 100 bootstraps; if none, the adipose WGCNA is exploratory. Never lowered. | n=23 is small for WGCNA. |
 | 5 | Cross-tissue chance test [5.1] | Primary: 1000-permutation null rerunning screen + LASSO, p < 0.05. Secondary: hypergeometric. The overlap is a finding only if the primary is significant. | The permutation accounts for the selection procedure. |
-| 6 | Docking target rule [5.4] | Shared genes (else islet panel) passing CV frequency ≥ 50%, direction confirmed in validation, and a usable structure. Highest frequency first; dock top 1 (2 if tied). If none pass, no docking. | Objective and fixed before results. |
+| 6 | Docking target rule [5.4] | Shared genes (else islet panel) passing CV frequency ≥ 50% and a usable structure (validation direction reported for information only, amendment v1.2). Highest frequency first; dock top 1 (2 if tied). If none pass, no docking. | Objective and fixed before results. |
 | 7 | Headline metric [3, 8] | Nested-CV AUC with 95% CI; apparent AUC always beside it, labelled optimistic. | CLAUDE.md rule 5. |
 
 ## B. Additional locked decisions

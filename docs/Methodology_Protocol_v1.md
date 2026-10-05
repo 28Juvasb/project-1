@@ -1,6 +1,6 @@
 # Methodology Protocol v1 — Cross-Tissue Senescence Hub Genes in Type 2 Diabetes
 
-**Version:** 1.1 (amendment 2026-10-05, tag `protocol-v1.1`); v1.0 locked 2026-10-05 (tag `protocol-v1`)
+**Version:** 1.2 (amendment v1.2 2026-10-05: docking rule 5.4(b), see below; tag `protocol-v1.2`); 1.1 (tag `protocol-v1.1`); v1.0 locked 2026-10-05 (tag `protocol-v1`)
 **Amendment 1.1 (made before any expression analysis):** GSE38642 retired (63/63 CEL files are byte-identical to GSE41762 arrays; no independent data). GSE76894 added as primary islet external validation; GSE20966 becomes secondary. Sensitivity analysis added for the 11 GSE41762/GSE38642 label-discordant donors. See §1 and §7 and `logs/deviations.md`.
 **Decision authority:** Juvas (project lead). Supervisor: Dr. Thirumurugan.
 **Status of data at lock time (stated plainly):** all GEO files had been downloaded and the *sample metadata* (counts, group labels, covariates) inspected. **No expression values had been normalised, plotted or analysed.** Every analytical choice below was fixed before seeing any expression result.
@@ -134,7 +134,7 @@ Full-cohort limma, reported for description only and **never fed into selection*
 1. Candidates: shared panel genes; if none, the islet final panel.
 2. Each candidate must pass all of:
    - (a) nested-CV selection frequency ≥ 50%
-   - (b) same direction of effect in external validation (GSE76894 for islet; GSE71416 for adipose-specific)
+   - (b) ~~same direction of effect in external validation~~ **(amended v1.2, before any validation scoring):** direction of effect in validation is reported for information only and is NOT a selection criterion. Reason: using validation data to choose the target would breach CLAUDE.md rule 2 (validation sets never inform any decision).
    - (c) a usable structure (§6.1)
 3. Rank by selection frequency. Dock the top 1, or the top 2 if tied.
 4. If no candidate passes, docking is reported as not performed under the rule. The rule is not relaxed.

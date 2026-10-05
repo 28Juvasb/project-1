@@ -1,0 +1,79 @@
+Script: 07a_descriptive_deg  run: 20261005_231042 
+*** DESCRIPTIVE ONLY: these DEG tables are never fed into feature selection, the nested CV or the final panel (protocol §3.3, plan B4). ***
+
+Inputs:
+  data/processed/04_GSE41762_expr.rds md5=00b63bc09d54a5deeebf6a9fb6d42144
+  data/processed/04_GSE41762_pheno.rds md5=266de90b470e5e28ccbd78e98af37232
+  data/processed/04_GSE41762_expressed.rds md5=0c9ea7b66b910d6a54a4e6eb807058fd
+  data/processed/04_GSE27951_expr.rds md5=ae1851b209c367e0082f2a21d020d6cc
+  data/processed/04_GSE27951_pheno.rds md5=10cb1ccbb5b64909ae79053f63a21bfb
+  data/processed/04_GSE27951_expressed.rds md5=d2c26c69c3552f3c1660b845652b4e66
+  genesets/senescence_union.rds md5=ae4394bb94e0ee3f04a9715c404aaeb9
+  (validation cohorts GSE76894, GSE20966, GSE71416, GSE16415 and GSE38642 expression are NOT loaded)
+Parameters: limma lmFit+eBayes (default, non-robust, no trend); BH FDR < 0.05 & abs(log2FC) >= 0.263 (T2D vs ND); seed 42
+
+=== islet (GSE41762, full cohort): n=77 (57 ND / 20 T2D), genes in matrix=18807, expressed=14721 ===
+design columns: (Intercept), statusT2D, age, sexmale, batchdonors_49-80
+tested (expressed) = 14721; FDR<0.05 = 74; DEG (FDR<0.05 & |log2FC|>=0.263) = 62 (up 29 / down 33); senescence-union genes tested = 1000; senescence-union DEGs = 11
+(sensitivity: DEG count if BH is taken over all 18807 matrix genes instead of the expressed set = 29)
+senescence-union DEGs (top 15 by FDR):
+   gene     log2FC  adj.P.Val   direction
+  IL1R1  0.6133398 0.01667826   up_in_T2D
+   ARG2 -0.6944330 0.02914155 down_in_T2D
+    MYC  0.5109821 0.02914155   up_in_T2D
+ PDGFRA  0.6891740 0.03393538   up_in_T2D
+   PCK1 -0.7187466 0.03786382 down_in_T2D
+  PLAUR  0.3894263 0.04149637   up_in_T2D
+    FAS  0.3966332 0.04521925   up_in_T2D
+   FGF2  0.6184863 0.04521925   up_in_T2D
+   GPC3  0.6260587 0.04635777   up_in_T2D
+   FGF7  0.6715934 0.04699692   up_in_T2D
+    HGF  0.6052933 0.04896298   up_in_T2D
+
+=== adipose (GSE27951, full cohort): n=23 (11 ND / 12 T2D), genes in matrix=20823, expressed=16416 ===
+design columns: (Intercept), statusT2D, age, sexmale
+note: includes PCA outlier GSM691134 (kept per plan B12); sex = expression-inferred (no sex field in GEO)
+tested (expressed) = 16416; FDR<0.05 = 0; DEG (FDR<0.05 & |log2FC|>=0.263) = 0 (up 0 / down 0); senescence-union genes tested = 1029; senescence-union DEGs = 0
+(sensitivity: DEG count if BH is taken over all 20823 matrix genes instead of the expressed set = 0)
+
+Summary:
+     arm      gse  n n_T2D n_ND genes_tested_expressed n_fdr05 n_DEG n_DEG_up
+   islet GSE41762 77    20   57                  14721      74    62       29
+ adipose GSE27951 23    12   11                  16416       0     0        0
+ n_DEG_down senescence_union_in_tested n_senescence_DEG
+         33                       1000               11
+          0                       1029                0
+ n_DEG_if_BH_over_all_matrix_genes
+                                29
+                                 0
+
+All end-of-script assertions passed.
+Runtime: 0.02 min
+
+sessionInfo():
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] limma_3.66.0 here_1.0.2  
+
+loaded via a namespace (and not attached):
+[1] BiocManager_1.30.27 compiler_4.5.2      rprojroot_2.1.1    
+[4] tools_4.5.2         renv_1.3.0          statmod_1.5.2      
