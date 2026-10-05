@@ -1,0 +1,5 @@
+"cohort","gene","discovery_cohort","discovery_mean_z_T2D_minus_ND","discovery_direction","frozen_coef_sign","validation_mean_z_T2D_minus_ND","validation_direction","concordant_with_discovery","welch_t_p_descriptive"
+"GSE76894","IL1R1","GSE41762",0.977985712751434,"up in T2D","+ (score higher in T2D)",0.335467066347293,"up in T2D",TRUE,0.161647391896794
+"GSE20966","IL1R1","GSE41762",0.977985712751434,"up in T2D","+ (score higher in T2D)",0.28508334162353,"up in T2D",TRUE,0.538412162439362
+"GSE71416","SNAI1","GSE27951",-1.21799980050211,"down in T2D","- (score lower in T2D)",0.0769716788890195,"up in T2D",FALSE,0.892796115228577
+"GSE16415","SNAI1","GSE27951",-1.21799980050211,"down in T2D","- (score lower in T2D)",0.0251632397265747,"up in T2D",FALSE,0.971395022802832

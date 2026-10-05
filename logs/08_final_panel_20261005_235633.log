@@ -1,0 +1,65 @@
+Script: 08_final_panel  run: 20261005_235633 
+Parameters: none (read-only assembly of saved discovery results); seed 42
+
+Inputs:
+  results/stage3/06_final_panel_islet.csv md5=6fa28a3f211cbd0ae0ec67d441ddc190
+  results/stage3/06_auc_summary_islet.csv md5=2c87776f18ef612d21ecccdc5d455795
+  results/stage3/06_fallback_frequency_islet.csv md5=987a8f7f1b906b630e3e973d3d997ec3
+  results/stage3/stability_selection.csv md5=4ca1cb1f92e6a40a64afa08c1c97a55f
+  results/stage3/06_nested_cv_islet_result.rds md5=caa64ceac7e75440fd6f41e7ca3575e2
+  results/stage3/06_permutation_test_islet.csv md5=badc02d527c0f4f45121b1e81356a1a8
+  results/stage3/06b_final_panel_adipose_main.csv md5=9e28ef300014db9eefefb208cf09b498
+  results/stage3/06b_auc_summary.csv md5=27d5de57e42ca7165a7047fe4cc93314
+  results/stage3/06b_fallback_frequency_adipose_main.csv md5=03e6555571ed96ad250a8da0f0efbfbd
+  results/stage3/stability_selection_adipose.csv md5=191692a8aebb00317fa51f0406cfc40c
+  results/stage3/06b_permutation_test_adipose.rds md5=1b939ad3b8a5d098e1dd484d4f28be95
+  results/stage3/06b_sensitivity_comparison.csv md5=0455a245a3a1b929b2908950ace639f9
+  results/stage3/06b_final_panel_islet_excl11.csv md5=225eb59422757dd5808a100b0f18dd76
+  results/stage3/06b_fallback_frequency_islet_excl11.csv md5=859621830e95dbe131f8b2a4d7fb5b41
+  results/stage3/06b_stability_selection_islet_excl11.csv md5=4eebb8233ff2e168b7e8339db6554659
+  results/stage3/06b_final_panel_islet_bmi.csv md5=458fcd7dae01c0ee2631c984c0eb3755
+  results/stage3/06b_fallback_frequency_islet_bmi.csv md5=46e32c69c572e433d1e8ef39dacb327e
+  results/stage3/06b_stability_selection_islet_bmi.csv md5=8e3ce8b0e3bd1b8355a4ebcf6fa214db
+  results/stage3/06b_final_panel_adipose_excl_GSM691134.csv md5=0239b6520bd54f7ee6789b07d82dfe01
+  results/stage3/06b_fallback_frequency_adipose_excl_GSM691134.csv md5=446ce175ad80cb42724f787dc7afa4ec
+  results/stage3/06b_stability_selection_adipose_excl_GSM691134.csv md5=6f86d17543ffb9baa0b215b96b57f102
+  results/stage3/06b_final_panel_adipose_bmi.csv md5=9e28ef300014db9eefefb208cf09b498
+  results/stage3/06b_fallback_frequency_adipose_bmi.csv md5=ea755649f6356558b94b0e8ed46e462b
+  results/stage3/06b_stability_selection_adipose_bmi.csv md5=e925f19b0a67ae82956acfcc8c2c7e98
+
+=== results (08_final_panels.csv) ===
+     arm                     run  n n_T2D
+   islet   islet_main (GSE41762) 77    20
+ adipose adipose_main (GSE27951) 23    12
+   islet            islet_excl11 66    10
+   islet               islet_bmi 77    20
+ adipose  adipose_excl_GSM691134 22    12
+ adipose             adipose_bmi 23    12
+                                   final_panel nested_cv_auc_headline
+                                         IL1R1              0.6594737
+                                         SNAI1              0.5321970
+                     SERPINE2;PCGF2;CD55;SFRP1              0.7878571
+                       IL1R1;EPOR;PCK1;NLK;FXN              0.6661404
+ PEA15;SPX;CSF2RB;ITGB3;IQGAP2;HSPB1;INS;NRSN2              0.4158333
+                                         SNAI1              0.5113636
+ nested_ci_lo_sample_level_HEADLINE nested_ci_hi_sample_level_HEADLINE
+                          0.5284123                          0.7893026
+                          0.3840720                          0.6818371
+                          0.6864196                          0.8796429
+                          0.5261316                          0.8008860
+                          0.2691458                          0.5641875
+                          0.3727273                          0.6500284
+ nested_ci_lo_protocol_pROC nested_ci_hi_protocol_pROC apparent_auc_optimistic
+                  0.5959228                  0.7260456               0.7657895
+                  0.4392680                  0.5928371               0.8712121
+                  0.7195000                  0.8437875               0.9375000
+                  0.5949088                  0.7274061               0.9482456
+                  0.3499937                  0.4979250               0.9500000
+                  0.4291468                  0.5786420               0.8712121
+
+Outputs: results/stage5/08_final_panels.csv (md5 074cd39ad6e9e2bf6116d077c8ca5701), results/stage5/08_final_panels.md
+
+All end-of-script assertions passed (6 rows; AUCs and CIs in [0,1] with no NA; nested CI brackets the point estimate; fallback levels sum to 1; counts 77/20 and 23/12).
+Error in cat("\nAll end-of-script assertions passed (6 rows; AUCs and CIs in [0,1] with no NA; nested CI brackets the point estimate; fallback levels sum to 1; counts 77/20 and 23/12).\n") : 
+  ignoring SIGPIPE signal
+Execution halted

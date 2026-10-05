@@ -1,0 +1,5 @@
+"cohort","platform","gene","present","n_genes_in_matrix"
+"GSE76894","GPL570","IL1R1",TRUE,20823
+"GSE20966","GPL1352","IL1R1",TRUE,20129
+"GSE71416","GPL570","SNAI1",TRUE,20823
+"GSE16415","GPL2986","SNAI1",TRUE,16465

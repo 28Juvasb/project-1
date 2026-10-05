@@ -1,0 +1,182 @@
+Script: 09_external_validation  run: 20261006_000137  mode: verify-identical 
+Parameters: seed 42 ; bootstrap replicates 2000 (sample-level stratified percentile CI = headline; pROC::ci.auc stratified; pROC::ci.se band); z-scoring within the scored dataset; frozen intercept/coefficients; AUC orientation: score higher = T2D (not flipped)
+
+Inputs (md5):
+  results/stage3/06_final_model_islet.rds  85aa24d6d299c31d0605f019d85cb7df
+  results/stage3/06b_final_model_adipose_main.rds  da71be35f0b424654dbc6de94bfcdcb1
+  results/stage3/06_final_panel_islet.csv  6fa28a3f211cbd0ae0ec67d441ddc190
+  results/stage3/06b_final_panel_adipose_main.csv  9e28ef300014db9eefefb208cf09b498
+  results/stage3/06_auc_summary_islet.csv  2c87776f18ef612d21ecccdc5d455795
+  results/stage3/06b_auc_summary.csv  27d5de57e42ca7165a7047fe4cc93314
+  data/processed/04_GSE41762_expr.rds  00b63bc09d54a5deeebf6a9fb6d42144
+  data/processed/04_GSE41762_pheno.rds  266de90b470e5e28ccbd78e98af37232
+  data/processed/04_GSE27951_expr.rds  ae1851b209c367e0082f2a21d020d6cc
+  data/processed/04_GSE27951_pheno.rds  10cb1ccbb5b64909ae79053f63a21bfb
+  data/processed/04_GSE76894_expr.rds  5bdc4f6a1d0485fab6b2b143557fabd9
+  data/processed/04_GSE76894_pheno.rds  221a76ff6cebfc19e99590c4be02a5ae
+  data/processed/04_GSE20966_expr.rds  ad7239796f4f7f82565d8a0a02ed46d6
+  data/processed/04_GSE20966_pheno.rds  fb334c014e1958246dc1ffa9c3a40486
+  data/processed/04_GSE71416_expr.rds  7705067c4407365624c4a97492bd09b8
+  data/processed/04_GSE71416_pheno.rds  db2577b255f48ae8f97d470f93a440aa
+  data/processed/04_GSE16415_expr.rds  3aacc790327a915bcb9f3451d285a139
+  data/processed/04_GSE16415_pheno.rds  f21a5ddb8bacd0fda0bd012a9106fe20
+  scripts/09_external_validation.R  c4faef519f820553b342c218d4364acb
+  scripts/08_final_panel.R  a6e5cba686df301dfe06642488972535
+  scripts/06_nested_cv.R  13f7bd94c40e00edfcfc83c0f797567c
+  scripts/06b_nested_cv_arms.R  3f2629d2c97494eab228e8d5aa9a9fb4
+
+Frozen models: islet panel = IL1R1 (coef 1.0269 , intercept -1.24646 ); adipose panel = SNAI1 (coef -1.51065 , intercept 0.013893 )
+Stored apparent AUC of the frozen models (to be reproduced by the dry run): islet 0.765789 [0.625417-0.882478] ; adipose 0.871212 [0.666667-1.000000] 
+
+=== 3. panel-gene presence per platform (expression matrices only) ===
+   cohort platform panel present n_genes n_samples anyNA
+ GSE76894   GPL570 IL1R1    TRUE   20823        99 FALSE
+ GSE20966  GPL1352 IL1R1    TRUE   20129        20 FALSE
+ GSE71416   GPL570 SNAI1    TRUE   20823        17 FALSE
+ GSE16415  GPL2986 SNAI1    TRUE   16465        10 FALSE
+
+=== 4. DRY RUN: identical code path on the DISCOVERY cohorts (frozen islet model -> GSE41762; frozen adipose model -> GSE27951) ===
+Warning messages:
+1: In ci.auc.roc(r, method = "bootstrap", boot.n = B, boot.stratified = TRUE,  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+2: In ci.se.roc(r, specificities = seq(0, 1, 0.02), method = "bootstrap",  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+3: In ci.auc.roc(r, method = "bootstrap", boot.n = B, boot.stratified = TRUE,  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+4: In ci.se.roc(r, specificities = seq(0, 1, 0.02), method = "bootstrap",  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+   cohort                analysis  n n_ND n_T2D scorable       auc
+ GSE41762         AUC + direction 77   57    20     TRUE 0.7657895
+ GSE27951         AUC + direction 23   11    12     TRUE 0.8712121
+ GSE27951 direction only (no AUC) 23   11    12     TRUE        NA
+ auc_ci_lo_bootstrap_HEADLINE auc_ci_hi_bootstrap_HEADLINE auc_ci_lo_pROC
+                    0.6254167                    0.8824781      0.6254167
+                    0.6666667                    1.0000000      0.6666667
+                           NA                           NA             NA
+ auc_ci_hi_pROC
+      0.8824781
+      1.0000000
+             NA
+  [PASS] islet: AUC of frozen model on GSE41762 == stored apparent AUC
+  [PASS] adipose: AUC of frozen model on GSE27951 == stored apparent AUC
+  [PASS] islet: pROC bootstrap CI reproduces stored apparent CI
+  [PASS] adipose: pROC bootstrap CI reproduces stored apparent CI
+  [PASS] GSE41762: within-dataset z-scoring reproduces the frozen-model predict_model() probabilities on its own training data (max |diff| < 1e-9)
+  [PASS] GSE41762: within-dataset training mean/SD equal the stored frozen mu/sd
+  [PASS] GSE27951: within-dataset z-scoring reproduces the frozen-model predict_model() probabilities on its own training data (max |diff| < 1e-9)
+  [PASS] GSE27951: within-dataset training mean/SD equal the stored frozen mu/sd
+  [PASS] direction-only path (adipose, no AUC): AUC fields are NA and a direction row was produced
+  [PASS] direction in discovery equals itself and matches the sign of the frozen coefficient (islet IL1R1 +, adipose SNAI1 -)
+  [PASS] absent-gene path: reported 'NOT SCORABLE' with no AUC and no substitution
+  [PASS] dry-run outputs written (4 csv + rds + roc pdf/png)
+  [PASS] frozen model files unchanged during dry run
+DRY RUN PASSED: the scoring code path reproduces the stored apparent AUCs exactly. Only after this point may validation labels be read.
+
+=== 5. EXTERNAL VALIDATION SCORING (frozen models; one pass; no tuning) ===
+Warning messages:
+1: In ci.auc.roc(r, method = "bootstrap", boot.n = B, boot.stratified = TRUE,  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+2: In ci.se.roc(r, specificities = seq(0, 1, 0.02), method = "bootstrap",  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+3: In ci.auc.roc(r, method = "bootstrap", boot.n = B, boot.stratified = TRUE,  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+4: In ci.se.roc(r, specificities = seq(0, 1, 0.02), method = "bootstrap",  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+5: In ci.auc.roc(r, method = "bootstrap", boot.n = B, boot.stratified = TRUE,  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+6: In ci.se.roc(r, specificities = seq(0, 1, 0.02), method = "bootstrap",  :
+  Progress bars are deprecated in pROC 1.19. Ignoring 'progress' argument
+
+=== RESULTS (as-is; no decision follows from them in this script) ===
+   cohort                                 role  n n_ND n_T2D scorable       auc
+ GSE76894   islet external validation, primary 99   80    19     TRUE 0.5914474
+ GSE20966 islet external validation, secondary 20   10    10     TRUE 0.5600000
+ GSE71416          adipose external validation 17    6    11     TRUE 0.4393939
+ GSE16415      adipose sanity (direction only) 10    5     5     TRUE        NA
+ auc_ci_lo_bootstrap_HEADLINE auc_ci_hi_bootstrap_HEADLINE auc_ci_lo_pROC
+                    0.4348684                    0.7375164      0.4348684
+                    0.2900000                    0.8200000      0.2900000
+                    0.1363636                    0.7424242      0.1363636
+                           NA                           NA             NA
+ auc_ci_hi_pROC
+      0.7375164
+      0.8200000
+      0.7424242
+             NA
+
+Gene presence:
+   cohort platform  gene present n_genes_in_matrix
+ GSE76894   GPL570 IL1R1    TRUE             20823
+ GSE20966  GPL1352 IL1R1    TRUE             20129
+ GSE71416   GPL570 SNAI1    TRUE             20823
+ GSE16415  GPL2986 SNAI1    TRUE             16465
+
+Direction of effect (descriptive; discovery direction from the discovery cohort, within-dataset z):
+   cohort  gene discovery_cohort discovery_mean_z_T2D_minus_ND
+ GSE76894 IL1R1         GSE41762                     0.9779857
+ GSE20966 IL1R1         GSE41762                     0.9779857
+ GSE71416 SNAI1         GSE27951                    -1.2179998
+ GSE16415 SNAI1         GSE27951                    -1.2179998
+ discovery_direction        frozen_coef_sign validation_mean_z_T2D_minus_ND
+           up in T2D + (score higher in T2D)                     0.33546707
+           up in T2D + (score higher in T2D)                     0.28508334
+         down in T2D  - (score lower in T2D)                     0.07697168
+         down in T2D  - (score lower in T2D)                     0.02516324
+ validation_direction concordant_with_discovery welch_t_p_descriptive
+            up in T2D                      TRUE             0.1616474
+            up in T2D                      TRUE             0.5384122
+            up in T2D                     FALSE             0.8927961
+            up in T2D                     FALSE             0.9713950
+
+Sign tests:
+   cohort n_genes_direction_concordant n_genes_scored sign_test_p
+ GSE76894                            1              1           1
+ GSE20966                            1              1           1
+ GSE71416                            0              1           1
+ GSE16415                            0              1           1
+                                                                                                                    note
+                                                single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+                                                single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+                                                single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+ no AUC computed (protocol §7: direction only); single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+
+Assertions passed (4 cohorts with expected n and group counts; all panel genes present; 3 AUC rows with both CIs; GSE16415 has no AUC; scores non-NA; frozen models unchanged).
+
+=== --verify-identical: comparing recomputed results with the saved results ===
+  input_matrix: 12/12 md5 match the lock
+  frozen_model: 4/4 md5 match the lock
+  script: 4/4 md5 match the lock
+  09_validation_results.csv    saved md5 7c5e6731582fd2b9b5bd4da17e9771c4  recomputed md5 7c5e6731582fd2b9b5bd4da17e9771c4  IDENTICAL
+  09_direction_of_effect.csv   saved md5 794a99fc218baacaae581c3b33819804  recomputed md5 794a99fc218baacaae581c3b33819804  IDENTICAL
+  09_validation_scores.csv     saved md5 620f6ddda27fa0eba604c1e75cf67c94  recomputed md5 620f6ddda27fa0eba604c1e75cf67c94  IDENTICAL
+  09_gene_presence.csv         saved md5 db36ae60a3a409ac6786a55ad1252d1c  recomputed md5 db36ae60a3a409ac6786a55ad1252d1c  IDENTICAL
+  09_validation_results.rds: identical() TRUE (all numbers, bands and per-sample scores bit-identical)
+VERIFY PASSED: the saved validation results are bit-identical to a fresh recomputation from the frozen inputs.
+
+sessionInfo():
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] pROC_1.19.1 here_1.0.2 
+
+loaded via a namespace (and not attached):
+[1] BiocManager_1.30.27 compiler_4.5.2      rprojroot_2.1.1    
+[4] tools_4.5.2         Rcpp_1.1.2          renv_1.3.0         

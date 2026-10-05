@@ -1,0 +1,84 @@
+Script: 09_external_validation  run: 20261006_000131  mode: full (dry run, then ONE validation scoring) 
+Parameters: seed 42 ; bootstrap replicates 2000 (sample-level stratified percentile CI = headline; pROC::ci.auc stratified; pROC::ci.se band); z-scoring within the scored dataset; frozen intercept/coefficients; AUC orientation: score higher = T2D (not flipped)
+
+*** LOCK EXISTS (/run/media/juvaasbollini/My Files/Senescence-Diabetes-Study/results/stage5/09_VALIDATION_SCORED.lock): the validation sets have already been scored. REFUSING to re-score. ***
+Lock contents:
+validation scored: 2026-10-06 00:01:19 IST
+script log: logs/09_external_validation_20261006_000102.log
+kind	path	md5
+input_matrix	data/processed/04_GSE76894_expr.rds	5bdc4f6a1d0485fab6b2b143557fabd9
+input_matrix	data/processed/04_GSE76894_pheno.rds	221a76ff6cebfc19e99590c4be02a5ae
+input_matrix	data/processed/04_GSE20966_expr.rds	ad7239796f4f7f82565d8a0a02ed46d6
+input_matrix	data/processed/04_GSE20966_pheno.rds	fb334c014e1958246dc1ffa9c3a40486
+input_matrix	data/processed/04_GSE71416_expr.rds	7705067c4407365624c4a97492bd09b8
+input_matrix	data/processed/04_GSE71416_pheno.rds	db2577b255f48ae8f97d470f93a440aa
+input_matrix	data/processed/04_GSE16415_expr.rds	3aacc790327a915bcb9f3451d285a139
+input_matrix	data/processed/04_GSE16415_pheno.rds	f21a5ddb8bacd0fda0bd012a9106fe20
+input_matrix	data/processed/04_GSE41762_expr.rds	00b63bc09d54a5deeebf6a9fb6d42144
+input_matrix	data/processed/04_GSE41762_pheno.rds	266de90b470e5e28ccbd78e98af37232
+input_matrix	data/processed/04_GSE27951_expr.rds	ae1851b209c367e0082f2a21d020d6cc
+input_matrix	data/processed/04_GSE27951_pheno.rds	10cb1ccbb5b64909ae79053f63a21bfb
+frozen_model	results/stage3/06_final_model_islet.rds	85aa24d6d299c31d0605f019d85cb7df
+frozen_model	results/stage3/06b_final_model_adipose_main.rds	da71be35f0b424654dbc6de94bfcdcb1
+frozen_model	results/stage3/06_final_panel_islet.csv	6fa28a3f211cbd0ae0ec67d441ddc190
+frozen_model	results/stage3/06b_final_panel_adipose_main.csv	9e28ef300014db9eefefb208cf09b498
+script	scripts/09_external_validation.R	c4faef519f820553b342c218d4364acb
+script	scripts/08_final_panel.R	a6e5cba686df301dfe06642488972535
+script	scripts/06_nested_cv.R	13f7bd94c40e00edfcfc83c0f797567c
+script	scripts/06b_nested_cv_arms.R	3f2629d2c97494eab228e8d5aa9a9fb4
+result_table	results/stage5/09_validation_results.csv	7c5e6731582fd2b9b5bd4da17e9771c4
+result_table	results/stage5/09_direction_of_effect.csv	794a99fc218baacaae581c3b33819804
+result_table	results/stage5/09_validation_scores.csv	620f6ddda27fa0eba604c1e75cf67c94
+result_table	results/stage5/09_gene_presence.csv	db36ae60a3a409ac6786a55ad1252d1c
+result_table	results/stage5/09_validation_results.rds	654f742a44dedc61308d8ef270132fb9
+
+=== SAVED VALIDATION RESULTS (read from results/stage5; nothing recomputed) ===
+   cohort                                 role  tissue platform
+ GSE76894   islet external validation, primary   islet   GPL570
+ GSE20966 islet external validation, secondary   islet  GPL1352
+ GSE71416          adipose external validation adipose   GPL570
+ GSE16415      adipose sanity (direction only) adipose  GPL2986
+                analysis  n n_ND n_T2D panel_genes genes_present genes_absent
+         AUC + direction 99   80    19       IL1R1         IL1R1           NA
+         AUC + direction 20   10    10       IL1R1         IL1R1           NA
+         AUC + direction 17    6    11       SNAI1         SNAI1           NA
+ direction only (no AUC) 10    5     5       SNAI1         SNAI1           NA
+ scorable       auc auc_ci_lo_bootstrap_HEADLINE auc_ci_hi_bootstrap_HEADLINE
+     TRUE 0.5914474                    0.4348684                    0.7375164
+     TRUE 0.5600000                    0.2900000                    0.8200000
+     TRUE 0.4393939                    0.1363636                    0.7424242
+     TRUE        NA                           NA                           NA
+ auc_ci_lo_pROC auc_ci_hi_pROC n_genes_direction_concordant n_genes_scored
+      0.4348684      0.7375164                            1              1
+      0.2900000      0.8200000                            1              1
+      0.1363636      0.7424242                            0              1
+             NA             NA                            0              1
+ sign_test_p
+           1
+           1
+           1
+           1
+                                                                                                                    note
+                                                single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+                                                single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+                                                single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+ no AUC computed (protocol §7: direction only); single-gene panel: the sign test is degenerate (1 gene, two-sided p = 1)
+
+Direction of effect:
+   cohort  gene discovery_cohort discovery_mean_z_T2D_minus_ND
+ GSE76894 IL1R1         GSE41762                     0.9779857
+ GSE20966 IL1R1         GSE41762                     0.9779857
+ GSE71416 SNAI1         GSE27951                    -1.2179998
+ GSE16415 SNAI1         GSE27951                    -1.2179998
+ discovery_direction        frozen_coef_sign validation_mean_z_T2D_minus_ND
+           up in T2D + (score higher in T2D)                     0.33546707
+           up in T2D + (score higher in T2D)                     0.28508334
+         down in T2D  - (score lower in T2D)                     0.07697168
+         down in T2D  - (score lower in T2D)                     0.02516324
+ validation_direction concordant_with_discovery welch_t_p_descriptive
+            up in T2D                      TRUE             0.1616474
+            up in T2D                      TRUE             0.5384122
+            up in T2D                     FALSE             0.8927961
+            up in T2D                     FALSE             0.9713950
+
+To recompute and check bit-identical results run with --verify-identical (writes nothing into results/).
