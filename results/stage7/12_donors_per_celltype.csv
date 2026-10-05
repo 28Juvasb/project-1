@@ -1,0 +1,5 @@
+celltype,ND,T2D,n_donors,testable
+beta,6,5,11,True
+alpha,10,6,16,True
+delta,0,0,0,False
+PP,1,1,2,False

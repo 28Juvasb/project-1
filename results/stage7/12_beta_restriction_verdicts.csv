@@ -1,0 +1,10 @@
+gene,category,beta_logFC,beta_P,beta_FDR_9genes,beta,alpha,delta,verdict
+IL1R1,nested-CV panel,-0.1639766,0.249156655523378,0.8357244963462337,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"
+SNAI1,nested-CV panel,,,,not testable,not significant,not testable,NOT ASSESSABLE (beta not testable for this gene)
+SERPINE2,top islet stability,0.0095723066666667,0.968638490767224,0.968638490767224,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"
+NLK,top islet stability,-0.159520633333333,0.436884890493803,0.8357244963462337,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"
+CDKN1A,top islet stability,0.230474,0.703203758045724,0.8357244963462337,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"
+PCK1,top islet stability,0.0238057466666667,0.47189794751968,0.8357244963462337,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"
+FXN,top islet stability,0.054085517,0.571158017019273,0.8357244963462337,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"
+GPC3,WGCNA hub,,,,not testable,not testable,not testable,NOT ASSESSABLE (beta not testable for this gene)
+FGF2,WGCNA hub,0.0318934526666667,0.716335282582486,0.8357244963462337,not significant,not significant,not testable,"INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)"

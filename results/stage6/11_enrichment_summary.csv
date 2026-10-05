@@ -1,0 +1,15 @@
+"analysis","set","background","n_genes","n_genes_mapped_entrez","universe_size","universe_mapped_entrez","db","status","n_terms_tested","n_significant_BH05"
+"protocol","shared","expressed (union of both tissues)",0,NA,18255,NA,"all","underpowered (<10 genes): not tested",NA,NA
+"protocol","islet-specific","expressed islet",1,NA,14721,NA,"all","underpowered (<10 genes): not tested",NA,NA
+"protocol","adipose-specific","expressed adipose",1,NA,16416,NA,"all","underpowered (<10 genes): not tested",NA,NA
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","A: all expressed islet genes",11,11,14721,14721,"GO_BP","tested",1006,219
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","A: all expressed islet genes",11,11,14721,14721,"GO_MF","tested",59,20
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","A: all expressed islet genes",11,11,14721,14721,"GO_CC","tested",37,2
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","A: all expressed islet genes",11,11,14721,14721,"KEGG","tested",101,17
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","B (caveat): senescence-union genes expressed in islet",11,11,1000,1000,"GO_BP","tested",1087,35
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","B (caveat): senescence-union genes expressed in islet",11,11,1000,1000,"GO_MF","tested",101,2
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","B (caveat): senescence-union genes expressed in islet",11,11,1000,1000,"GO_CC","tested",78,3
+"EXPLORATORY E1: islet senescence-union DEGs","islet_senescence_DEGs","B (caveat): senescence-union genes expressed in islet",11,11,1000,1000,"KEGG","tested",90,5
+"EXPLORATORY E2: islet nested-CV stability list (freq >= 0.2)","islet_stability_ge0.2","A: all expressed islet genes",9,NA,14721,NA,"all","underpowered (<10 genes): not tested",NA,NA
+"EXPLORATORY E3: adipose nested-CV stability list (freq >= 0.2)","adipose_stability_ge0.2","A: all expressed adipose genes",2,NA,16416,NA,"all","underpowered (<10 genes): not tested",NA,NA
+"EXPLORATORY E3: adipose descriptive DEGs (protocol §3.3)","adipose_DEGs","A: all expressed adipose genes",0,NA,16416,NA,"all","underpowered (<10 genes): not tested",NA,NA

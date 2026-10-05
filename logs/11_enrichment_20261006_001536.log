@@ -1,0 +1,288 @@
+Script: 11_enrichment  run: 20261006_001536 
+
+Inputs:
+  results/stage6/10_gene_classification.csv md5=b9125ed0f41c271dca07b95c8108f69a
+  results/stage6/10_cross_tissue_result.rds md5=fb5fdb33169dea44c8f392d7bf3277f8
+  data/processed/04_GSE41762_expressed.rds md5=0c9ea7b66b910d6a54a4e6eb807058fd
+  data/processed/04_GSE27951_expressed.rds md5=d2c26c69c3552f3c1660b845652b4e66
+  genesets/senescence_union.csv md5=14cfa24d69fc20f20199a9b6c31475ae
+  results/stage4/07a_deg_islet.csv md5=b127245505b537d777064d3cd0485a1f
+  results/stage4/07a_deg_adipose.csv md5=289f24e147394cccd916aa74d1316441
+  results/stage3/stability_selection.csv md5=4ca1cb1f92e6a40a64afa08c1c97a55f
+  results/stage3/stability_selection_adipose.csv md5=191692a8aebb00317fa51f0406cfc40c
+  (validation cohorts and results/stage5/09_* are NOT read)
+
+Parameters: BH p.adjust < 0.05; minGSSize 10; maxGSSize 500; underpowered if set < 10 genes; clusterProfiler 4.18.4; org.Hs.eg.db 3.22.0; seed 42
+KEGG REST API reachable: TRUE (retrieved 2026-10-06; 372 human pathways)
+
+=== Enrichment runs ===
+
+[protocol | shared | expressed (union of both tissues)]
+  genes: 0; universe: 18255 genes (expressed (union of both tissues))
+  -> UNDERPOWERED: fewer than 10 genes; enrichment NOT tested (narrative gene-level annotation below instead).
+
+[protocol | islet-specific | expressed islet]
+  genes: 1 (IL1R1); universe: 14721 genes (expressed islet)
+  -> UNDERPOWERED: fewer than 10 genes; enrichment NOT tested (narrative gene-level annotation below instead).
+
+[protocol | adipose-specific | expressed adipose]
+  genes: 1 (SNAI1); universe: 16416 genes (expressed adipose)
+  -> UNDERPOWERED: fewer than 10 genes; enrichment NOT tested (narrative gene-level annotation below instead).
+
+[EXPLORATORY E1: islet senescence-union DEGs | islet_senescence_DEGs | A: all expressed islet genes]
+  genes: 11 (IL1R1, ARG2, MYC, PDGFRA, PCK1, PLAUR, FAS, FGF2, GPC3, FGF7, HGF); universe: 14721 genes (A: all expressed islet genes)
+Reading KEGG annotation online: "https://rest.kegg.jp/link/hsa/pathway"...
+Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/hsa"...
+kegg_category.rda is not found, download it online...
+  mapped to Entrez: 11/11 genes; universe mapped 14721/14721
+  GO_BP  terms tested  1006; BH p < 0.05: 219
+  GO_MF  terms tested    59; BH p < 0.05: 20
+  GO_CC  terms tested    37; BH p < 0.05: 2
+  KEGG   terms tested   101; BH p < 0.05: 17
+
+[EXPLORATORY E1: islet senescence-union DEGs | islet_senescence_DEGs | B (caveat): senescence-union genes expressed in islet]
+  genes: 11 (IL1R1, ARG2, MYC, PDGFRA, PCK1, PLAUR, FAS, FGF2, GPC3, FGF7, HGF); universe: 1000 genes (B (caveat): senescence-union genes expressed in islet)
+  mapped to Entrez: 11/11 genes; universe mapped 1000/1000
+  GO_BP  terms tested  1087; BH p < 0.05: 35
+  GO_MF  terms tested   101; BH p < 0.05: 2
+  GO_CC  terms tested    78; BH p < 0.05: 3
+  KEGG   terms tested    90; BH p < 0.05: 5
+
+[EXPLORATORY E2: islet nested-CV stability list (freq >= 0.2) | islet_stability_ge0.2 | A: all expressed islet genes]
+  genes: 9 (SERPINE2, NLK, IL1R1, PCK1, CDKN1A, FXN, EPOR, ARG2, CEBPB); universe: 14721 genes (A: all expressed islet genes)
+  -> UNDERPOWERED: fewer than 10 genes; enrichment NOT tested.
+
+[EXPLORATORY E3: adipose nested-CV stability list (freq >= 0.2) | adipose_stability_ge0.2 | A: all expressed adipose genes]
+  genes: 2 (SNAI1, S100A6); universe: 16416 genes (A: all expressed adipose genes)
+  -> UNDERPOWERED: fewer than 10 genes; enrichment NOT tested.
+
+[EXPLORATORY E3: adipose descriptive DEGs (protocol §3.3) | adipose_DEGs | A: all expressed adipose genes]
+  genes: 0; universe: 16416 genes (A: all expressed adipose genes)
+  -> UNDERPOWERED: fewer than 10 genes; enrichment NOT tested.
+
+=== Summary table ===
+ analysis                                                      
+ protocol                                                      
+ protocol                                                      
+ protocol                                                      
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E1: islet senescence-union DEGs                   
+ EXPLORATORY E2: islet nested-CV stability list (freq >= 0.2)  
+ EXPLORATORY E3: adipose nested-CV stability list (freq >= 0.2)
+ EXPLORATORY E3: adipose descriptive DEGs (protocol §3.3)      
+ set                     background                                           
+ shared                  expressed (union of both tissues)                    
+ islet-specific          expressed islet                                      
+ adipose-specific        expressed adipose                                    
+ islet_senescence_DEGs   A: all expressed islet genes                         
+ islet_senescence_DEGs   A: all expressed islet genes                         
+ islet_senescence_DEGs   A: all expressed islet genes                         
+ islet_senescence_DEGs   A: all expressed islet genes                         
+ islet_senescence_DEGs   B (caveat): senescence-union genes expressed in islet
+ islet_senescence_DEGs   B (caveat): senescence-union genes expressed in islet
+ islet_senescence_DEGs   B (caveat): senescence-union genes expressed in islet
+ islet_senescence_DEGs   B (caveat): senescence-union genes expressed in islet
+ islet_stability_ge0.2   A: all expressed islet genes                         
+ adipose_stability_ge0.2 A: all expressed adipose genes                       
+ adipose_DEGs            A: all expressed adipose genes                       
+ n_genes db    status                               n_terms_tested
+  0      all   underpowered (<10 genes): not tested   NA          
+  1      all   underpowered (<10 genes): not tested   NA          
+  1      all   underpowered (<10 genes): not tested   NA          
+ 11      GO_BP tested                               1006          
+ 11      GO_MF tested                                 59          
+ 11      GO_CC tested                                 37          
+ 11      KEGG  tested                                101          
+ 11      GO_BP tested                               1087          
+ 11      GO_MF tested                                101          
+ 11      GO_CC tested                                 78          
+ 11      KEGG  tested                                 90          
+  9      all   underpowered (<10 genes): not tested   NA          
+  2      all   underpowered (<10 genes): not tested   NA          
+  0      all   underpowered (<10 genes): not tested   NA          
+ n_significant_BH05
+  NA               
+  NA               
+  NA               
+ 219               
+  20               
+   2               
+  17               
+  35               
+   2               
+   3               
+   5               
+  NA               
+  NA               
+  NA               
+
+=== Terms with BH-adjusted p < 0.05 (EXPLORATORY analyses; counts per analysis/background/db) ===
+                                    analysis
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+ EXPLORATORY E1: islet senescence-union DEGs
+                                            background    db Freq
+                          A: all expressed islet genes GO_BP  219
+ B (caveat): senescence-union genes expressed in islet GO_BP   35
+                          A: all expressed islet genes GO_CC    2
+ B (caveat): senescence-union genes expressed in islet GO_CC    3
+                          A: all expressed islet genes GO_MF   20
+ B (caveat): senescence-union genes expressed in islet GO_MF    2
+                          A: all expressed islet genes  KEGG   17
+ B (caveat): senescence-union genes expressed in islet  KEGG    5
+
+-- islet_senescence_DEGs | A: all expressed islet genes (top 8 per db by p.adjust)
+   GO_BP  GO:0061138   morphogenesis of a branching epithelium                 Count  5  5/11  p.adj 1.01e-04
+   GO_BP  GO:0001763   morphogenesis of a branching structure                  Count  5  5/11  p.adj 1.01e-04
+   GO_BP  GO:0001657   ureteric bud development                                Count  4  4/11  p.adj 1.16e-04
+   GO_BP  GO:0072163   mesonephric epithelium development                      Count  4  4/11  p.adj 1.16e-04
+   GO_BP  GO:0072164   mesonephric tubule development                          Count  4  4/11  p.adj 1.16e-04
+   GO_BP  GO:0001823   mesonephros development                                 Count  4  4/11  p.adj 1.16e-04
+   GO_BP  GO:0001822   kidney development                                      Count  5  5/11  p.adj 2.68e-04
+   GO_BP  GO:0072001   renal system development                                Count  5  5/11  p.adj 2.68e-04
+   GO_MF  GO:0042056   chemoattractant activity                                Count  3  3/11  p.adj 3.33e-05
+   GO_MF  GO:0070851   growth factor receptor binding                          Count  4  4/11  p.adj 3.33e-05
+   GO_MF  GO:0005161   platelet-derived growth factor receptor binding         Count  2  2/11  p.adj 9.18e-04
+   GO_MF  GO:0008083   growth factor activity                                  Count  3  3/11  p.adj 1.18e-03
+   GO_MF  GO:0005104   fibroblast growth factor receptor binding               Count  2  2/11  p.adj 1.63e-03
+   GO_MF  GO:0030145   manganese ion binding                                   Count  2  2/11  p.adj 1.02e-02
+   GO_MF  GO:0048018   receptor ligand activity                                Count  3  3/11  p.adj 1.72e-02
+   GO_MF  GO:0030546   signaling receptor activator activity                   Count  3  3/11  p.adj 1.72e-02
+   GO_CC  GO:0098552   side of membrane                                        Count  5  5/11  p.adj 4.21e-04
+   GO_CC  GO:0009897   external side of plasma membrane                        Count  4  4/11  p.adj 4.21e-04
+   KEGG   hsa04010     MAPK signaling pathway                                  Count  7  7/11  p.adj 5.29e-06
+   KEGG   hsa05205     Proteoglycans in cancer                                 Count  6  6/11  p.adj 1.14e-05
+   KEGG   hsa05218     Melanoma                                                Count  4  4/11  p.adj 7.77e-05
+   KEGG   hsa04151     PI3K-Akt signaling pathway                              Count  6  6/11  p.adj 7.77e-05
+   KEGG   hsa05200     Pathways in cancer                                      Count  6  6/11  p.adj 8.43e-04
+   KEGG   hsa05226     Gastric cancer                                          Count  4  4/11  p.adj 9.52e-04
+   KEGG   hsa04015     Rap1 signaling pathway                                  Count  4  4/11  p.adj 2.17e-03
+   KEGG   hsa04020     Calcium signaling pathway                               Count  4  4/11  p.adj 2.17e-03
+
+-- islet_senescence_DEGs | B (caveat): senescence-union genes expressed in islet (top 8 per db by p.adjust)
+   GO_BP  GO:0009605   response to external stimulus                           Count 11  11/11  p.adj 4.03e-03
+   GO_BP  GO:0061138   morphogenesis of a branching epithelium                 Count  5  5/11  p.adj 2.95e-02
+   GO_BP  GO:0001763   morphogenesis of a branching structure                  Count  5  5/11  p.adj 2.95e-02
+   GO_BP  GO:0080134   regulation of response to stress                        Count  9  9/11  p.adj 2.95e-02
+   GO_BP  GO:0001657   ureteric bud development                                Count  4  4/11  p.adj 2.95e-02
+   GO_BP  GO:0001823   mesonephros development                                 Count  4  4/11  p.adj 2.95e-02
+   GO_BP  GO:0072163   mesonephric epithelium development                      Count  4  4/11  p.adj 2.95e-02
+   GO_BP  GO:0072164   mesonephric tubule development                          Count  4  4/11  p.adj 2.95e-02
+   GO_MF  GO:0070851   growth factor receptor binding                          Count  4  4/11  p.adj 1.92e-02
+   GO_MF  GO:0042056   chemoattractant activity                                Count  3  3/11  p.adj 3.15e-02
+   GO_CC  GO:0098552   side of membrane                                        Count  5  5/11  p.adj 7.52e-03
+   GO_CC  GO:0009897   external side of plasma membrane                        Count  4  4/11  p.adj 7.52e-03
+   GO_CC  GO:0009986   cell surface                                            Count  5  5/11  p.adj 2.90e-02
+   KEGG   hsa04010     MAPK signaling pathway                                  Count  7  7/11  p.adj 7.56e-03
+   KEGG   hsa05205     Proteoglycans in cancer                                 Count  6  6/11  p.adj 7.56e-03
+   KEGG   hsa04151     PI3K-Akt signaling pathway                              Count  6  6/11  p.adj 3.12e-02
+   KEGG   hsa04020     Calcium signaling pathway                               Count  4  4/11  p.adj 3.12e-02
+   KEGG   hsa05218     Melanoma                                                Count  4  4/11  p.adj 3.12e-02
+
+figures written: 11_islet_senescence_DEGs_bgA_allExpressed_GO_BP_dotplot, 11_islet_senescence_DEGs_bgA_allExpressed_GO_MF_dotplot, 11_islet_senescence_DEGs_bgA_allExpressed_GO_CC_dotplot, 11_islet_senescence_DEGs_bgA_allExpressed_KEGG_dotplot, 11_islet_senescence_DEGs_bgB_unionExpressed_GO_BP_dotplot, 11_islet_senescence_DEGs_bgB_unionExpressed_GO_MF_dotplot, 11_islet_senescence_DEGs_bgB_unionExpressed_GO_CC_dotplot, 11_islet_senescence_DEGs_bgB_unionExpressed_KEGG_dotplot
+
+=== Gene-level annotation of the protocol sets (all are < 10 genes: enrichment is underpowered; annotation below replaces the test) ===
+Sources: org.Hs.eg.db 3.22.0 (GO annotation, gene name, cytoband); KEGG REST API (pathway links, retrieved 2026-10-06); genesets/senescence_union.csv (SenMayo/CellAge/GenAge membership); discovery descriptive limma tables 07a (never used for selection) and nested-CV stability tables.
+'select()' returned 1:1 mapping between keys and columns
+'select()' returned 1:many mapping between keys and columns
+'select()' returned 1:1 mapping between keys and columns
+
+IL1R1 (islet-specific) -- interleukin 1 receptor type 1; protein-coding; cytoband 2q11.2-q12.1; Entrez 3554
+  GO annotations in org.Hs.eg.db: BP 19, MF 14, CC 10 (24 with non-IEA evidence)
+  non-IEA MF terms (5): interleukin-1 receptor activity [IBA]; interleukin-1, type I, activating receptor activity [TAS]; platelet-derived growth factor receptor binding [IPI]; protein binding [IPI]; transmembrane signaling receptor activity [TAS]
+  non-IEA BP terms (11): cell surface receptor signaling pathway [TAS]; immune response [TAS]; interleukin-1-mediated signaling pathway [IBA]; positive regulation of canonical NF-kappaB signal transduction [IMP]; positive regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction [IDA]; positive regulation of platelet-derived growth factor receptor signaling pathway [IDA]; positive regulation of T-helper 1 cell cytokine production [IDA]; positive regulation of type II interferon production [IDA]; regulation of inflammatory response [IBA]; response to interleukin-1 [IDA]; smooth muscle adaptation [NAS]
+  non-IEA CC terms (3): cell surface [IBA]; membrane [IDA]; plasma membrane [IBA]
+  KEGG pathway links: hsa04010 MAPK signaling pathway; hsa04060 Cytokine-cytokine receptor interaction; hsa04064 NF-kappa B signaling pathway; hsa04380 Osteoclast differentiation; hsa04640 Hematopoietic cell lineage; hsa04659 Th17 cell differentiation; hsa04750 Inflammatory mediator regulation of TRP channels; hsa05130 Pathogenic Escherichia coli infection; hsa05131 Shigellosis; hsa05146 Amoebiasis; hsa05163 Human cytomegalovirus infection; hsa05166 Human T-cell leukemia virus 1 infection; hsa05418 Fluid shear stress and atherosclerosis
+  senescence gene sets containing it: CellAge (n_sources = 1 of 3)
+  discovery descriptive limma (never used for selection): islet log2FC 0.613, P 3.79e-06, BH adjP 0.0167, DEG TRUE | adipose log2FC 0.506, P 2.10e-01, BH adjP 0.606, DEG FALSE
+  nested-CV stability (final-panel selection frequency): islet 0.42, adipose 0.00
+
+SNAI1 (adipose-specific) -- snail family transcriptional repressor 1; protein-coding; cytoband 20q13.13; Entrez 6615
+  GO annotations in org.Hs.eg.db: BP 50, MF 15, CC 12 (41 with non-IEA evidence)
+  non-IEA MF terms (7): DNA-binding transcription repressor activity, RNA polymerase II-specific [IBA]; E-box binding [IDA]; kinase binding [IPI]; protein binding [IPI]; RNA polymerase II cis-regulatory region sequence-specific DNA binding [IBA]; RNA polymerase II transcription regulatory region sequence-specific DNA binding [IDA]; sequence-specific double-stranded DNA binding [IDA]
+  non-IEA BP terms (17): aortic valve morphogenesis [TAS]; canonical Wnt signaling pathway [IMP]; epithelial to mesenchymal transition [IDA]; epithelial to mesenchymal transition involved in endocardial cushion formation [ISS]; heterochromatin organization [ISS]; mesoderm formation [ISS]; negative regulation of DNA damage response, signal transduction by p53 class mediator [IMP]; negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage [IMP]; negative regulation of transcription by RNA polymerase II [IDA]; negative regulation of vitamin D biosynthetic process [IDA]; Notch signaling pathway [ISS]; osteoblast differentiation [IEP]
+  non-IEA CC terms (6): cytoplasm [IDA]; cytosol [IDA]; fibrillar center [IDA]; nucleoplasm [IDA]; nucleus [IDA]; pericentric heterochromatin [IDA]
+  KEGG pathway links: hsa04520 Adherens junction
+  senescence gene sets containing it: CellAge (n_sources = 1 of 3)
+  discovery descriptive limma (never used for selection): islet log2FC 0.223, P 5.89e-02, BH adjP 0.379, DEG FALSE | adipose log2FC -0.268, P 2.18e-02, BH adjP 0.488, DEG FALSE
+  nested-CV stability (final-panel selection frequency): islet 0.00, adipose 0.46
+
+All end-of-script assertions passed.
+
+Runtime: 2.7 min
+
+sessionInfo():
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices datasets  utils     methods  
+[8] base     
+
+other attached packages:
+ [1] ggplot2_4.0.3          org.Hs.eg.db_3.22.0    AnnotationDbi_1.72.0  
+ [4] IRanges_2.44.0         S4Vectors_0.48.1       Biobase_2.70.0        
+ [7] BiocGenerics_0.56.0    generics_0.1.4         clusterProfiler_4.18.4
+[10] here_1.0.2            
+
+loaded via a namespace (and not attached):
+  [1] DBI_1.3.0               gson_0.2.1              httr2_1.3.0            
+  [4] rlang_1.3.0             magrittr_2.0.5          DOSE_4.4.0             
+  [7] compiler_4.5.2          RSQLite_3.53.3          png_0.1-9              
+ [10] systemfonts_1.3.2       vctrs_0.7.3             reshape2_1.4.5         
+ [13] stringr_1.6.0           pkgconfig_2.0.3         crayon_1.5.3           
+ [16] fastmap_1.2.0           XVector_0.50.0          labeling_0.4.3         
+ [19] enrichplot_1.30.5       purrr_1.2.2             bit_4.6.0              
+ [22] cachem_1.1.0            aplot_0.3.2             jsonlite_2.0.0         
+ [25] blob_1.3.0              tidydr_0.0.6            BiocParallel_1.44.0    
+ [28] tweenr_2.0.3            parallel_4.5.2          cluster_2.1.8.2        
+ [31] R6_2.6.1                stringi_1.8.9           RColorBrewer_1.1-3     
+ [34] GOSemSim_2.36.0         Rcpp_1.1.2              Seqinfo_1.0.0          
+ [37] ggtangle_0.1.3          R.utils_2.13.0          Matrix_1.7-4           
+ [40] splines_4.5.2           igraph_2.3.4            tidyselect_1.2.1       
+ [43] qvalue_2.42.0           codetools_0.2-20        curl_8.0.0             
+ [46] lattice_0.22-9          tibble_3.3.1            plyr_1.8.9             
+ [49] treeio_1.34.0           withr_3.0.3             KEGGREST_1.50.0        
+ [52] S7_0.2.2                gridGraphics_0.5-1      scatterpie_0.2.6       
+ [55] polyclip_1.10-7         Biostrings_2.78.0       pillar_1.11.1          
+ [58] BiocManager_1.30.27     ggtree_4.0.5            renv_1.3.0             
+ [61] ggfun_0.2.1             rprojroot_2.1.1         scales_1.4.0           
+ [64] tidytree_0.4.8          glue_1.8.1              gdtools_0.5.1          
+ [67] lazyeval_0.2.3          tools_4.5.2             ggnewscale_0.5.2       
+ [70] data.table_1.18.6.1     fgsea_1.36.2            ggiraph_0.9.6          
+ [73] fs_2.1.0                fastmatch_1.1-8         cowplot_1.2.0          
+ [76] grid_4.5.2              tidyr_1.3.2             ape_5.8-1              
+ [79] nlme_3.1-168            patchwork_1.3.2         ggforce_0.5.0          
+ [82] cli_3.6.6               rappdirs_0.3.4          fontBitstreamVera_0.1.1
+ [85] dplyr_1.2.1             gtable_0.3.6            R.methodsS3_1.8.2      
+ [88] yulab.utils_0.2.5       digest_0.6.39           fontquiver_0.2.1       
+ [91] ggrepel_0.9.8           ggplotify_0.1.3         htmlwidgets_1.6.4      
+ [94] farver_2.1.2            memoise_2.0.1           htmltools_0.5.9        
+ [97] R.oo_1.27.1             lifecycle_1.0.5         httr_1.4.9             
+[100] GO.db_3.22.0            fontLiberation_0.1.0    bit64_4.8.6            
+[103] MASS_7.3-65            

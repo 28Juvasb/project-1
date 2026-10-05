@@ -6,3 +6,4 @@ renv/staging/
 .Rhistory
 .RData
 __pycache__/
+.venv-sc/

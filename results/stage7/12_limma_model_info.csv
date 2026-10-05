@@ -1,0 +1,4 @@
+celltype,n_donors,n_ND,n_T2D,n_genes_tested,adjusted_feasible,resid_df_adjusted,resid_df_unadjusted,status
+beta,11,6,5,21648.0,False,,9.0,tested
+alpha,16,10,6,25543.0,True,12.0,14.0,tested
+PP,2,1,1,,False,,,NOT TESTABLE: 1 ND / 1 T2D donors with >= 10 cells (need >= 2 per group)

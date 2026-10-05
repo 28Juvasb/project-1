@@ -1,0 +1,3 @@
+"gene","classification","in_islet_final_panel","in_adipose_final_panel","in_islet_screen_LASSO","in_adipose_screen_LASSO","islet_stability_freq","adipose_stability_freq","expressed_islet","expressed_adipose","SenMayo","CellAge","GenAge","n_sources"
+"IL1R1","islet-specific",TRUE,FALSE,TRUE,FALSE,0.42,0,TRUE,TRUE,0,1,0,1
+"SNAI1","adipose-specific",FALSE,TRUE,FALSE,FALSE,0,0.46,TRUE,TRUE,0,1,0,1

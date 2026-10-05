@@ -1,0 +1,4 @@
+celltype,model,n_genes,n_p_lt_0.05,frac_p_lt_0.05,n_FDR_lt_0.05_allgenes,median_abs_t
+alpha,adjusted,25543,789,0.0309,0,0.633
+alpha,unadjusted,25543,900,0.0352,0,0.657
+beta,unadjusted,21648,903,0.0417,1,0.731

@@ -1,0 +1,30 @@
+sample,celltype,donor,group,age,sex,n_cells
+beta__NonT2D1,beta,Non T2D 1,ND,23.0,M,11
+beta__NonT2D10,beta,Non T2D 10,ND,43.0,M,23
+beta__NonT2D11,beta,Non T2D 11,ND,31.0,F,10
+beta__NonT2D12,beta,Non T2D 12,ND,56.0,M,41
+beta__NonT2D5,beta,Non T2D 5,ND,27.0,M,21
+beta__NonT2D8,beta,Non T2D 8,ND,60.0,M,16
+beta__T2D1,beta,T2D 1,T2D,57.0,M,11
+beta__T2D2,beta,T2D 2,T2D,37.0,F,17
+beta__T2D4,beta,T2D 4,T2D,41.0,F,134
+beta__T2D5,beta,T2D 5,T2D,42.0,M,11
+beta__T2D6,beta,T2D 6,T2D,51.0,M,65
+alpha__NonT2D1,alpha,Non T2D 1,ND,23.0,M,45
+alpha__NonT2D10,alpha,Non T2D 10,ND,43.0,M,19
+alpha__NonT2D11,alpha,Non T2D 11,ND,31.0,F,47
+alpha__NonT2D12,alpha,Non T2D 12,ND,56.0,M,89
+alpha__NonT2D3,alpha,Non T2D 3,ND,23.0,F,29
+alpha__NonT2D4,alpha,Non T2D 4,ND,56.0,F,14
+alpha__NonT2D5,alpha,Non T2D 5,ND,27.0,M,25
+alpha__NonT2D6,alpha,Non T2D 6,ND,68.0,M,35
+alpha__NonT2D8,alpha,Non T2D 8,ND,60.0,M,13
+alpha__NonT2D9,alpha,Non T2D 9,ND,24.0,F,23
+alpha__T2D1,alpha,T2D 1,T2D,57.0,M,39
+alpha__T2D2,alpha,T2D 2,T2D,37.0,F,48
+alpha__T2D3,alpha,T2D 3,T2D,55.0,F,26
+alpha__T2D4,alpha,T2D 4,T2D,41.0,F,145
+alpha__T2D5,alpha,T2D 5,T2D,42.0,M,158
+alpha__T2D6,alpha,T2D 6,T2D,51.0,M,122
+PP__NonT2D8,PP,Non T2D 8,ND,60.0,M,11
+PP__T2D1,PP,T2D 1,T2D,57.0,M,33

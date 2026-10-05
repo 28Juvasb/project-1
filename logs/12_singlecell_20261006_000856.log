@@ -1,0 +1,269 @@
+Script: 12_singlecell  run: 20261006_000856
+*** GSE81608 = DISCOVERY-ADJACENT DESCRIPTIVE DATA. NOT a validation set. Nothing here informs feature selection, the nested CV,
+    the final panel or any validation scoring (CLAUDE.md rules 1-4). ***
+*** DEVIATION (protocol §5.3): no raw counts in GEO -> pseudobulk = mean log2(RPKM+1) per donor x cell type, limma lmFit/eBayes ***
+Seed: 42   python 3.11.16  platform Linux-7.0.0-38-generic-x86_64-with-glibc2.43
+  package scanpy 1.11.5
+  package anndata 0.12.19
+  package pandas 2.3.3
+  package numpy 2.4.6
+  package scipy 1.17.1
+  package statsmodels 0.15.0
+  package matplotlib 3.11.2
+Device: CPU (numpy/pandas/scipy). GPU (GTX 1650 4GB) NOT used: rapids-singlecell not installed/attempted (1,600 cells; no benefit). No stochastic step in this script.
+Inputs:
+  data/raw/GSE81608/GSE81608_human_islets_rpkm.txt.gz  md5=d0e0d81a6e8cab0f2c6400439b4930e2
+  manifest/GSE81608_samples.csv  md5=96bfcd857d4864523a6ef2fd276550c8
+  scripts/12b_singlecell_r.R  md5=12a6520c886421efa61812ac0278fad5
+Parameters: QC 3 raw MADs (scipy median_abs_deviation scale=1, scverse convention): log(genes detected) two-sided, log(library size) two-sided, mito fraction upper-only; pseudobulk min cells/donor/type = 10; FDR cut = 0.05 (BH across the 9 genes per cell type and model)
+
+RPKM matrix: 39851 genes x 1600 cells; manifest rows: 1600
+--- Rscript scripts/12b_singlecell_r.R map (exit 0) ---
+org.Hs.eg.db 3.22.0  entrez->symbol rows: 193613
+[R stderr, last 25 lines]
+'select()' returned 1:1 mapping between keys and columns
+Entrez IDs mapped to a symbol: 37990 / 39851 (unmapped rows kept for QC, dropped from symbol-level analyses)
+Mitochondrial genes (symbol starts 'MT-') present in matrix: 37
+
+=== 1. QC ===
+NOTE: values are RPKM, not counts. 'library size' = total RPKM per cell as given; 'mito fraction' = sum RPKM of MT- genes / total RPKM (RPKM-based, so it is a fraction of length-normalised signal, not of reads); 'genes detected' = genes with RPKM > 0.
+log genes detected: median 8.646, MAD 0.133 -> fails 87
+log library size  : median 13.197, MAD 0.080 -> fails 57
+mito fraction     : median 0.16585, MAD 0.06789 -> fails 59 (upper only)
+cells failing QC (union): 189 / 1600  (11.8%); kept 1411
+(information only) with normal-scaled MAD (x1.4826) the union would fail 23 cells
+
+Cells removed per group:
+group  n_cells  n_removed  n_kept  pct_removed
+   ND      651         92     559         14.1
+  T2D      949         97     852         10.2
+
+Cells removed per cell type:
+celltype  n_cells  n_removed  n_kept  pct_removed
+      PP       93         18      75         19.4
+   alpha      946         58     888          6.1
+    beta      503         97     406         19.3
+   delta       58         16      42         27.6
+
+Cells removed per donor:
+group      donor  n_cells  n_removed  n_kept  pct_removed
+   ND  Non T2D 1       77         15      62         19.5
+   ND Non T2D 10       49          4      45          8.2
+   ND Non T2D 11       63          4      59          6.3
+   ND Non T2D 12      144         12     132          8.3
+   ND  Non T2D 2       24          8      16         33.3
+   ND  Non T2D 3       44          8      36         18.2
+   ND  Non T2D 4       31          8      23         25.8
+   ND  Non T2D 5       57          7      50         12.3
+   ND  Non T2D 6       50          6      44         12.0
+   ND  Non T2D 7       29         10      19         34.5
+   ND  Non T2D 8       45          5      40         11.1
+   ND  Non T2D 9       38          5      33         13.2
+  T2D      T2D 1       91          4      87          4.4
+  T2D      T2D 2       83          7      76          8.4
+  T2D      T2D 3       69         33      36         47.8
+  T2D      T2D 4      306         17     289          5.6
+  T2D      T2D 5      176          5     171          2.8
+  T2D      T2D 6      224         31     193         13.8
+
+=== 2. Cell types (authors' labels; not relabelled) ===
+Post-QC cells per donor x cell type:
+celltype          beta  alpha  delta  PP
+group donor                             
+ND    Non T2D 1     11     45      4   2
+      Non T2D 10    23     19      2   1
+      Non T2D 11    10     47      1   1
+      Non T2D 12    41     89      2   0
+      Non T2D 2      8      3      1   4
+      Non T2D 3      4     29      2   1
+      Non T2D 4      6     14      0   3
+      Non T2D 5     21     25      2   2
+      Non T2D 6      4     35      4   1
+      Non T2D 7      9      8      0   2
+      Non T2D 8     16     13      0  11
+      Non T2D 9      6     23      1   3
+T2D   T2D 1         11     39      4  33
+      T2D 2         17     48      4   7
+      T2D 3          9     26      1   0
+      T2D 4        134    145      8   2
+      T2D 5         11    158      1   1
+      T2D 6         65    122      5   1
+
+Post-QC cells per condition x cell type:
+celltype  beta  alpha  delta  PP
+group                           
+ND         159    350     19  31
+T2D        247    538     23  44
+
+Symbol-level matrix: 37990 unique symbols (0 rows shared a symbol; kept highest-mean row per symbol)
+Genes of interest / markers absent from matrix: none
+
+Marker sanity check (mean log2(RPKM+1) per authors' label, QC-passed cells):
+  gene                               expected_label  mean_beta  det_beta  mean_alpha  det_alpha  mean_delta  det_delta  mean_PP  det_PP highest_label as_expected
+   INS                                         beta     15.776     1.000       3.488      0.777       4.999      0.810    3.674   0.853          beta        True
+   GCG                                        alpha      6.856     0.988      17.503      1.000       7.904      0.976    6.637   0.987         alpha        True
+   SST                                        delta      2.949     0.653       2.537      0.579      16.827      1.000    3.517   0.773         delta        True
+   PPY                                           PP      0.990     0.259       1.177      0.292       1.278      0.333   16.476   1.000            PP        True
+ PRSS1 none present (acinar/stellate labels absent)      0.609     0.192       0.597      0.222       1.158      0.357    1.070   0.360         delta         n/a
+COL1A1 none present (acinar/stellate labels absent)      0.230     0.135       0.281      0.120       0.674      0.167    0.275   0.120         delta         n/a
+INS/GCG/SST/PPY highest in beta/alpha/delta/PP respectively: CONFIRMED. PRSS1 and COL1A1: the deposit has only the four endocrine labels (no acinar/stellate), so there is no expected label; values above show where this ambient/contaminant signal sits.
+
+=== 3. Detection fraction and mean log2(RPKM+1) per cell type ===
+         detection_fraction                      mean_log2_rpkm1                     
+celltype                 PP  alpha   beta  delta              PP  alpha   beta  delta
+gene                                                                                 
+IL1R1                 0.160  0.305  0.150  0.119           0.299  0.766  0.390  0.251
+SNAI1                 0.013  0.019  0.012  0.071           0.088  0.059  0.028  0.131
+SERPINE2              0.573  0.811  0.264  0.238           2.218  3.478  0.788  0.978
+NLK                   0.293  0.238  0.337  0.262           0.697  0.579  0.807  0.666
+CDKN1A                0.600  0.278  0.618  0.262           2.831  0.864  3.125  0.805
+PCK1                  0.000  0.060  0.017  0.190           0.000  0.228  0.027  1.009
+FXN                   0.147  0.179  0.106  0.095           0.376  0.311  0.189  0.070
+GPC3                  0.000  0.002  0.002  0.048           0.000  0.004  0.001  0.178
+FGF2                  0.027  0.045  0.030  0.048           0.015  0.045  0.045  0.066
+
+=== 4. Pseudobulk (mean log2(RPKM+1) per donor x cell type; donors with >= 10 QC-passed cells of that type) ===
+Donors in study: {'ND': 12, 'T2D': 6}
+Donors (>= 10 cells) per group per cell type:
+group     ND  T2D  n_donors  testable
+celltype                             
+beta       6    5        11      True
+alpha     10    6        16      True
+delta      0    0         0     False
+PP         1    1         2     False
+
+Pseudobulk sample metadata:
+         sample celltype      donor group  age sex  n_cells
+  beta__NonT2D1     beta  Non T2D 1    ND 23.0   M       11
+ beta__NonT2D10     beta Non T2D 10    ND 43.0   M       23
+ beta__NonT2D11     beta Non T2D 11    ND 31.0   F       10
+ beta__NonT2D12     beta Non T2D 12    ND 56.0   M       41
+  beta__NonT2D5     beta  Non T2D 5    ND 27.0   M       21
+  beta__NonT2D8     beta  Non T2D 8    ND 60.0   M       16
+     beta__T2D1     beta      T2D 1   T2D 57.0   M       11
+     beta__T2D2     beta      T2D 2   T2D 37.0   F       17
+     beta__T2D4     beta      T2D 4   T2D 41.0   F      134
+     beta__T2D5     beta      T2D 5   T2D 42.0   M       11
+     beta__T2D6     beta      T2D 6   T2D 51.0   M       65
+ alpha__NonT2D1    alpha  Non T2D 1    ND 23.0   M       45
+alpha__NonT2D10    alpha Non T2D 10    ND 43.0   M       19
+alpha__NonT2D11    alpha Non T2D 11    ND 31.0   F       47
+alpha__NonT2D12    alpha Non T2D 12    ND 56.0   M       89
+ alpha__NonT2D3    alpha  Non T2D 3    ND 23.0   F       29
+ alpha__NonT2D4    alpha  Non T2D 4    ND 56.0   F       14
+ alpha__NonT2D5    alpha  Non T2D 5    ND 27.0   M       25
+ alpha__NonT2D6    alpha  Non T2D 6    ND 68.0   M       35
+ alpha__NonT2D8    alpha  Non T2D 8    ND 60.0   M       13
+ alpha__NonT2D9    alpha  Non T2D 9    ND 24.0   F       23
+    alpha__T2D1    alpha      T2D 1   T2D 57.0   M       39
+    alpha__T2D2    alpha      T2D 2   T2D 37.0   F       48
+    alpha__T2D3    alpha      T2D 3   T2D 55.0   F       26
+    alpha__T2D4    alpha      T2D 4   T2D 41.0   F      145
+    alpha__T2D5    alpha      T2D 5   T2D 42.0   M      158
+    alpha__T2D6    alpha      T2D 6   T2D 51.0   M      122
+    PP__NonT2D8       PP  Non T2D 8    ND 60.0   M       11
+       PP__T2D1       PP      T2D 1   T2D 57.0   M       33
+
+POWER LIMITATION: only 6 T2D donors exist in the whole dataset (<= 6 per cell type, 10 ND in alpha/beta). Delta cells: no donor has >= 10 QC-passed delta cells, PP cells: too few donors per group -> those cell types cannot be tested without relaxing the protocol threshold, which is NOT done. Absence of significance is 'inconclusive', not 'no effect'.
+
+=== 4b. limma lmFit/eBayes on pseudobulk (R) ===
+--- Rscript scripts/12b_singlecell_r.R limma (exit 0) ---
+limma 3.66.0 ; R R version 4.5.2 (2025-10-31) 
+beta [unadjusted]: 6 ND / 5 T2D donors, 21648 genes fitted, residual df 9, genes FDR<0.05 (all-gene BH) = 1
+alpha [unadjusted]: 10 ND / 6 T2D donors, 25543 genes fitted, residual df 14, genes FDR<0.05 (all-gene BH) = 0
+alpha [adjusted]: 10 ND / 6 T2D donors, 25543 genes fitted, residual df 12, genes FDR<0.05 (all-gene BH) = 0
+PP : NOT TESTABLE: 1 ND / 1 T2D donors with >= 10 cells (need >= 2 per group) 
+
+sessionInfo():
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] limma_3.66.0 here_1.0.2  
+
+loaded via a namespace (and not attached):
+[1] BiocManager_1.30.27 compiler_4.5.2      rprojroot_2.1.1    
+[4] tools_4.5.2         renv_1.3.0          statmod_1.5.2
+
+Model info:
+celltype  n_donors  n_ND  n_T2D  n_genes_tested  adjusted_feasible  resid_df_adjusted  resid_df_unadjusted                                                                   status
+    beta        11     6      5         21648.0              False                NaN                  9.0                                                                   tested
+   alpha        16    10      6         25543.0               True               12.0                 14.0                                                                   tested
+      PP         2     1      1             NaN              False                NaN                  NaN NOT TESTABLE: 1 ND / 1 T2D donors with >= 10 cells (need >= 2 per group)
+
+Overall check (all fitted genes; BH over all genes within cell type x model):
+celltype      model  n_genes  n_p_lt_0.05  frac_p_lt_0.05  n_FDR_lt_0.05_allgenes  median_abs_t
+   alpha   adjusted    25543          789          0.0309                       0         0.633
+   alpha unadjusted    25543          900          0.0352                       0         0.657
+    beta unadjusted    21648          903          0.0417                       1         0.731
+(Expected under no effect: ~5% of genes at p < 0.05. With 6 vs 10 donors few or no genes pass genome-wide FDR; this is a calibration check, not a finding.)
+
+=== 4c. T2D vs ND pseudobulk results for the 9 genes (logFC = T2D - ND, log2 scale of RPKM+1; BH across the 9 genes) ===
+PRIMARY model (adjusted for age + sex where feasible, else unadjusted):
+celltype      model     gene  n_ND  n_T2D  logFC_T2D_vs_ND  P.Value  FDR_BH_9genes  FDR_BH_allgenes  approx_min_detectable_abs_logFC_80pct_power                                           note
+   alpha   adjusted    IL1R1    10      6           0.1940   0.2846         0.6991           0.9999                                       0.5105                                               
+   alpha   adjusted    SNAI1    10      6           0.0392   0.1066         0.6991           0.9999                                       0.0664                                               
+   alpha   adjusted SERPINE2    10      6          -0.1917   0.6462         0.9626           0.9999                                       1.1984                                               
+   alpha   adjusted      NLK    10      6          -0.0068   0.9626         0.9626           0.9999                                       0.4201                                               
+   alpha   adjusted   CDKN1A    10      6           0.1745   0.3495         0.6991           0.9999                                       0.5280                                               
+   alpha   adjusted     PCK1    10      6           0.0152   0.8608         0.9626           0.9999                                       0.2499                                               
+   alpha   adjusted      FXN    10      6           0.1082   0.2017         0.6991           0.9999                                       0.2363                                               
+   alpha   adjusted     GPC3    10      6              NaN      NaN            NaN              NaN                                          NaN gene not fitted (pseudobulk > 0 in < 3 donors)
+   alpha   adjusted     FGF2    10      6           0.0014   0.9590         0.9626           0.9999                                       0.0776                                               
+    beta unadjusted    IL1R1     6      5          -0.1640   0.2492         0.8357           0.9634                                       0.4210                                               
+    beta unadjusted    SNAI1     6      5              NaN      NaN            NaN              NaN                                          NaN gene not fitted (pseudobulk > 0 in < 3 donors)
+    beta unadjusted SERPINE2     6      5           0.0096   0.9686         0.9686           0.9998                                       0.7465                                               
+    beta unadjusted      NLK     6      5          -0.1595   0.4369         0.8357           0.9634                                       0.6191                                               
+    beta unadjusted   CDKN1A     6      5           0.2305   0.7032         0.8357           0.9878                                       1.8477                                               
+    beta unadjusted     PCK1     6      5           0.0238   0.4719         0.8357           0.9634                                       0.1001                                               
+    beta unadjusted      FXN     6      5           0.0541   0.5712         0.8357           0.9711                                       0.2903                                               
+    beta unadjusted     GPC3     6      5              NaN      NaN            NaN              NaN                                          NaN gene not fitted (pseudobulk > 0 in < 3 donors)
+    beta unadjusted     FGF2     6      5           0.0319   0.7163         0.8357           0.9890                                       0.2682                                               
+
+SENSITIVITY (unadjusted model where an adjusted model was primary):
+celltype      model     gene  logFC_T2D_vs_ND  P.Value  FDR_BH_9genes
+   alpha unadjusted    IL1R1           0.2723   0.1343         0.5371
+   alpha unadjusted    SNAI1           0.0379   0.0893         0.5371
+   alpha unadjusted SERPINE2          -0.0876   0.8200         0.9277
+   alpha unadjusted      NLK           0.0129   0.9277         0.9277
+   alpha unadjusted   CDKN1A           0.0674   0.7480         0.9277
+   alpha unadjusted     PCK1          -0.0488   0.6238         0.9277
+   alpha unadjusted      FXN           0.0766   0.4318         0.9277
+   alpha unadjusted     GPC3              NaN      NaN            NaN
+   alpha unadjusted     FGF2           0.0023   0.9248         0.9277
+
+=== 4d. Beta-cell restriction verdict (protocol §5.3) ===
+Rule: significant (FDR < 0.05) in beta pseudobulk AND not significant in alpha or delta. Absence of significance = inconclusive.
+    gene            category  beta_logFC  beta_P  beta_FDR_9genes            beta           alpha        delta                                                                                 verdict
+   IL1R1     nested-CV panel     -0.1640  0.2492           0.8357 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+   SNAI1     nested-CV panel         NaN     NaN              NaN    not testable not significant not testable                                        NOT ASSESSABLE (beta not testable for this gene)
+SERPINE2 top islet stability      0.0096  0.9686           0.9686 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+     NLK top islet stability     -0.1595  0.4369           0.8357 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+  CDKN1A top islet stability      0.2305  0.7032           0.8357 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+    PCK1 top islet stability      0.0238  0.4719           0.8357 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+     FXN top islet stability      0.0541  0.5712           0.8357 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+    GPC3           WGCNA hub         NaN     NaN              NaN    not testable    not testable not testable                                        NOT ASSESSABLE (beta not testable for this gene)
+    FGF2           WGCNA hub      0.0319  0.7163           0.8357 not significant not significant not testable INCONCLUSIVE (not significant in beta pseudobulk; low power, not evidence of no effect)
+
+Appended 2 row(s) to logs/deviations.md
+
+=== Final assertions ===
+All assertions passed.
+Finished 2026-10-06T00:12:11
