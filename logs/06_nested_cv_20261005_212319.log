@@ -1,0 +1,29 @@
+Script: 06_nested_cv  mode: benchmark  run: 20261005_212319  cores: 8 
+
+Inputs:
+  data/processed/04_GSE41762_expr.rds md5=00b63bc09d54a5deeebf6a9fb6d42144
+  data/processed/04_GSE41762_pheno.rds md5=266de90b470e5e28ccbd78e98af37232
+  data/processed/04_GSE41762_expressed.rds md5=0c9ea7b66b910d6a54a4e6eb807058fd
+  genesets/senescence_union.rds md5=ae4394bb94e0ee3f04a9715c404aaeb9
+  data/processed/04_GSE27951_expr.rds md5=ae1851b209c367e0082f2a21d020d6cc
+  data/processed/04_GSE27951_pheno.rds md5=10cb1ccbb5b64909ae79053f63a21bfb
+  (validation cohorts GSE76894, GSE20966, GSE71416, GSE16415 are NOT loaded)
+
+Pre-run checks (islet GSE41762): n = 77 genes = 18807  ND/T2D = 57/20 
+sex covariate: recorded, with expression-inferred value for sex_mismatch rows (GSM1023682)
+In-fold expression filter applied to the full cohort reproduces 04_GSE41762_expressed.rds exactly (14721 genes).
+senescence union genes: 1151; present in matrix: 1100; expressed: 1000
+
+Parameters (islet): outer 10-fold x 5 reps; inner 10-fold; design ~status + age + sex + batch; screen p<0.05 (fallback top 30 if <10); SVM-RFE sizes 1..30; Boruta maxRuns=500 ntree=1000; ridge lambda.min; LASSO lambda.1se; seed 42
+
+=== 0. adipose smoke test (code path only; NO adipose performance is reported or saved) ===
+adipose smoke: 5 folds ran (outer 5, inner 3); self-tests 1-2 passed; fallback levels: L0_intersection=2, L1_>=2of3=3; screen fallback in 0 folds. (AUC deliberately not printed.)
+
+=== 1. runtime benchmark (islet) ===
+single outer fold: 35.5 s (screen 175 genes, features 2, level L0_intersection); full-cohort pipeline: 43.3 s
+estimated wall time (8 cores, 85% parallel efficiency): real 50 folds 4.4 min; permutation 20x10 folds 17.4 min; synthetic 20 folds 1.7 min; final fit 0.7 min; TOTAL 24.2 min
+SELF-TEST (extra) PASS: a fold re-run (serial, forked) is bit-identical; scrambling TEST-fold labels leaves selected features and predictions unchanged.
+SELF-TEST (extra) PASS: manual frozen-model prediction equals glmnet predict; SVM decision-value direction (positive = ND) verified.
+
+benchmark mode: done.
+There were 12 warnings (use warnings() to see them)

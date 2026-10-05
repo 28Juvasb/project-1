@@ -1,0 +1,4 @@
+"metric","auc","ci_lo_protocol","ci_hi_protocol","ci_lo_sample_level","ci_hi_sample_level"
+"nested-CV AUC (honest, headline) mean of per-repeat AUCs",0.659473684210526,0.595922807017544,0.726045614035088,0.528412280701754,0.789302631578947
+"nested-CV AUC pooled stack",0.661929824561403,0.595922807017544,0.726045614035088,NA,NA
+"apparent AUC, optimistic (apparent)",0.765789473684211,0.625416666666667,0.882478070175438,NA,NA

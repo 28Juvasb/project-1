@@ -1,0 +1,165 @@
+Script: 06_nested_cv  mode: all  run: 20261005_212648  cores: 8 
+
+Inputs:
+  data/processed/04_GSE41762_expr.rds md5=00b63bc09d54a5deeebf6a9fb6d42144
+  data/processed/04_GSE41762_pheno.rds md5=266de90b470e5e28ccbd78e98af37232
+  data/processed/04_GSE41762_expressed.rds md5=0c9ea7b66b910d6a54a4e6eb807058fd
+  genesets/senescence_union.rds md5=ae4394bb94e0ee3f04a9715c404aaeb9
+  data/processed/04_GSE27951_expr.rds md5=ae1851b209c367e0082f2a21d020d6cc
+  data/processed/04_GSE27951_pheno.rds md5=10cb1ccbb5b64909ae79053f63a21bfb
+  (validation cohorts GSE76894, GSE20966, GSE71416, GSE16415 are NOT loaded)
+
+Pre-run checks (islet GSE41762): n = 77 genes = 18807  ND/T2D = 57/20 
+sex covariate: recorded, with expression-inferred value for sex_mismatch rows (GSM1023682)
+In-fold expression filter applied to the full cohort reproduces 04_GSE41762_expressed.rds exactly (14721 genes).
+senescence union genes: 1151; present in matrix: 1100; expressed: 1000
+
+Parameters (islet): outer 10-fold x 5 reps; inner 10-fold; design ~status + age + sex + batch; screen p<0.05 (fallback top 30 if <10); SVM-RFE sizes 1..30; Boruta maxRuns=500 ntree=1000; ridge lambda.min; LASSO lambda.1se; seed 42
+
+=== 0. adipose smoke test (code path only; NO adipose performance is reported or saved) ===
+adipose smoke: 5 folds ran (outer 5, inner 3); self-tests 1-2 passed; fallback levels: L0_intersection=2, L1_>=2of3=3; screen fallback in 0 folds. (AUC deliberately not printed.)
+
+=== 1. runtime benchmark (islet) ===
+single outer fold: 35.1 s (screen 175 genes, features 2, level L0_intersection); full-cohort pipeline: 42.1 s
+estimated wall time (8 cores, 85% parallel efficiency): real 50 folds 4.3 min; permutation 20x10 folds 17.2 min; synthetic 20 folds 1.7 min; final fit 0.7 min; TOTAL 23.9 min
+SELF-TEST (extra) PASS: a fold re-run (serial, forked) is bit-identical; scrambling TEST-fold labels leaves selected features and predictions unchanged.
+SELF-TEST (extra) PASS: manual frozen-model prediction equals glmnet predict; SVM decision-value direction (positive = ND) verified.
+
+=== 2. synthetic positive control ===
+Design (fixed before running): 3000 genes (the 1151 senescence-union names + 1849 SYNTH noise genes), 77 samples with the real ND/T2D labels,
+10 randomly chosen union genes shifted +1.5 SD in T2D, all other genes pure noise (SD 0.5), covariates random and independent of status.
+Pipeline = production nested_cv, 10-fold x 2 repeats. Pre-stated PASS: nested AUC >= 0.90 AND >= 8 of the top-10 stability genes are planted.
+synthetic nested-CV AUC = 0.984 (protocol CI 0.968-0.995; sample-level CI 0.962-0.997)
+planted genes: AKT1, CACNA1A, CD34, FERMT1, GHRHR, KDR, MSRA, ORAI1, PPIB, RAP1GAP 
+planted-gene stability frequencies: MSRA=1.00, FERMT1=0.90, AKT1=0.55, PPIB=0.90, CD34=0.95, RAP1GAP=0.75, CACNA1A=0.75, KDR=0.00, GHRHR=0.95, ORAI1=0.90 
+top-10 stability genes: MSRA(1.00)*, CD34(0.95)*, GHRHR(0.95)*, FERMT1(0.90)*, ORAI1(0.90)*, PPIB(0.90)*, CACNA1A(0.75)*, RAP1GAP(0.75)*, AKT1(0.55)*, CDKN2B(0.40)  (* = planted)
+non-planted gene with highest final-panel frequency: 0.40
+synthetic fallback levels: L0_intersection=20 (180 s)
+POSITIVE CONTROL:PASS (9/10 planted in top 10)
+
+=== 3. permutation leakage test (20 label shuffles, full pipeline, 1 repeat of 10-fold outer CV) ===
+20 permutation AUCs: 0.362 0.381 0.381 0.420 0.423 0.434 0.452 0.480 0.482 0.493 0.495 0.510 0.511 0.530 0.549 0.553 0.577 0.590 0.611 0.670 
+mean 0.495  SD 0.082  95th pct 0.614  min 0.362  max 0.670  (23.2 min)
+Criteria (fixed): mean in [0.45,0.55] AND 95th percentile < 0.65 -> PASS
+
+=== 4. real nested CV (islet GSE41762, 10-fold x 5 repeats) ===
+done in 9.2 min; folds = 50
+fallback levels:
+           level n_folds frequency
+ L0_intersection      32      0.64
+       L1_>=2of3      18      0.36
+   L2_top5_LASSO       0      0.00
+  L3_top5_screen       0      0.00
+                                    item n_folds frequency
+ screen_fallback_top30 (<10 pass p<0.05)       0      0.00
+                             LASSO_empty      14      0.28
+panel size per fold: median 4.5 (range 1-20); screen genes per fold median 166; Boruta tentative per fold median 5; warnings in 47 folds
+distinct warning messages:
+  - getImp result contains NA(s) or NaN(s); replacing with 0(s), yet this is suspicious. 
+
+=== 5. full-cohort pipeline (final panel, protocol §3.2) and apparent AUC ===
+final panel (1 genes, L0_intersection): IL1R1
+selected by LASSO 3, SVM-RFE 11, Boruta 24 (screen 176 genes)
+
+================ RESULTS (islet, GSE41762 discovery) ================
+NESTED-CV AUC (honest, headline): 0.659  [per-repeat AUCs: 0.677, 0.658, 0.646, 0.650, 0.667]
+   95% CI, protocol (pROC::ci.auc, 2000 stratified bootstraps on pooled OOF predictions): 0.596 - 0.726   [pooled-stack AUC 0.662]
+   95% CI, sample-level stratified bootstrap (conservative; repeats are not independent): 0.528 - 0.789
+APPARENT AUC, optimistic (apparent): 0.766   95% CI (pROC, 2000 bootstraps) 0.625 - 0.882   [full-cohort model scored on its own training data]
+Top 20 genes by stability (final-panel selection frequency over 50 outer folds):
+     gene n_folds_final frequency freq_screen freq_lasso freq_svmrfe
+ SERPINE2            35      0.70        1.00       0.34        1.00
+      NLK            26      0.52        1.00       0.46        0.58
+    IL1R1            21      0.42        1.00       0.36        0.52
+     PCK1            18      0.36        1.00       0.50        0.50
+   CDKN1A            16      0.32        0.96       0.12        0.64
+      FXN            14      0.28        1.00       0.34        0.74
+     EPOR            12      0.24        1.00       0.44        0.72
+     ARG2            12      0.24        1.00       0.16        0.42
+    CEBPB            11      0.22        1.00       0.32        0.34
+    SFRP1             9      0.18        1.00       0.14        0.60
+    PLAUR             8      0.16        1.00       0.28        0.14
+      CD9             8      0.16        1.00       0.24        0.30
+    NUTF2             7      0.14        1.00       0.22        0.28
+    PCGF2             4      0.08        1.00       0.06        0.30
+     MYCN             4      0.08        0.24       0.04        0.16
+     CD55             4      0.08        0.74       0.02        0.26
+     MAPT             3      0.06        1.00       0.12        0.18
+    RACK1             3      0.06        1.00       0.12        0.14
+    PEA15             3      0.06        1.00       0.04        0.22
+  MYBBP1A             2      0.04        1.00       0.30        0.58
+ freq_boruta
+        1.00
+        0.96
+        1.00
+        0.76
+        0.60
+        0.46
+        0.46
+        0.90
+        0.88
+        0.36
+        0.98
+        1.00
+        0.82
+        0.36
+        0.22
+        0.72
+        0.08
+        1.00
+        0.30
+        0.04
+
+All end-of-script assertions passed (50 folds; 5 predictions per donor; no NA; fallback table sums to 50; self-tests 1-3 passed).
+
+Runtime: benchmark fold 35.1 s; synthetic 3.0 min; permutation 23.2 min; real 9.2 min; total 39.5 min
+
+sessionInfo():
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] parallel  stats     graphics  grDevices datasets  utils     methods  
+[8] base     
+
+other attached packages:
+ [1] pROC_1.19.1    Boruta_10.0.0  e1071_1.7-17   caret_7.0-1    lattice_0.22-9
+ [6] ggplot2_4.0.3  glmnet_5.1     Matrix_1.7-4   limma_3.66.0   here_1.0.2    
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.6         shape_1.4.6.1        recipes_1.4.0       
+ [4] vctrs_0.7.3          tools_4.5.2          generics_0.1.4      
+ [7] stats4_4.5.2         fru_1.0.0            proxy_0.4-29        
+[10] tibble_3.3.1         pkgconfig_2.0.3      ModelMetrics_1.2.2.2
+[13] data.table_1.18.6.1  RColorBrewer_1.1-3   S7_0.2.2            
+[16] lifecycle_1.0.5      compiler_4.5.2       farver_2.1.2        
+[19] stringr_1.6.0        statmod_1.5.2        codetools_0.2-20    
+[22] class_7.3-23         prodlim_2026.03.11   pillar_1.11.1       
+[25] MASS_7.3-65          gower_1.0.2          iterators_1.0.14    
+[28] rpart_4.1.24         foreach_1.5.2        nlme_3.1-168        
+[31] parallelly_1.48.0    lava_1.9.3           tidyselect_1.2.1    
+[34] digest_0.6.39        stringi_1.8.9        future_1.76.0       
+[37] dplyr_1.2.1          reshape2_1.4.5       purrr_1.2.2         
+[40] listenv_1.0.0        splines_4.5.2        rprojroot_2.1.1     
+[43] grid_4.5.2           cli_3.6.6            magrittr_2.0.5      
+[46] survival_3.8-6       future.apply_1.20.2  withr_3.0.3         
+[49] scales_1.4.0         lubridate_1.9.5      timechange_0.4.0    
+[52] globals_0.19.1       nnet_7.3-20          timeDate_4052.112   
+[55] hardhat_1.4.3        rlang_1.3.0          Rcpp_1.1.2          
+[58] glue_1.8.1           BiocManager_1.30.27  renv_1.3.0          
+[61] ipred_0.9-16         R6_2.6.1             plyr_1.8.9          
+There were 27 warnings (use warnings() to see them)
