@@ -1,0 +1,7 @@
+"dataset","role","matrix_genes","union_size","union_present","pct_present","union_expressed","pct_expressed","flag_lt80pct_present"
+"GSE41762","discovery islet",18807,1151,1100,95.6,1000,86.9,FALSE
+"GSE27951","discovery adipose",20823,1151,1133,98.4,1029,89.4,FALSE
+"GSE76894","validation islet (primary)",20823,1151,1133,98.4,1065,92.5,FALSE
+"GSE71416","validation adipose",20823,1151,1133,98.4,1070,93,FALSE
+"GSE20966","validation islet (secondary)",20129,1151,1114,96.8,976,84.8,FALSE
+"GSE16415","validation adipose",16465,1151,944,82,896,77.8,FALSE

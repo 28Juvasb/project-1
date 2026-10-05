@@ -1,0 +1,6 @@
+"set","input","mapped_symbol","status","n_candidates","entrez_supplied","entrez_of_mapped","entrez_agrees"
+"CellAge","PHB","PHB1","updated_alias",1,"5245","5245",TRUE
+"GenAge","ATP5O","ATP5PO","updated_alias",1,"539","539",TRUE
+"GenAge","CTGF","CCN2","updated_alias",1,"1490","1490",TRUE
+"GenAge","H2AFX","H2AX","updated_alias",1,"3014","3014",TRUE
+"GenAge","ARNTL","BMAL1","updated_alias",1,"406","406",TRUE

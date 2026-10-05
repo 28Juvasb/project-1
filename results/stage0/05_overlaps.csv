@@ -1,0 +1,12 @@
+"comparison","n"
+"SenMayo",124
+"CellAge",866
+"GenAge",307
+"SenMayo & CellAge",23
+"SenMayo & GenAge",19
+"CellAge & GenAge",113
+"SenMayo & CellAge & GenAge (3-way)",9
+"Union",1151
+"only SenMayo",91
+"only CellAge",739
+"only GenAge",184

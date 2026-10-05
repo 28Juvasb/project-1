@@ -8,3 +8,6 @@
 
 Unmodified downloads are in `source_files/`. Symbols are as supplied by the sources; NOT re-mapped to current HGNC (do at Task 4 union step).
 Notes: SenMayo MSigDB version has 124 genes (the paper describes a 125-gene panel; not reconciled). No union built here (Task 4).
+
+## Update 2026-10-05 (Task 4)
+Symbols were later mapped to current HGNC with `limma::alias2SymbolTable` (scripts/05_genesets.R). Five aliases were updated (PHB->PHB1, ATP5O->ATP5PO, CTGF->CCN2, H2AFX->H2AX, ARNTL->BMAL1); none dropped. The source files in `source_files/` are unchanged. SenMayo remains the 124-gene MSigDB copy: the paper's 125th gene could not be retrieved (nature.com blocked automated access; PMC had no supplementary link). Union: 1151 genes (`senescence_union.rds`).
