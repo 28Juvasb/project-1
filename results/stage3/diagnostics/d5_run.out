@@ -1,0 +1,11 @@
+here() starts at /run/media/juvaasbollini/My Files/Senescence-Diabetes-Study
+elapsed min: 12.6 
+failed jobs: 0 
+FINAL fit, Boruta backend fru: panel = IL1R1 (L0_intersection); LASSO 3, SVM-RFE 11, Boruta 24
+FINAL fit, Boruta backend ranger: panel = IL1R1 (L0_intersection); LASSO 3, SVM-RFE 11, Boruta 24
+FINAL fit, Boruta backend rf: panel = IL1R1 (L0_intersection); LASSO 3, SVM-RFE 11, Boruta 25
+Boruta confirmed set, fru(production) vs ranger, 50 folds: Jaccard mean 0.900 median 0.909 min 0.741; sizes fru median 23 ranger median 22
+features_k, production vs ranger-swap: identical in 40/50 folds; Jaccard mean 0.957; fallback level identical in 50/50; levels swap: L0 32 vs prod 32
+ranger-swap nested AUC per repeat: 0.661 0.665 0.648 0.667 0.668  mean 0.662 (production 0.659)
+top-10 stability, ranger-swap: SERPINE2(0.70) NLK(0.52) IL1R1(0.42) CDKN1A(0.32) PCK1(0.32) FXN(0.28) EPOR(0.26) ARG2(0.24) CEBPB(0.22) SFRP1(0.18) 
+top-10 stability, production : SERPINE2(0.70) NLK(0.52) IL1R1(0.42) PCK1(0.36) CDKN1A(0.32) FXN(0.28) ARG2(0.24) EPOR(0.24) CEBPB(0.22) SFRP1(0.18) 

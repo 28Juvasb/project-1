@@ -1,0 +1,31 @@
+here() starts at /run/media/juvaasbollini/My Files/Senescence-Diabetes-Study
+iterations: 499  with NaN: 15 
+NaN cells: 49  of which raw NaN: 0  raw==0: 30  raw>0: 9  raw<0: 10 
+n_attr in NaN iterations:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    350     350     350     350     350     350 
+n_attr overall:    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  56.00   56.00   56.00   65.19   56.00  350.00 
+iteration index of NaN events: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+attributes with exactly zero raw importance per iteration (all attrs):    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00000 0.00000 0.00000 0.07615 0.00000 5.00000 
+          it n_attr       var           raw scaled      var_x n_unique
+G157       1    350      G157  0.000000e+00     NA 0.09035013       69
+G175       1    350      G175  0.000000e+00     NA 0.08478225       69
+shadow18   1    350  shadow18  4.347826e-05     NA 0.19904408       69
+shadow60   1    350  shadow60  0.000000e+00     NA 0.13101762       69
+G78        2    350       G78  0.000000e+00     NA 0.05637008       69
+shadow27   2    350  shadow27 -4.545455e-05     NA 0.25434667       69
+shadow70   2    350  shadow70  4.000000e-05     NA 0.44758638       69
+shadow100  2    350 shadow100  0.000000e+00     NA 0.19352681       69
+shadow115  2    350 shadow115  0.000000e+00     NA 0.05521610       68
+shadow134  2    350 shadow134  0.000000e+00     NA 0.05077427       69
+shadow23   3    350  shadow23  0.000000e+00     NA 0.40612203       69
+shadow54   3    350  shadow54  0.000000e+00     NA 0.06131582       65
+shadow99   3    350  shadow99  0.000000e+00     NA 0.11852903       67
+shadow124  3    350 shadow124  0.000000e+00     NA 0.08946183       69
+shadow4    4    350   shadow4  0.000000e+00     NA 0.30333064       68
+NaN-cell shadow vs real: 16 33 
+        bin nan_iter.sum nan_iter.n n_nan.sum n_nan.n
+1   (40,80]            0        480         0     480
+2  (80,160]            0          4         0       4
+3 (160,400]           15         15        49      15
