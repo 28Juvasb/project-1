@@ -1,0 +1,7 @@
+dataset,role,platform,method,annotation,n_samples,n_probes,n_control_dropped,n_multi_dropped,n_unmapped_dropped,n_probes_kept,n_genes,n_expressed,q25_threshold
+GSE41762,discovery,GPL6244,oligo,hugene10sttranscriptcluster.db,77,33297,4428,2153,7039,19677,18807,14721,5.09930533397405
+GSE27951,discovery,GPL570,affy,hgu133plus2.db,23,54675,62,1527,9976,43110,20823,16416,4.13096115642676
+GSE76894,validation,GPL570,affy,hgu133plus2.db,99,54675,62,1527,9976,43110,20823,16413,5.24504318317714
+GSE71416,validation,GPL570,affy,hgu133plus2.db,20,54675,62,1527,9976,43110,20823,16603,3.07470209735216
+GSE20966,validation,GPL1352,affy,u133x3p.db,20,61359,62,2725,12267,46305,20129,15954,4.64549703060198
+GSE16415,validation,GPL2986,matrix,GPL2986 annotation table (data/raw/GPL2986),10,32878,0,310,14439,18129,16465,14797,9.47638126561517

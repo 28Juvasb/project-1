@@ -46,6 +46,17 @@ Any change after lock goes to `logs/deviations.md` (CLAUDE.md rule 7).
 
 Signed off: Juvas (decision authority), 2026-10-05.
 
+## B12. QC decisions after Task 3 (2026-10-05; made from QC evidence only, no outcome data seen)
+
+| Item | Decision | Reason |
+|---|---|---|
+| GSM691134 (GSE27951, ND, PC1 z = -4.3) | **Keep.** Sensitivity rerun of the adipose arm without it. | It passes the array-quality checks (NUSE 1.014, RLE normal). Dropping it on PCA alone would cost 1 of 11 controls and be a judgement call. Reporting both versions shows the result doesn't depend on it. |
+| Sex mismatches: GSE41762 ID30 (GSM1023682), GSE20966 GSM524170 | **Keep both; use expression-inferred sex as the covariate.** | Both sex signals (Y genes, and XIST for GSE20966) agree on male; for ID30 the other GEO deposit also says male. The recorded value is a likely data-entry error, not a sample swap. |
+| XIST missing from GPL6244 and GPL2986 annotation | **Accept the Y-gene-only sex call** for GSE41762 and GSE16415 (already in `logs/deviations.md`). | Verified true; 76 of 77 GSE41762 calls agree with recorded sex and the separation is 3.2 log2. |
+| GSE71416 NUSE failures (3 arrays) | **Accept the pre-set rule: n=17 (6 ND / 11 T2D).** | Objective rule fixed in advance, applied label-blind. Stated as a limitation; the CI will be wide. |
+| GSE16415 symbols (33% not current HGNC) | **No symbol update.** Panel genes absent under the deposited names are reported as absent. | GSE16415 is a direction-only sanity check, so the loss of a few genes is acceptable. |
+| `group` column in validation `qc_summary.csv` | **Keep; never used.** | Needed later for the single scoring pass. QC decisions above did not use it. |
+
 ## C. Open inputs (do not block analysis)
 - LSC structure from the lab. Docking of the other three ligands proceeds without it.
 - Proposal v3 text: update n=21 → 23 and remove ComBat at the next revision.

@@ -1,0 +1,260 @@
+Script: 04_qc  run: 20261005_011656 
+
+Inputs:
+  data/processed/03_GSE41762_expr.rds md5=00b63bc09d54a5deeebf6a9fb6d42144
+  data/processed/03_GSE41762_pheno.rds md5=cc3c9fe2d064abf1bbff1a6d010394cf
+  data/processed/03_GSE27951_expr.rds md5=ae1851b209c367e0082f2a21d020d6cc
+  data/processed/03_GSE27951_pheno.rds md5=5df55038eb3a1691a172fe15e9dc16b7
+  data/processed/03_GSE76894_expr.rds md5=5bdc4f6a1d0485fab6b2b143557fabd9
+  data/processed/03_GSE76894_pheno.rds md5=fe93807ff71f83d611c56fe9012929d1
+  data/processed/03_GSE71416_expr.rds md5=5a3bbebd0656de51c72011d4b69125fa
+  data/processed/03_GSE71416_pheno.rds md5=550829e027c263867b6280d8ad795060
+  data/processed/03_GSE20966_expr.rds md5=ad7239796f4f7f82565d8a0a02ed46d6
+  data/processed/03_GSE20966_pheno.rds md5=7e161312b304512acdae760213e2ef35
+  data/processed/03_GSE16415_expr.rds md5=3aacc790327a915bcb9f3451d285a139
+  data/processed/03_GSE16415_pheno.rds md5=a2e6d314f613e0d52e75a0eefb99766d
+
+Parameters: NUSE exclusion median > 1.05 | PCA top 5000 genes by variance, prcomp centred, unscaled | flag |z| > 3 on PC1 or PC2
+  hclust: same top genes, distance 1 - Pearson r, average linkage
+  sex: XIST vs mean(RPS4Y1, DDX3Y, KDM5D, UTY where present), k-means k=2 on z-scored (XIST, Y-mean), nstart=25, seed 42;
+       cluster with higher (Y - XIST) centroid = male
+  PLM: affyPLM::fitPLM (affy) / oligo::fitProbeLevelModel(target='core') (oligo); GSE16415: RLE from normalised gene matrix, no NUSE
+
+
+==================== GSE41762 (discovery, GPL6244) ====================
+Warning: stack imbalance in '::', 26 then 28
+Warning: stack imbalance in '<-', 18 then 20
+Warning: stack imbalance in '{', 14 then 16
+Warning: stack imbalance in 'if', 12 then 14
+Warning: stack imbalance in '{', 8 then 10
+  median NUSE range: 0.9898..1.0323 | RLE median range -0.050..0.118 | RLE IQR range 0.250..0.708
+  NUSE exclusions (median > 1.05): 0 
+  *** XIST ABSENT from the collapsed matrix (not annotated on this platform's annotation source):
+       k-means k=2 on the z-scored Y-gene mean ONLY (deviation from §2.4, logged in logs/deviations.md) ***
+  Y-mean by inferred sex: female max 4.80, male min 8.00 (gap 3.21 log2)
+  sex check genes: XIST + RPS4Y1,DDX3Y,KDM5D,UTY (absent: )
+  k-means centres (raw scale):
+       XIST Ymean  n
+female   NA 4.493 32
+male     NA 8.527 45
+        inferred
+recorded female male
+  female     32    1
+  male        0   44
+  sex mismatches: 1 (GSM1023682 rec=female inf=male)
+  donor ID30 (GSM1023682): recorded GSE41762 sex = female (GSE38642 deposit says male); expression-inferred = male; XIST=NA Ymean=8.71
+  PCA on top 5000 genes: PC1 20.6%, PC2 16.2% variance; max |z| PC1 2.33, PC2 2.67
+  PCA-flagged (>3 SD, NOT excluded): 0 
+
+==================== GSE27951 (discovery, GPL570) ====================
+
+  median NUSE range: 0.9865..1.0490 | RLE median range -0.085..0.071 | RLE IQR range 0.227..0.537
+  NUSE exclusions (median > 1.05): 0 
+  Y-mean by inferred sex: female max 4.81, male min 7.46 (gap 2.65 log2)
+  sex check genes: XIST + RPS4Y1,DDX3Y,KDM5D,UTY (absent: )
+  k-means centres (raw scale):
+         XIST Ymean  n
+female 12.266 4.362  6
+male    4.497 7.734 17
+  recorded sex: none in GEO -> inferred sex reported and used as the sex covariate (§2.4) 
+  PCA on top 5000 genes: PC1 39.6%, PC2 24.5% variance; max |z| PC1 4.31, PC2 2.60
+  PCA-flagged (>3 SD, NOT excluded): 1 (GSM691134 PC1z=-4.31 PC2z=-1.49)
+
+==================== GSE76894 (validation, GPL570) ====================
+  median NUSE range: 0.9852..1.0262 | RLE median range -0.109..0.093 | RLE IQR range 0.366..0.751
+  NUSE exclusions (median > 1.05): 0 
+  Y-mean by inferred sex: female max 5.19, male min 9.72 (gap 4.53 log2)
+  sex check genes: XIST + RPS4Y1,DDX3Y,KDM5D,UTY (absent: )
+  k-means centres (raw scale):
+         XIST  Ymean  n
+female 12.452  4.907 50
+male    3.825 10.248 49
+        inferred
+recorded female male
+  female     50    0
+  male        0   49
+  sex mismatches: 0 
+  PCA on top 5000 genes: PC1 22.7%, PC2 19.5% variance; max |z| PC1 2.43, PC2 1.96
+  PCA-flagged (>3 SD, NOT excluded): 0 
+
+==================== GSE71416 (validation, GPL570) ====================
+  median NUSE range: 0.9857..1.3207 | RLE median range -0.041..0.235 | RLE IQR range 0.225..2.002
+  NUSE exclusions (median > 1.05): 3 (GSM1833927=1.3207, GSM1833937=1.1393, GSM1833938=1.0586)
+  re-normalising 17 remaining arrays from raw (protocol 2.1 settings)
+Background correcting
+Normalizing
+Calculating Expression
+  Y-mean by inferred sex: female max 3.27, male min 7.58 (gap 4.30 log2)
+  sex check genes: XIST + RPS4Y1,DDX3Y,KDM5D,UTY (absent: )
+  k-means centres (raw scale):
+         XIST Ymean  n
+female 11.363 3.120 12
+male    4.192 7.846  5
+        inferred
+recorded female male
+  female     12    0
+  male        0    5
+  sex mismatches: 0 
+  PCA on top 5000 genes: PC1 32.4%, PC2 23.2% variance; max |z| PC1 1.70, PC2 2.17
+  PCA-flagged (>3 SD, NOT excluded): 0 
+
+==================== GSE20966 (validation, GPL1352) ====================
+
+
+Attaching package: ‘u133x3pcdf’
+
+The following objects are masked from ‘package:hgu133plus2cdf’:
+
+    i2xy, xy2i
+
+  median NUSE range: 0.9877..1.0185 | RLE median range -0.094..0.087 | RLE IQR range 0.267..0.420
+  NUSE exclusions (median > 1.05): 0 
+  Y-mean by inferred sex: female max 4.95, male min 8.31 (gap 3.36 log2)
+  sex check genes: XIST + RPS4Y1,DDX3Y,KDM5D,UTY (absent: )
+  k-means centres (raw scale):
+         XIST Ymean  n
+female 11.658 4.466  6
+male    4.421 8.589 14
+        inferred
+recorded female male
+  female      6    1
+  male        0   13
+  sex mismatches: 1 (GSM524170 rec=female inf=male)
+  PCA on top 5000 genes: PC1 37.4%, PC2 11.8% variance; max |z| PC1 1.50, PC2 2.51
+  PCA-flagged (>3 SD, NOT excluded): 0 
+
+==================== GSE16415 (validation, GPL2986) ====================
+  median NUSE range: n/a (no probe-level data) | RLE median range -0.027..0.038 | RLE IQR range 0.607..0.979
+  NUSE exclusions (median > 1.05): 0 
+  *** XIST ABSENT from the collapsed matrix (not annotated on this platform's annotation source):
+       k-means k=2 on the z-scored Y-gene mean ONLY (deviation from §2.4, logged in logs/deviations.md) ***
+  Y-mean by inferred sex: female max 9.60, male min 15.21 (gap 5.61 log2)
+  sex check genes: XIST + RPS4Y1,DDX3Y,UTY (absent: KDM5D)
+  k-means centres (raw scale):
+       XIST  Ymean n
+female   NA  8.547 7
+male     NA 15.460 3
+  recorded sex: none in GEO -> inferred sex reported only 
+  PCA on top 5000 genes: PC1 27.0%, PC2 19.4% variance; max |z| PC1 2.46, PC2 1.35
+  note: with n=10 the largest attainable |z| is (n-1)/sqrt(n) = 2.85, so the 3 SD flag cannot fire
+  PCA-flagged (>3 SD, NOT excluded): 0 
+Warning: stack imbalance in 'for', 2 then 4
+Warning messages:
+1: replacing previous import ‘S4Arrays::makeNindexFromArrayViewport’ by ‘DelayedArray::makeNindexFromArrayViewport’ when loading ‘SummarizedExperiment’ 
+2: replacing previous import ‘AnnotationDbi::tail’ by ‘utils::tail’ when loading ‘hgu133plus2cdf’ 
+3: replacing previous import ‘AnnotationDbi::head’ by ‘utils::head’ when loading ‘hgu133plus2cdf’ 
+4: replacing previous import ‘AnnotationDbi::tail’ by ‘utils::tail’ when loading ‘u133x3pcdf’ 
+5: replacing previous import ‘AnnotationDbi::head’ by ‘utils::head’ when loading ‘u133x3pcdf’ 
+
+NUSE exclusions logged to logs/excluded_samples.csv
+
+==== Per-dataset QC overview ====
+    dataset  n_in nuse_excluded pca_flagged sex_recorded sex_mismatch
+     <char> <int>         <int>       <int>        <int>        <int>
+1: GSE41762    77             0           0           77            1
+2: GSE27951    23             0           1            0            0
+3: GSE76894    99             0           0           99            0
+4: GSE71416    20             3           0           20            0
+5: GSE20966    20             0           0           20            1
+6: GSE16415    10             0           0            0            0
+   max_median_NUSE max_RLE_IQR
+             <num>       <num>
+1:          1.0323      0.7085
+2:          1.0490      0.5370
+3:          1.0262      0.7507
+4:          1.3207      2.0022
+5:          1.0185      0.4202
+6:            -Inf      0.9787
+
+Flagged samples (PCA > 3 SD or sex mismatch) -- NOT excluded; project lead decides:
+    dataset        gsm  PC1_z  PC2_z outlier_flag recorded_sex inferred_sex
+     <char>     <char>  <num>  <num>       <lgcl>       <char>       <char>
+1: GSE41762 GSM1023682 -0.414 -0.621        FALSE       female         male
+2: GSE27951  GSM691134 -4.315 -1.494         TRUE         <NA>         male
+3: GSE20966  GSM524170  0.375 -0.062        FALSE       female         male
+   sex_mismatch
+         <lgcl>
+1:         TRUE
+2:           NA
+3:         TRUE
+
+All assertions passed.
+
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices datasets  utils     methods  
+[8] base     
+
+other attached packages:
+ [1] u133x3pcdf_2.18.0          hgu133plus2.db_3.13.0     
+ [3] org.Hs.eg.db_3.22.0        AnnotationDbi_1.72.0      
+ [5] hgu133plus2cdf_2.18.0      pd.hugene.1.0.st.v1_3.14.1
+ [7] DBI_1.3.0                  oligo_1.74.0              
+ [9] Biobase_2.70.0             oligoClasses_1.72.0       
+[11] RSQLite_3.53.3             Biostrings_2.78.0         
+[13] Seqinfo_1.0.0              XVector_0.50.0            
+[15] IRanges_2.44.0             S4Vectors_0.48.1          
+[17] BiocGenerics_0.56.0        generics_0.1.4            
+[19] ggplot2_4.0.3              data.table_1.18.6.1       
+[21] here_1.0.2                
+
+loaded via a namespace (and not attached):
+ [1] gridExtra_2.3.1             rlang_1.3.0                
+ [3] magrittr_2.0.5              matrixStats_1.5.0          
+ [5] compiler_4.5.2              png_0.1-9                  
+ [7] vctrs_0.7.3                 stringr_1.6.0              
+ [9] pkgconfig_2.0.3             crayon_1.5.3               
+[11] fastmap_1.2.0               backports_1.5.1            
+[13] labeling_0.4.3              rmarkdown_2.32             
+[15] preprocessCore_1.72.0       bit_4.6.0                  
+[17] xfun_0.61                   cachem_1.1.0               
+[19] affxparser_1.82.0           blob_1.3.0                 
+[21] DelayedArray_0.36.1         parallel_4.5.2             
+[23] cluster_2.1.8.2             R6_2.6.1                   
+[25] stringi_1.8.9               RColorBrewer_1.1-3         
+[27] rpart_4.1.24                GenomicRanges_1.62.1       
+[29] Rcpp_1.1.2                  SummarizedExperiment_1.40.0
+[31] iterators_1.0.14            knitr_1.52                 
+[33] WGCNA_1.74                  gcrma_2.82.0               
+[35] base64enc_0.1-6             Matrix_1.7-4               
+[37] splines_4.5.2               nnet_7.3-20                
+[39] tidyselect_1.2.1            rstudioapi_0.19.0          
+[41] abind_1.4-8                 doParallel_1.0.17          
+[43] codetools_0.2-20            affy_1.88.0                
+[45] lattice_0.22-9              tibble_3.3.1               
+[47] withr_3.0.3                 KEGGREST_1.50.0            
+[49] S7_0.2.2                    evaluate_1.0.5             
+[51] foreign_0.8-91              survival_3.8-6             
+[53] pillar_1.11.1               affyio_1.80.0              
+[55] BiocManager_1.30.27         MatrixGenerics_1.22.0      
+[57] checkmate_2.3.4             renv_1.3.0                 
+[59] foreach_1.5.2               rprojroot_2.1.1            
+[61] scales_1.4.0                ff_4.5.3                   
+[63] glue_1.8.1                  Hmisc_5.3-0                
+[65] tools_4.5.2                 affyPLM_1.86.0             
+[67] fastcluster_1.3.0           grid_4.5.2                 
+[69] impute_1.84.0               colorspace_2.1-3           
+[71] htmlTable_2.5.0             Formula_1.2-6              
+[73] cli_3.6.6                   S4Arrays_1.10.1            
+[75] dplyr_1.2.1                 gtable_0.3.6               
+[77] dynamicTreeCut_1.63-1       digest_0.6.39              
+[79] SparseArray_1.10.10         htmlwidgets_1.6.4          
+[81] farver_2.1.2                memoise_2.0.1              
+[83] htmltools_0.5.9             lifecycle_1.0.5            
+[85] httr_1.4.9                  bit64_4.8.6                

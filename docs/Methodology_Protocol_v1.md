@@ -176,6 +176,6 @@ Ligand, best ΔG, mean ± SD ΔG across seeds, decoy percentile, contact residue
 ## 8. Reporting and deviations
 - For each arm, report the nested-CV AUC (headline) and the apparent AUC side by side, each with a 95% CI.
 - Report the fallback frequencies (§3), excluded samples with reasons, and the outcome of the adipose stability rule.
-- **Sensitivity analyses (pre-specified):** + BMI covariate (§2.4); GSE27951 excluding GSM691135 and GSM691140; GSE41762 excluding the 11 label-discordant donors (v1.1).
+- **Sensitivity analyses (pre-specified):** + BMI covariate (§2.4); GSE27951 excluding GSM691135 and GSM691140; GSE41762 excluding the 11 label-discordant donors (v1.1); GSE27951 excluding the PCA outlier GSM691134 (decided 2026-10-05 after Task 3 QC, from QC evidence only).
 - Limitations stated without softening (see IMPLEMENTATION_PLAN Task 11).
 - Every deviation from this document goes in `logs/deviations.md` (date, item, original, new, reason) and is listed in the report.
