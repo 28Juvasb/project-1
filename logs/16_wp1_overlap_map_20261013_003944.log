@@ -1,0 +1,202 @@
+Script: 16_wp1_overlap_map  run: 20261013_003944 
+Series (order = A before B in pairwise table): GSE41762, GSE38642, GSE50397, GSE20966, GSE76894, GSE76895, GSE25724 
+Parameters:
+  exact rule : sex & group & age exact & BMI to 0.1
+  near rule  : age +-1, BMI +-0.1, sex & group exact
+ missing BMI : pair matched on sex+group+age only;  group NA : group condition dropped (flagged)
+ CEL hash    : md5 of decompressed CEL bytes, streamed from the tar (nothing extracted to disk)
+ HARD GATE   : series-matrix files read to '!series_matrix_table_begin' only; no expression value is read
+
+Input file checksums:
+  c029525bd388a502684e7e7137c42b1b  GSE41762/GSE41762_RAW.tar
+  cafdb032c77433f697e320bd28ea508e  GSE38642/GSE38642_RAW.tar
+  2dc30aa505739b73b02084923a5d6abb  GSE50397/GSE50397_RAW.tar
+  773096981c5e1887dd60484876d74617  GSE20966/GSE20966_RAW.tar
+  ff73df9ee9cf65be3e5508d719af4527  GSE76894/GSE76894_RAW.tar
+  8fa7ca9d4dd83e0b6668fee7cea6ec92  GSE76895/GSE76895_RAW.tar
+  7d388e11f4959dd93274c84436797a34  GSE25724/GSE25724_RAW.tar
+  3245c714573c7bb621cab28096f6107e  GSE41762/GSE41762_series_matrix.txt.gz
+  fd1ffc2ab99fc942bfdef9b029682385  GSE38642/GSE38642_series_matrix.txt.gz
+  11f4b762cf0c8c73861d44810c80aadb  GSE50397/GSE50397_series_matrix.txt.gz
+  3bf7935ca88685bb2b7f4bddf14f5a47  GSE20966/GSE20966_series_matrix.txt.gz
+  edc482e314e3f71b5275846459cdab73  GSE76894/GSE76894_series_matrix.txt.gz
+  e5946bcc65930b07bd987ee909e5b7d5  GSE76895/GSE76895_series_matrix.txt.gz
+  30c812498e174c68ffa6de973099e99c  GSE25724/GSE25724_series_matrix.txt.gz
+
+Header lines read (table not read): GSE41762=60 GSE38642=64 GSE50397=68 GSE20966=77 GSE76894=111 GSE76895=111 GSE25724=59 
+
+New manifests: GSE50397 n=89; GSE76895 n=103; GSE25724 n=13
+GSE76895 diabetes-status counts (from GEO sample metadata):
+   group_status_raw     N
+             <char> <int>
+1:              IGT    15
+2:               ND    32
+3:              T2D    36
+4:             T3cD    20
+GSE76895 platform: GPL570 ; GSE25724 group counts:
+   group_status_raw  group     N
+             <char> <char> <int>
+1:     non-diabetic     ND     7
+2:  type 2 diabetes    T2D     6
+GSE50397 group status: none in GEO; HbA1c present for 77 of 89 arrays
+
+manifest/files_extension.csv:
+                                 filename size_bytes
+                                   <char>      <num>
+1:              GSE50397/GSE50397_RAW.tar  378470400
+2: GSE50397/GSE50397_series_matrix.txt.gz   13321751
+3:              GSE76895/GSE76895_RAW.tar  867020800
+4: GSE76895/GSE76895_series_matrix.txt.gz   24154260
+5:              GSE25724/GSE25724_RAW.tar   27279360
+6: GSE25724/GSE25724_series_matrix.txt.gz    1076351
+                                md5                   check
+                             <char>                  <char>
+1: 2dc30aa505739b73b02084923a5d6abb      tar ok, 89 members
+2: 11f4b762cf0c8c73861d44810c80aadb gz ok (first line read)
+3: 8fa7ca9d4dd83e0b6668fee7cea6ec92     tar ok, 103 members
+4: e5946bcc65930b07bd987ee909e5b7d5 gz ok (first line read)
+5: 7d388e11f4959dd93274c84436797a34      tar ok, 13 members
+6: 30c812498e174c68ffa6de973099e99c gz ok (first line read)
+
+CEL md5 computed: GSE41762=77 GSE38642=63 GSE50397=89 GSE20966=20 GSE76894=103 GSE76895=103 GSE25724=13 
+Duplicated CEL md5 within a series: GSE20966=0 GSE25724=0 GSE38642=0 GSE41762=0 GSE50397=0 GSE76894=0 GSE76895=0 
+
+Covariate completeness (n, ND, T2D, other/NA group; NA sex/age/bmi/hba1c):
+     series     n    ND   T2D group_NA sex_NA age_NA bmi_NA hba1c_NA nonint_age
+     <fctr> <int> <int> <int>    <int>  <int>  <int>  <int>    <int>      <int>
+1: GSE41762    77    57    20        0      0      0      0       14          0
+2: GSE38642    63    54     9        0      0      0      0       12          0
+3: GSE50397    89     0     0       89      0      0      0       12          0
+4: GSE20966    20    10    10        0      0      0      1       20          0
+5: GSE76894   103    84    19        0      0      0      1      103          0
+6: GSE76895   103    32    36       35      0      0      0      103          0
+7: GSE25724    13     7     6        0      0      0      0       13          0
+(GSE50397 group is NA by design; GSE76895 NA = IGT/T3cD; GSE50397 BMI/age decimals as deposited.)
+
+==== Pairwise overlap table (B-side counts unless stated) ====
+    series_A series_B    nA    nB ident_CEL cov_exact cov_exact_Aside
+      <char>   <char> <int> <int>     <int>     <int>           <int>
+ 1: GSE41762 GSE38642    77    63        63        52              51
+ 2: GSE41762 GSE50397    77    89        67        13              13
+ 3: GSE41762 GSE20966    77    20         0         0               0
+ 4: GSE41762 GSE76894    77   103         0         4               4
+ 5: GSE41762 GSE76895    77   103         0         1               1
+ 6: GSE41762 GSE25724    77    13         0         0               0
+ 7: GSE38642 GSE50397    63    89        56         5               5
+ 8: GSE38642 GSE20966    63    20         0         0               0
+ 9: GSE38642 GSE76894    63   103         0         3               3
+10: GSE38642 GSE76895    63   103         0         1               1
+11: GSE38642 GSE25724    63    13         0         0               0
+12: GSE50397 GSE20966    89    20         0         2               4
+13: GSE50397 GSE76894    89   103         0         5               9
+14: GSE50397 GSE76895    89   103         0         2               2
+15: GSE50397 GSE25724    89    13         0         0               0
+16: GSE20966 GSE76894    20   103         0         1               1
+17: GSE20966 GSE76895    20   103         0         2               1
+18: GSE20966 GSE25724    20    13         0         0               0
+19: GSE76894 GSE76895   103   103         0         3               1
+20: GSE76894 GSE25724   103    13         0         0               0
+21: GSE76895 GSE25724   103    13         0         0               0
+    series_A series_B    nA    nB ident_CEL cov_exact cov_exact_Aside
+      <char>   <char> <int> <int>     <int>     <int>           <int>
+    cov_ign_grp near_only label_conf_CEL label_conf_cov
+          <int>     <int>          <int>          <int>
+ 1:          62         5             11             12
+ 2:          13        59              0              0
+ 3:           1         0              0              1
+ 4:           4         8              0              0
+ 5:           1         4              0              0
+ 6:           0         0              0              0
+ 7:           5        55              0              0
+ 8:           1         1              0              1
+ 9:           3         7              0              0
+10:           1         4              0              0
+11:           0         0              0              0
+12:           2         2              0              0
+13:           5         8              0              0
+14:           2         6              0              0
+15:           0         1              0              0
+16:           1         2              0              1
+17:           2         5              0              0
+18:           0         0              0              0
+19:           4         7              0              1
+20:           0         1              0              0
+21:           0         0              0              0
+    cov_ign_grp near_only label_conf_CEL label_conf_cov
+          <int>     <int>          <int>          <int>
+
+Notes:
+  GSE41762 vs GSE38642: 63/63 GSE38642 arrays byte-identical to GSE41762 arrays | both state source = Nordic Islet Transplantation Programme (Uppsala)
+  GSE41762 vs GSE50397: 67/89 GSE50397 arrays byte-identical to GSE41762 arrays | group NA in GSE50397: group condition dropped | shared header contributors: Leif Groop | both state source = Nordic Islet Transplantation Programme (Uppsala)
+  GSE41762 vs GSE20966: BMI missing for some samples: sex+group+age only for those pairs
+  GSE41762 vs GSE76894: BMI missing for some samples: sex+group+age only for those pairs
+  GSE41762 vs GSE76895: group NA in GSE76895: group condition dropped
+  GSE38642 vs GSE50397: 56/89 GSE50397 arrays byte-identical to GSE38642 arrays | group NA in GSE50397: group condition dropped | shared header contributors: João Fadista | both state source = Nordic Islet Transplantation Programme (Uppsala)
+  GSE38642 vs GSE20966: BMI missing for some samples: sex+group+age only for those pairs
+  GSE38642 vs GSE76894: BMI missing for some samples: sex+group+age only for those pairs
+  GSE38642 vs GSE76895: group NA in GSE76895: group condition dropped
+  GSE50397 vs GSE20966: group NA in GSE50397: group condition dropped | BMI missing for some samples: sex+group+age only for those pairs
+  GSE50397 vs GSE76894: group NA in GSE50397: group condition dropped | BMI missing for some samples: sex+group+age only for those pairs
+  GSE50397 vs GSE76895: group NA in GSE50397/GSE76895: group condition dropped
+  GSE50397 vs GSE25724: group NA in GSE50397: group condition dropped
+  GSE20966 vs GSE76894: BMI missing for some samples: sex+group+age only for those pairs | shared header contributors: Lorella Marselli
+  GSE20966 vs GSE76895: group NA in GSE76895: group condition dropped | BMI missing for some samples: sex+group+age only for those pairs | shared header contributors: Lorella Marselli
+  GSE20966 vs GSE25724: BMI missing for some samples: sex+group+age only for those pairs
+  GSE76894 vs GSE76895: group NA in GSE76895: group condition dropped | BMI missing for some samples: sex+group+age only for those pairs | shared header contributors: Michele Solimena; Anke M Schulte; Lorella Marselli; Florian Ehehalt; Daniela Richter; Manuela Rösler; Hassan Mziaut; Klaus-Peter Knoch; Julia Parnis; Marco Bugliani; Afshan Siddiq; Anne Jörns; Frédéric Burdet; Robin Liechti; Mara Suleiman; Daniel Margerie; Farooq Syed; Marius Distler; Robert Grützmann; Enrico Petretto; Aida Moreno; Carolin Wegbrod; Anke Sönmez; Katja Pfriem; Anne Friedrich; Joern Meinel; Claes Wollheim; Gustavo Baretton; Raphael Scharfmann; Everson Nogoceke; Ezio Bonifacio; Dorotheé Sturm; Ugo Boggi; Hans-Detlev Saeger; Franco Filipponi; Mathias Lesche; Paolo Meda; Andreas Dahl; Leonore Wigger; Ioannis Xenarios; Mario Falchi; Bernard Thorens; Jürgen Weitz; Krister Bokvist; Sigurd Lenzen; Guy Rutter; Philippe Froguel; Manon von Bülow; Mark Ibberson | shared PubMed ids: 29185012,30956117 | both IMIDIA consortium biobank (SuperSeries GSE76896)
+  GSE76894 vs GSE25724: BMI missing for some samples: sex+group+age only for those pairs | shared header contributors: Marco Bugliani
+  GSE76895 vs GSE25724: group NA in GSE76895: group condition dropped | shared header contributors: Marco Bugliani
+
+==== Consistency check: GSE41762 vs GSE38642 (reference: manifest/GSE38642_donor_overlap.csv, 02_donor_overlap.R) ====
+  identical CEL: this pipeline 63 / 63 (reference 63 / 63); per-sample CEL partner identical to reference: 63 / 63
+  label conflicts (identical CEL, group differs): this pipeline 11 (reference 11 GROUP_DIFF: 11)
+  covariate-exact matched GSE38642 samples (sex+group+age+BMI): this pipeline 52 (reference 'shared' 52)
+  sex-label discordance among identical CELs: 1 (reference 1); HbA1c discordance: 1 (reference 1)
+  RESULT: REPRODUCED (63/63 identical CELs, 11 label conflicts, 52 covariate-matched) 
+
+==== Provenance (series-matrix headers) ====
+  GSE41762  | Expression data from human pancreatic islets | contact: Anders Rosengren, Lund University | contributors: 3 | PMIDs: 23140642,25298321 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA178122
+  GSE38642  | Expression data from human pancreatic islets | contact: Joao Fadista, Lund University Diabetes Centre | contributors: 2 | PMIDs: 22768844,23707792,23935095,26742564 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA168302
+  GSE50397  | Global transcriptomic analysis of human pancreatic islets re | contact: Joao Fadista, Lund University Diabetes Centre | contributors: 2 | PMIDs: 25015099,25201977,25489054,30762474,28637794,31550518,33402679 | SubSeries of: GSE50398 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA217408
+  GSE20966  | Gene expression profiles of beta-cell enriched tissue obtain | contact: Lorella Marselli, Harvard Medical School | contributors: 8 | PMIDs: 20644627 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA124531
+  GSE76894  | Affymetrix profiling of IMIDIA biobank samples from organ do | contact: Mark Ibberson, SIB Swiss Institute of Bioinformatics | contributors: 49 | PMIDs: 29185012,30956117 | SubSeries of: GSE76896 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA308896
+  GSE76895  | Affymetrix profiling of IMIDIA biobank samples from organ do | contact: Mark Ibberson, SIB Swiss Institute of Bioinformatics | contributors: 49 | PMIDs: 29185012,30956117 | SubSeries of: GSE76896 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA308895
+  GSE25724  | Expression data from type 2 diabetic and non-diabetic isolat | contact: Marco Bugliani, University of Pisa | contributors: 1 | PMIDs: 21127054 | BioProject: https://www.ncbi.nlm.nih.gov/bioproject/PRJNA133855
+
+Figure 1: results/stage8/figures/16_overlap_map.{pdf,png} (88 mm wide). Lower triangle; cell number = arrays (a) or donors (b) in the smaller series of the pair; colour = that number as a fraction of the smaller series (cividis, colour-blind safe); grey = 0; diagonal (italic) = series size. Panel b: group condition dropped where group NA (GSE50397; IGT/T3cD in GSE76895).
+
+All assertions passed.
+
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04.1 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=en_IN       LC_NUMERIC=C         LC_TIME=en_IN       
+ [4] LC_COLLATE=en_IN     LC_MONETARY=en_IN    LC_MESSAGES=en_IN   
+ [7] LC_PAPER=en_IN       LC_NAME=C            LC_ADDRESS=C        
+[10] LC_TELEPHONE=C       LC_MEASUREMENT=en_IN LC_IDENTIFICATION=C 
+
+time zone: Asia/Kolkata
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+[1] patchwork_1.3.2     ggplot2_4.0.3       data.table_1.18.6.1
+[4] here_1.0.2         
+
+loaded via a namespace (and not attached):
+ [1] RColorBrewer_1.1-3  R6_2.6.1            tidyselect_1.2.1   
+ [4] farver_2.1.2        magrittr_2.0.5      gtable_0.3.6       
+ [7] glue_1.8.1          tibble_3.3.1        pkgconfig_2.0.3    
+[10] generics_0.1.4      dplyr_1.2.1         lifecycle_1.0.5    
+[13] cli_3.6.6           S7_0.2.2            viridisLite_0.4.3  
+[16] scales_1.4.0        vctrs_0.7.3         grid_4.5.2         
+[19] withr_3.0.3         renv_1.3.0          compiler_4.5.2     
+[22] rprojroot_2.1.1     tools_4.5.2         pillar_1.11.1      
+[25] BiocManager_1.30.27 rlang_1.3.0        

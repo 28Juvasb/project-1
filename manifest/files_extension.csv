@@ -1,0 +1,7 @@
+filename,size_bytes,md5,opens_nonempty,check
+GSE50397/GSE50397_RAW.tar,378470400,2dc30aa505739b73b02084923a5d6abb,TRUE,"tar ok, 89 members"
+GSE50397/GSE50397_series_matrix.txt.gz,13321751,11f4b762cf0c8c73861d44810c80aadb,TRUE,gz ok (first line read)
+GSE76895/GSE76895_RAW.tar,867020800,8fa7ca9d4dd83e0b6668fee7cea6ec92,TRUE,"tar ok, 103 members"
+GSE76895/GSE76895_series_matrix.txt.gz,24154260,e5946bcc65930b07bd987ee909e5b7d5,TRUE,gz ok (first line read)
+GSE25724/GSE25724_RAW.tar,27279360,7d388e11f4959dd93274c84436797a34,TRUE,"tar ok, 13 members"
+GSE25724/GSE25724_series_matrix.txt.gz,1076351,30c812498e174c68ffa6de973099e99c,TRUE,gz ok (first line read)

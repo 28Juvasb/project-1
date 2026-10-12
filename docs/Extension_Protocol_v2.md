@@ -13,7 +13,8 @@ Aim: quantify how duplicated public islet datasets and selection outside cross-v
 
 ## WP1 — Overlap map
 - **Series:** GSE41762, GSE38642, GSE50397, GSE20966, GSE76894, GSE76895, GSE25724 (and any other public human islet T2D series found by a GEO search done on the registration date; list every one searched in the log). Include a series only if raw CEL files are public.
-- **Method:** decompressed-CEL MD5 comparison across all series; covariate matching (sex + diabetes group + age + BMI, exact; near-match ±1 year and ±0.1 BMI reported separately, as in `scripts/02_donor_overlap.R`); series-header provenance. No expression values are read for this step.
+- **Primary criterion:** identical decompressed-CEL MD5 between series (an identical raw file is the same array). **Secondary:** covariate matching (sex + diabetes group + age + BMI, exact; near-match ±1 year and ±0.1 BMI reported separately, as in `scripts/02_donor_overlap.R`); series-header provenance. No expression values are read for this step.
+- **Pilot result disclosed before registration (2026-10-13):** a metadata-and-checksum pilot found 67 of 89 GSE50397 arrays byte-identical to GSE41762 arrays (56 also in GSE38642), with deposited ages shifted by 1–2 years for most shared donors, which is why exact covariate matching is only secondary. GSE54279 (128 Uppsala islets, HbA1c only) is added for the checksum comparison only. No expression values of GSE50397, GSE54279 or GSE76895 were read. GSE50397 has no diabetes-status field and is not used in WP3, so its labels are not inferred.
 - **Outputs:** pairwise table (n shared arrays, n covariate-matched donors, n label conflicts), Figure 1.
 - **Contact:** the submitters of GSE41762 and GSE38642 are asked to confirm shared donors and T2D definitions. Their answers are reported as received.
 

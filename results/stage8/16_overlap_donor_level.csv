@@ -1,0 +1,344 @@
+series_A,gsm_A,series_B,gsm_B,link,identical_CEL,covariate_exact,covariate_exact_ignoring_group,covariate_near,group_A,group_B,label_conflict_cel,label_conflict_covariate,sex_A,sex_B,age_A,age_B,bmi_A,bmi_B,hba1c_A,hba1c_B,covariate_agreement,group_rule,bmi_missing_rule
+GSE20966,GSM524160,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,63,63,28.5,,,,sex=;age=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE20966,GSM524163,GSE76894,GSM2040122,covariate_exact_ignoring_group,FALSE,FALSE,TRUE,FALSE,T2D,ND,FALSE,TRUE,male,male,63,63,29.4,,,,sex=;age=;bmiNA;hba1cNA;group!=,group required,TRUE
+GSE20966,GSM524159,GSE76894,GSM2040137,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,57,58,27.7,27.8,,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE20966,GSM524168,GSE76894,GSM2040055,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,T2D,FALSE,FALSE,male,male,79,78,25.9,26,,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE20966,GSM524164,GSE76895,GSM2040221,covariate_exact,FALSE,TRUE,TRUE,TRUE,T2D,,FALSE,FALSE,male,male,64,64,,22.2,,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE20966,GSM524164,GSE76895,GSM2040224,covariate_exact,FALSE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,male,male,64,64,,30.7,,,sex=;age=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE20966,GSM524164,GSE76895,GSM2040154,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,64,63,,31.7,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE20966,GSM524164,GSE76895,GSM2040181,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,T2D,FALSE,FALSE,male,male,64,63,,22.7,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE20966,GSM524164,GSE76895,GSM2040214,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,64,63,,33.3,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE20966,GSM524164,GSE76895,GSM2040246,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,64,63,,32.6,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE20966,GSM524168,GSE76895,GSM2040211,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,79,79,25.9,25.8,,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946712,GSE20966,GSM524164,covariate_exact_ignoring_group,FALSE,FALSE,TRUE,FALSE,ND,T2D,FALSE,TRUE,male,male,64,64,26.8,,,,sex=;age=;bmiNA;hba1cNA;group!=,group required,TRUE
+GSE38642,GSM946752,GSE20966,GSM524158,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,64,64,27,27.1,6.2,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946700,GSE50397,GSM1218048,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,69,69,24.7,24.7,5.8,5.8,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946701,GSE50397,GSM1218049,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,56,56,24.7,24.7,,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946702,GSE50397,GSM1218050,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,female,female,46,46,23.9,23.9,5.4,5.4,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946703,GSE50397,GSM1218051,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,female,female,62,62,27.7,27.7,,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946704,GSE50397,GSM1218052,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,69,70,17.6,17.6,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946705,GSE50397,GSM1218053,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,67,68,28.4,28.4,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946706,GSE50397,GSM1218054,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,62,63,21.1,21.1,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946707,GSE50397,GSM1218055,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,27,27,4.3,4.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946708,GSE50397,GSM1218056,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,29,29,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946709,GSE50397,GSM1218057,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,60,61,26.1,26.1,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946711,GSE50397,GSM1218058,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,44,45,29.4,29.4,6.9,6.9,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946712,GSE50397,GSM1218059,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,64,65,26.8,26.8,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946713,GSE50397,GSM1218060,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,73,74,26.2,26.2,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946714,GSE50397,GSM1218061,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,28.4,28.4,5.8,5.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946715,GSE50397,GSM1218062,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,31,32,26,26,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946716,GSE50397,GSM1218063,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,62,24.7,24.7,4.6,4.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946717,GSE50397,GSM1218064,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,57,58,23.9,23.9,6.1,6.1,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946718,GSE50397,GSM1218065,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,55,56,22.5,22.5,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946719,GSE50397,GSM1218066,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,63,64,26.2,26.2,4.5,4.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946720,GSE50397,GSM1218067,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,71,72,29.1,29.1,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946721,GSE50397,GSM1218068,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,26,27,21.1,21.1,4.3,4.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946722,GSE50397,GSM1218069,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,54,55,22,22,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946723,GSE50397,GSM1218070,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,43,44,27.5,27.5,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946727,GSE50397,GSM1218071,identical_CEL,TRUE,FALSE,FALSE,FALSE,ND,,FALSE,FALSE,male,male,57,59,26.2,26.2,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946728,GSE50397,GSM1218072,identical_CEL,TRUE,FALSE,FALSE,FALSE,ND,,FALSE,FALSE,male,male,59,61,26.3,26.3,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946729,GSE50397,GSM1218073,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,61,62,29.4,29.4,5.8,5.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946730,GSE50397,GSM1218074,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,49,50,24.5,24.5,6,6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946731,GSE50397,GSM1218075,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,27.8,27.8,5.9,5.9,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946732,GSE50397,GSM1218076,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,64,65,28.4,28.4,7,7,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946733,GSE50397,GSM1218077,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,70,26.1,26.1,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946734,GSE50397,GSM1218078,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,52,53,26.2,26.2,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946735,GSE50397,GSM1218079,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,54,55,27,27,8.6,8.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946736,GSE50397,GSM1218080,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,24.8,24.8,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946737,GSE50397,GSM1218081,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,32,33,24.5,24.5,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946739,GSE50397,GSM1218082,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,74,75,23.1,23.1,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946740,GSE50397,GSM1218083,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,46,47,22.9,22.9,5,5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946741,GSE50397,GSM1218084,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,68,69,21.5,21.5,5.2,5.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946742,GSE50397,GSM1218086,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,23.4,23.4,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946744,GSE50397,GSM1218087,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,56,57,27.5,27.5,5.9,5.6,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946745,GSE50397,GSM1218088,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,62,63,24.8,24.8,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946746,GSE50397,GSM1218089,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,75,76,33.1,33.1,6.8,6.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946747,GSE50397,GSM1218090,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,57,58,34.6,34.6,6.8,6.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946748,GSE50397,GSM1218091,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,53,54,25.7,25.7,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946749,GSE50397,GSM1218092,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,57,58,23.7,23.7,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946750,GSE50397,GSM1218093,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,62,24.7,24.7,8,8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946751,GSE50397,GSM1218094,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,60,61,24.6,24.6,4.6,4.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946752,GSE50397,GSM1218095,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,64,65,27,27,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946753,GSE50397,GSM1218096,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,67,68,19.4,19.4,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946754,GSE50397,GSM1218097,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,64,65,26,26,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946755,GSE50397,GSM1218098,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,56,57,33.6,33.6,6,6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946756,GSE50397,GSM1218099,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,40,41,24.7,24.7,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946758,GSE50397,GSM1218100,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,57,58,32.5,32.5,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946759,GSE50397,GSM1218101,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,62,63,25.3,25.3,6.4,6.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946760,GSE50397,GSM1218102,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,43,44,28.7,28.7,7,7,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946761,GSE50397,GSM1218103,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,66,67,34.2,34.2,10,10,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946762,GSE50397,GSM1218104,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,58,59,25.7,25.7,,5.1,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946726,GSE50397,GSM1218072,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,61,61,26.3,26.3,5.5,6.2,sex=;age=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946700,GSE50397,GSM1218123,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,68,24.7,24.6,5.8,6.1,sex=;age!=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946700,GSE50397,GSM1218134,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,68,24.7,24.7,5.8,6,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946716,GSE50397,GSM1218093,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,62,24.7,24.7,4.6,8,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946716,GSE50397,GSM1218094,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,61,24.7,24.6,4.6,4.6,sex=;age=;bmi!=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946719,GSE50397,GSM1218130,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,63,63,26.2,26.1,4.5,6.4,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946728,GSE50397,GSM1218071,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,59,59,26.3,26.2,6.2,5.5,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946736,GSE50397,GSM1218106,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,24.8,24.9,5.4,5.4,sex=;age!=;bmi!=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946745,GSE50397,GSM1218063,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,62,62,24.8,24.7,,4.6,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946745,GSE50397,GSM1218093,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,62,62,24.8,24.7,,8,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946750,GSE50397,GSM1218063,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,62,24.7,24.7,8,4.6,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946750,GSE50397,GSM1218094,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,61,24.7,24.6,8,4.6,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946701,GSE76894,GSM2040077,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,56,56,24.7,24.7,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946719,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,63,63,26.2,,4.5,,sex=;age=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE38642,GSM946748,GSE76894,GSM2040064,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,53,53,25.7,25.7,5.5,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946702,GSE76894,GSM2040100,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,46,46,23.9,23.8,5.4,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946706,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,63,21.1,,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE38642,GSM946712,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,64,63,26.8,,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE38642,GSM946713,GSE76894,GSM2040146,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,73,74,26.2,26.1,5.4,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946716,GSE76894,GSM2040119,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,61,61,24.7,24.8,4.6,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946718,GSE76894,GSM2040072,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,55,56,22.5,22.5,5.3,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946731,GSE76894,GSM2040114,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,54,53,27.8,27.8,5.9,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946734,GSE76894,GSM2040149,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,52,51,26.2,26.2,5.6,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946750,GSE76894,GSM2040119,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,61,61,24.7,24.8,8,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946757,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,63,36.9,,6.2,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE38642,GSM946759,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,63,25.3,,6.4,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE38642,GSM946700,GSE76895,GSM2040210,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,69,69,24.7,24.7,5.8,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946716,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,60,24.7,24.7,4.6,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946717,GSE76895,GSM2040231,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,57,58,23.9,23.9,6.1,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946733,GSE76895,GSM2040176,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,68,26.1,26,5.6,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946745,GSE76895,GSM2040153,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,T2D,FALSE,FALSE,male,male,62,61,24.8,24.9,,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE38642,GSM946750,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,60,24.7,24.7,8,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE38642,GSM946751,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,60,60,24.6,24.7,4.6,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023667,GSE20966,GSM524164,covariate_exact_ignoring_group,FALSE,FALSE,TRUE,FALSE,ND,T2D,FALSE,TRUE,male,male,64,64,26.8,,,,sex=;age=;bmiNA;hba1cNA;group!=,group required,TRUE
+GSE41762,GSM1023727,GSE20966,GSM524164,covariate_exact_ignoring_group,FALSE,FALSE,TRUE,FALSE,ND,T2D,FALSE,TRUE,male,male,64,64,30.5,,5.7,,sex=;age=;bmiNA;hba1cNA;group!=,group required,TRUE
+GSE41762,GSM1023655,GSE38642,GSM946700,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,69,69,24.7,24.7,5.8,5.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023656,GSE38642,GSM946701,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,56,56,24.7,24.7,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023657,GSE38642,GSM946702,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,46,46,23.9,23.9,5.4,5.4,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023658,GSE38642,GSM946703,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,62,62,27.7,27.7,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023659,GSE38642,GSM946704,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,69,69,17.6,17.6,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023660,GSE38642,GSM946705,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,67,67,28.4,28.4,5.5,5.5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023661,GSE38642,GSM946706,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,62,62,21.1,21.1,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023662,GSE38642,GSM946707,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,51,51,27,27,4.3,4.3,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023663,GSE38642,GSM946708,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,54,54,29,29,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023664,GSE38642,GSM946709,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,60,60,26.1,26.1,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023665,GSE38642,GSM946710,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,male,male,51,51,26.1,26.1,7.8,7.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023666,GSE38642,GSM946711,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,female,female,44,44,29.4,29.4,6.9,6.9,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023667,GSE38642,GSM946712,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,64,64,26.8,26.8,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023668,GSE38642,GSM946713,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,73,73,26.2,26.2,5.4,5.4,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023669,GSE38642,GSM946714,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,54,54,28.4,28.4,5.8,5.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023670,GSE38642,GSM946715,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,31,31,26,26,5.5,5.5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023671,GSE38642,GSM946716,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,61,61,24.7,24.7,4.6,4.6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023672,GSE38642,GSM946717,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,male,male,57,57,23.9,23.9,6.1,6.1,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023673,GSE38642,GSM946718,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,55,55,22.5,22.5,5.3,5.3,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023674,GSE38642,GSM946719,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,63,63,26.2,26.2,4.5,4.5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023675,GSE38642,GSM946720,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,71,71,29.1,29.1,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023676,GSE38642,GSM946721,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,26,26,21.1,21.1,4.3,4.3,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023677,GSE38642,GSM946722,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,54,54,22,22,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023678,GSE38642,GSM946723,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,43,43,27.5,27.5,5.4,5.4,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023679,GSE38642,GSM946724,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,43,43,24.2,24.2,5.6,5.6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023680,GSE38642,GSM946725,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,female,female,59,59,36.6,36.6,6.2,6.2,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023681,GSE38642,GSM946726,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,61,61,26.3,26.3,5.5,5.5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023682,GSE38642,GSM946727,identical_CEL,TRUE,FALSE,FALSE,FALSE,ND,ND,FALSE,FALSE,female,male,57,57,26.2,26.2,5.5,5.5,sex!=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023683,GSE38642,GSM946728,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,male,male,59,59,26.3,26.3,6.2,6.2,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023684,GSE38642,GSM946729,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,61,61,29.4,29.4,5.8,5.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023685,GSE38642,GSM946730,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,49,49,24.5,24.5,6,6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023686,GSE38642,GSM946731,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,54,54,27.8,27.8,5.9,5.9,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023687,GSE38642,GSM946732,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,female,female,64,64,28.4,28.4,7,7,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023688,GSE38642,GSM946733,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,69,69,26.1,26.1,5.6,5.6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023689,GSE38642,GSM946734,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,52,52,26.2,26.2,5.6,5.6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023690,GSE38642,GSM946735,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,female,female,54,54,27,27,8.6,8.6,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023691,GSE38642,GSM946736,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,51,51,24.8,24.8,5.4,5.4,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023692,GSE38642,GSM946737,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,32,32,24.5,24.5,5.3,5.3,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023693,GSE38642,GSM946738,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,male,male,41,41,22.5,22.5,6.8,6.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023694,GSE38642,GSM946739,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,male,male,74,74,23.1,23.1,6.2,6.2,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023695,GSE38642,GSM946740,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,46,46,22.9,22.9,5,5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023696,GSE38642,GSM946741,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,68,68,21.5,21.5,5.2,5.2,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023698,GSE38642,GSM946742,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,54,54,23.4,23.4,5.3,5.3,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023699,GSE38642,GSM946743,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,59,59,23.5,23.5,5.9,5.9,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023700,GSE38642,GSM946744,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,56,56,27.5,27.5,5.6,5.9,sex=;age=;bmi=;hba1c!=;group=,group required,FALSE
+GSE41762,GSM1023701,GSE38642,GSM946745,identical_CEL,TRUE,FALSE,TRUE,FALSE,ND,T2D,TRUE,TRUE,male,male,62,62,24.8,24.8,,,sex=;age=;bmi=;hba1cNA;group!=,group required,FALSE
+GSE41762,GSM1023702,GSE38642,GSM946746,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,female,female,75,75,33.1,33.1,6.8,6.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023703,GSE38642,GSM946747,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,female,female,57,57,34.6,34.6,6.8,6.8,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023704,GSE38642,GSM946748,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,53,53,25.7,25.7,5.5,5.5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023705,GSE38642,GSM946749,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,57,57,23.7,23.7,5.3,5.3,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023706,GSE38642,GSM946750,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,male,male,61,61,24.7,24.7,8,8,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023707,GSE38642,GSM946751,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,60,60,24.6,24.6,4.6,4.6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023708,GSE38642,GSM946752,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,female,female,64,64,27,27,6.2,6.2,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023709,GSE38642,GSM946753,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,67,67,19.4,19.4,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023710,GSE38642,GSM946754,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,64,64,26,26,5.6,5.6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023711,GSE38642,GSM946755,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,56,56,33.6,33.6,6,6,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023712,GSE38642,GSM946756,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,40,40,24.7,24.7,5.5,5.5,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023713,GSE38642,GSM946757,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,male,male,62,62,36.9,36.9,6.2,6.2,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023714,GSE38642,GSM946758,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,female,female,57,57,32.5,32.5,6.2,6.2,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023715,GSE38642,GSM946759,identical_CEL,TRUE,FALSE,TRUE,FALSE,T2D,ND,TRUE,TRUE,male,male,62,62,25.3,25.3,6.4,6.4,sex=;age=;bmi=;hba1c=;group!=,group required,FALSE
+GSE41762,GSM1023716,GSE38642,GSM946760,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,female,female,43,43,28.7,28.7,7,7,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023717,GSE38642,GSM946761,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,T2D,FALSE,FALSE,male,male,66,66,34.2,34.2,10,10,sex=;age=;bmi=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023718,GSE38642,GSM946762,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,58,58,25.7,25.7,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023671,GSE38642,GSM946750,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,61,61,24.7,24.7,4.6,8,sex=;age=;bmi=;hba1c!=;group=,group required,FALSE
+GSE41762,GSM1023706,GSE38642,GSM946716,covariate_exact_ignoring_group,FALSE,FALSE,TRUE,FALSE,T2D,ND,FALSE,TRUE,male,male,61,61,24.7,24.7,8,4.6,sex=;age=;bmi=;hba1c!=;group!=,group required,FALSE
+GSE41762,GSM1023671,GSE38642,GSM946751,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,61,60,24.7,24.6,4.6,4.6,sex=;age!=;bmi!=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023701,GSE38642,GSM946716,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,61,24.8,24.7,,4.6,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023701,GSE38642,GSM946750,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,61,24.8,24.7,,8,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023706,GSE38642,GSM946745,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,T2D,FALSE,FALSE,male,male,61,62,24.7,24.8,8,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023707,GSE38642,GSM946716,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,60,61,24.6,24.7,4.6,4.6,sex=;age!=;bmi!=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023707,GSE38642,GSM946750,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,60,61,24.6,24.7,4.6,8,sex=;age!=;bmi!=;hba1c!=;group=,group required,FALSE
+GSE41762,GSM1023721,GSE38642,GSM946736,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,52,51,24.8,24.8,,5.4,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023722,GSE38642,GSM946736,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,51,51,24.9,24.8,5.4,5.4,sex=;age=;bmi!=;hba1c=;group=,group required,FALSE
+GSE41762,GSM1023655,GSE50397,GSM1218048,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,69,69,24.7,24.7,5.8,5.8,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023656,GSE50397,GSM1218049,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,56,56,24.7,24.7,,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023657,GSE50397,GSM1218050,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,female,female,46,46,23.9,23.9,5.4,5.4,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023658,GSE50397,GSM1218051,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,female,female,62,62,27.7,27.7,,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023659,GSE50397,GSM1218052,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,69,70,17.6,17.6,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023660,GSE50397,GSM1218053,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,67,68,28.4,28.4,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023661,GSE50397,GSM1218054,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,62,63,21.1,21.1,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023662,GSE50397,GSM1218055,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,27,27,4.3,4.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023663,GSE50397,GSM1218056,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,29,29,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023664,GSE50397,GSM1218057,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,60,61,26.1,26.1,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023666,GSE50397,GSM1218058,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,44,45,29.4,29.4,6.9,6.9,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023667,GSE50397,GSM1218059,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,64,65,26.8,26.8,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023668,GSE50397,GSM1218060,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,73,74,26.2,26.2,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023669,GSE50397,GSM1218061,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,28.4,28.4,5.8,5.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023670,GSE50397,GSM1218062,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,31,32,26,26,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023671,GSE50397,GSM1218063,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,62,24.7,24.7,4.6,4.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023672,GSE50397,GSM1218064,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,57,58,23.9,23.9,6.1,6.1,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023673,GSE50397,GSM1218065,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,55,56,22.5,22.5,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023674,GSE50397,GSM1218066,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,63,64,26.2,26.2,4.5,4.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023675,GSE50397,GSM1218067,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,71,72,29.1,29.1,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023676,GSE50397,GSM1218068,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,26,27,21.1,21.1,4.3,4.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023677,GSE50397,GSM1218069,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,54,55,22,22,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023678,GSE50397,GSM1218070,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,43,44,27.5,27.5,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023682,GSE50397,GSM1218071,identical_CEL,TRUE,FALSE,FALSE,FALSE,ND,,FALSE,FALSE,female,male,57,59,26.2,26.2,5.5,5.5,sex!=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023683,GSE50397,GSM1218072,identical_CEL,TRUE,FALSE,FALSE,FALSE,T2D,,FALSE,FALSE,male,male,59,61,26.3,26.3,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023684,GSE50397,GSM1218073,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,61,62,29.4,29.4,5.8,5.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023685,GSE50397,GSM1218074,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,49,50,24.5,24.5,6,6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023686,GSE50397,GSM1218075,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,27.8,27.8,5.9,5.9,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023687,GSE50397,GSM1218076,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,64,65,28.4,28.4,7,7,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023688,GSE50397,GSM1218077,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,70,26.1,26.1,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023689,GSE50397,GSM1218078,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,52,53,26.2,26.2,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023690,GSE50397,GSM1218079,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,54,55,27,27,8.6,8.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023691,GSE50397,GSM1218080,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,24.8,24.8,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023692,GSE50397,GSM1218081,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,32,33,24.5,24.5,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023694,GSE50397,GSM1218082,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,74,75,23.1,23.1,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023695,GSE50397,GSM1218083,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,46,47,22.9,22.9,5,5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023696,GSE50397,GSM1218084,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,68,69,21.5,21.5,5.2,5.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023697,GSE50397,GSM1218085,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,69,70,20.1,20.1,6,6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023698,GSE50397,GSM1218086,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,54,55,23.4,23.4,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023700,GSE50397,GSM1218087,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,56,57,27.5,27.5,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023701,GSE50397,GSM1218088,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,62,63,24.8,24.8,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023702,GSE50397,GSM1218089,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,75,76,33.1,33.1,6.8,6.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023703,GSE50397,GSM1218090,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,57,58,34.6,34.6,6.8,6.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023704,GSE50397,GSM1218091,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,53,54,25.7,25.7,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023705,GSE50397,GSM1218092,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,57,58,23.7,23.7,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023706,GSE50397,GSM1218093,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,61,62,24.7,24.7,8,8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023707,GSE50397,GSM1218094,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,60,61,24.6,24.6,4.6,4.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023708,GSE50397,GSM1218095,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,64,65,27,27,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023709,GSE50397,GSM1218096,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,67,68,19.4,19.4,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023710,GSE50397,GSM1218097,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,64,65,26,26,5.6,5.6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023711,GSE50397,GSM1218098,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,56,57,33.6,33.6,6,6,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023712,GSE50397,GSM1218099,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,40,41,24.7,24.7,5.5,5.5,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023714,GSE50397,GSM1218100,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,57,58,32.5,32.5,6.2,6.2,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023715,GSE50397,GSM1218101,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,62,63,25.3,25.3,6.4,6.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023716,GSE50397,GSM1218102,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,female,female,43,44,28.7,28.7,7,7,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023717,GSE50397,GSM1218103,identical_CEL,TRUE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,66,67,34.2,34.2,10,10,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023718,GSE50397,GSM1218104,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,58,59,25.7,25.7,,5.1,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023719,GSE50397,GSM1218105,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,67,68,23.9,23.9,5.3,5.3,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023722,GSE50397,GSM1218106,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,24.9,24.9,5.4,5.4,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023723,GSE50397,GSM1218107,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,35,35,26.3,26.3,5.3,5.3,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023724,GSE50397,GSM1218108,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,female,female,54,54,23.2,23.2,6,6,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023725,GSE50397,GSM1218109,identical_CEL,TRUE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,female,female,69,70,22.5,22.5,5.8,5.8,sex=;age!=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023727,GSE50397,GSM1218111,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,64,64,30.5,30.5,5.7,5.7,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023728,GSE50397,GSM1218112,identical_CEL,TRUE,TRUE,TRUE,TRUE,T2D,,FALSE,FALSE,male,male,68,68,24.5,24.5,6.2,6.2,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023729,GSE50397,GSM1218113,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,61,61,24.2,24.2,5.2,5.2,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023730,GSE50397,GSM1218114,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,40,40,31.1,31.1,5.7,5.7,sex=;age=;bmi=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023731,GSE50397,GSM1218115,identical_CEL,TRUE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,65,65,26,26,,5.2,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023681,GSE50397,GSM1218072,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,61,61,26.3,26.3,5.5,6.2,sex=;age=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023721,GSE50397,GSM1218080,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,52,52,24.8,24.8,,5.4,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023655,GSE50397,GSM1218123,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,68,24.7,24.6,5.8,6.1,sex=;age!=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023655,GSE50397,GSM1218134,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,68,24.7,24.7,5.8,6,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023671,GSE50397,GSM1218093,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,62,24.7,24.7,4.6,8,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023671,GSE50397,GSM1218094,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,61,24.7,24.6,4.6,4.6,sex=;age=;bmi!=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023674,GSE50397,GSM1218130,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,63,63,26.2,26.1,4.5,6.4,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023683,GSE50397,GSM1218071,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,59,59,26.3,26.2,6.2,5.5,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023691,GSE50397,GSM1218106,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,24.8,24.9,5.4,5.4,sex=;age!=;bmi!=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023701,GSE50397,GSM1218063,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,62,62,24.8,24.7,,4.6,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023701,GSE50397,GSM1218093,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,62,62,24.8,24.7,,8,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023706,GSE50397,GSM1218063,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,61,62,24.7,24.7,8,4.6,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023706,GSE50397,GSM1218094,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,61,61,24.7,24.6,8,4.6,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023721,GSE50397,GSM1218106,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,52,52,24.8,24.9,,5.4,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023722,GSE50397,GSM1218080,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,51,52,24.9,24.8,5.4,5.4,sex=;age!=;bmi!=;hba1c=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023728,GSE50397,GSM1218116,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,68,69,24.5,24.5,6.2,5.4,sex=;age!=;bmi=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023728,GSE50397,GSM1218123,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,68,68,24.5,24.6,6.2,6.1,sex=;age=;bmi!=;hba1c!=;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023656,GSE76894,GSM2040077,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,56,56,24.7,24.7,,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023674,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,male,male,63,63,26.2,,4.5,,sex=;age=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE41762,GSM1023704,GSE76894,GSM2040064,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,53,53,25.7,25.7,5.5,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023719,GSE76894,GSM2040120,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,ND,FALSE,FALSE,female,female,67,67,23.9,23.9,5.3,,sex=;age=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023657,GSE76894,GSM2040100,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,46,46,23.9,23.8,5.4,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023661,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,63,21.1,,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE41762,GSM1023667,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,64,63,26.8,,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE41762,GSM1023668,GSE76894,GSM2040146,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,73,74,26.2,26.1,5.4,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023671,GSE76894,GSM2040119,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,61,61,24.7,24.8,4.6,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023673,GSE76894,GSM2040072,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,55,56,22.5,22.5,5.3,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023686,GSE76894,GSM2040114,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,54,53,27.8,27.8,5.9,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023689,GSE76894,GSM2040149,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,52,51,26.2,26.2,5.6,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023701,GSE76894,GSM2040119,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,61,24.8,24.8,,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023701,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,63,24.8,,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE41762,GSM1023706,GSE76894,GSM2040082,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,T2D,FALSE,FALSE,male,male,61,61,24.7,24.6,8,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE41762,GSM1023727,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,64,63,30.5,,5.7,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE41762,GSM1023655,GSE76895,GSM2040210,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,69,69,24.7,24.7,5.8,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023671,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,60,24.7,24.7,4.6,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023672,GSE76895,GSM2040231,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,57,58,23.9,23.9,6.1,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023688,GSE76895,GSM2040176,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,68,26.1,26,5.6,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023706,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,61,60,24.7,24.7,8,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023707,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,60,60,24.6,24.7,4.6,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE41762,GSM1023724,GSE76895,GSM2040233,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,54,54,23.2,23.1,6,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE50397,GSM1218066,GSE20966,GSM524164,covariate_exact,FALSE,TRUE,TRUE,TRUE,,T2D,FALSE,FALSE,male,male,64,64,26.2,,4.5,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218111,GSE20966,GSM524164,covariate_exact,FALSE,TRUE,TRUE,TRUE,,T2D,FALSE,FALSE,male,male,64,64,30.5,,5.7,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218120,GSE20966,GSM524162,covariate_exact,FALSE,TRUE,TRUE,TRUE,,T2D,FALSE,FALSE,female,female,68,68,29.4,29.4,5.7,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218122,GSE20966,GSM524164,covariate_exact,FALSE,TRUE,TRUE,TRUE,,T2D,FALSE,FALSE,male,male,64,64,25.1,,5.7,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218054,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,63,64,21.1,,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218059,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,65,64,26.8,,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218088,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,63,64,24.8,,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218095,GSE20966,GSM524158,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,female,female,65,64,27,27.1,6.2,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218101,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,63,64,25.3,,6.4,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218115,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,65,64,26,,5.2,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218128,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,63,64,21.3,,5.5,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218130,GSE20966,GSM524164,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,63,64,26.1,,6.4,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218067,GSE25724,GSM631764,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,female,female,72,73,29.1,29,,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218049,GSE76894,GSM2040077,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,56,56,24.7,24.7,,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218054,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,63,63,21.1,,,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218065,GSE76894,GSM2040072,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,female,female,56,56,22.5,22.5,5.3,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218088,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,63,63,24.8,,,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218094,GSE76894,GSM2040082,covariate_exact,FALSE,TRUE,TRUE,TRUE,,T2D,FALSE,FALSE,male,male,61,61,24.6,24.6,4.6,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218101,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,63,63,25.3,,6.4,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218128,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,63,63,21.3,,5.5,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218129,GSE76894,GSM2040145,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,66,66,27.8,27.8,7.2,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218130,GSE76894,GSM2040122,covariate_exact,FALSE,TRUE,TRUE,TRUE,,ND,FALSE,FALSE,male,male,63,63,26.1,,6.4,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218050,GSE76894,GSM2040100,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,female,female,46,46,23.9,23.8,5.4,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218060,GSE76894,GSM2040146,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,74,74,26.2,26.1,5.4,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218063,GSE76894,GSM2040082,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,62,61,24.7,24.6,4.6,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218063,GSE76894,GSM2040119,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,62,61,24.7,24.8,4.6,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218063,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,62,63,24.7,,4.6,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218066,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,64,63,26.2,,4.5,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218091,GSE76894,GSM2040064,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,female,female,54,53,25.7,25.7,5.5,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218093,GSE76894,GSM2040082,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,62,61,24.7,24.6,8,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218093,GSE76894,GSM2040119,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,62,61,24.7,24.8,8,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218093,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,62,63,24.7,,8,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218105,GSE76894,GSM2040120,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,female,female,68,67,23.9,23.9,5.3,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218111,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,64,63,30.5,,5.7,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218122,GSE76894,GSM2040122,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,64,63,25.1,,5.7,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE50397,GSM1218130,GSE76894,GSM2040093,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,63,62,26.1,26,6.4,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218048,GSE76895,GSM2040210,covariate_exact,FALSE,TRUE,TRUE,TRUE,,,FALSE,FALSE,male,male,69,69,24.7,24.7,5.8,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218064,GSE76895,GSM2040231,covariate_exact,FALSE,TRUE,TRUE,TRUE,,,FALSE,FALSE,male,male,58,58,23.9,23.9,6.1,,sex=;age=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218086,GSE76895,GSM2040206,covariate_near,FALSE,FALSE,FALSE,TRUE,,T2D,FALSE,FALSE,male,male,55,54,23.4,23.5,5.3,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218094,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,,,FALSE,FALSE,male,male,61,60,24.6,24.7,4.6,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218108,GSE76895,GSM2040233,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,female,female,54,54,23.2,23.1,6,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218110,GSE76895,GSM2040185,covariate_near,FALSE,FALSE,FALSE,TRUE,,,FALSE,FALSE,male,male,41,41,24.2,24.1,5.4,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218123,GSE76895,GSM2040210,covariate_near,FALSE,FALSE,FALSE,TRUE,,,FALSE,FALSE,male,male,68,69,24.6,24.7,6.1,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218129,GSE76895,GSM2040190,covariate_near,FALSE,FALSE,FALSE,TRUE,,ND,FALSE,FALSE,male,male,66,67,27.8,27.8,7.2,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE50397,GSM1218134,GSE76895,GSM2040210,covariate_near,FALSE,FALSE,FALSE,TRUE,,,FALSE,FALSE,male,male,68,69,24.7,24.7,6,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE76894,GSM2040121,GSE25724,GSM631761,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,72,73,22,22,,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
+GSE76894,GSM2040122,GSE76895,GSM2040154,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,63,63,,31.7,,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE76894,GSM2040122,GSE76895,GSM2040214,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,63,63,,33.3,,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE76894,GSM2040122,GSE76895,GSM2040246,covariate_exact,FALSE,TRUE,TRUE,TRUE,ND,,FALSE,FALSE,male,male,63,63,,32.6,,,sex=;age=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE76894,GSM2040122,GSE76895,GSM2040181,covariate_exact_ignoring_group,FALSE,FALSE,TRUE,FALSE,ND,T2D,FALSE,TRUE,male,male,63,63,,22.7,,,sex=;age=;bmiNA;hba1cNA;group!=,group required,TRUE
+GSE76894,GSM2040082,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,T2D,,FALSE,FALSE,male,male,61,60,24.6,24.7,,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE76894,GSM2040092,GSE76895,GSM2040227,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,female,female,80,79,23.4,23.5,,,sex=;age!=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE76894,GSM2040093,GSE76895,GSM2040171,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,62,62,26,25.9,,,sex=;age=;bmi!=;hba1cNA;group=,group required,FALSE
+GSE76894,GSM2040119,GSE76895,GSM2040195,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,61,60,24.8,24.7,,,sex=;age!=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE76894,GSM2040122,GSE76895,GSM2040171,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,63,62,,25.9,,,sex=;age!=;bmiNA;hba1cNA;group=,group required,TRUE
+GSE76894,GSM2040122,GSE76895,GSM2040221,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,63,64,,22.2,,,sex=;age!=;bmiNA;hba1cNA;groupNA,group dropped (NA in one series),TRUE
+GSE76894,GSM2040123,GSE76895,GSM2040186,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,69,70,25,25,,,sex=;age!=;bmi=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE76894,GSM2040124,GSE76895,GSM2040167,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,,FALSE,FALSE,male,male,76,76,23.4,23.5,,,sex=;age=;bmi!=;hba1cNA;groupNA,group dropped (NA in one series),FALSE
+GSE76894,GSM2040145,GSE76895,GSM2040190,covariate_near,FALSE,FALSE,FALSE,TRUE,ND,ND,FALSE,FALSE,male,male,66,67,27.8,27.8,,,sex=;age!=;bmi=;hba1cNA;group=,group required,FALSE
