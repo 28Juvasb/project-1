@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Senescence Study Publication Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+:root {
+  /* Layout: one reading column (~70ch) on a faintly green-tinted ground; the forest plot, tables and timeline break out to a wider measure */
+  --bg: #F4F6F5;
+  --surface: #FFFFFF;
+  --ink: #16201C;
+  --muted: #56645E;
+  --rule: #D3DCD8;
+  --accent: #1D6A55;
+  --accent-soft: #E1EEE8;
+  --mag: #9A3366;
+  --mag-soft: #F3E3EB;
+  --ok: #2E7540;
+  --ok-soft: #E0EFE3;
+  --warn: #8F5E00;
+  --warn-soft: #F6EBD3;
+  --stop: #A23A2B;
+  --stop-soft: #F6E1DC;
+  --info: #35577F;
+  --info-soft: #E2E9F2;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "Source Sans 3", "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --measure: 70ch;
+  --wide: 1000px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1412; --surface: #151D1A; --ink: #E3EBE7; --muted: #A1AFA9; --rule: #2A3531;
+    --accent: #66C2A5; --accent-soft: #163029; --mag: #E27DAE; --mag-soft: #33202A;
+    --ok: #7DCB8C; --ok-soft: #17301C; --warn: #E3B55E; --warn-soft: #32280F;
+    --stop: #EF8B7D; --stop-soft: #3A1E19; --info: #96B5DB; --info-soft: #1A2535;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1412; --surface: #151D1A; --ink: #E3EBE7; --muted: #A1AFA9; --rule: #2A3531;
+  --accent: #66C2A5; --accent-soft: #163029; --mag: #E27DAE; --mag-soft: #33202A;
+  --ok: #7DCB8C; --ok-soft: #17301C; --warn: #E3B55E; --warn-soft: #32280F;
+  --stop: #EF8B7D; --stop-soft: #3A1E19; --info: #96B5DB; --info-soft: #1A2535;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--font-body); }
+.page { max-width: var(--wide); margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: grid; gap: 56px; }
+.page > section, .page > header { display: grid; gap: 18px; min-width: 0; }
+p, ul, ol { margin: 0; max-width: var(--measure); }
+ul, ol { padding-left: 1.25rem; display: grid; gap: 8px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+strong { font-weight: 700; }
+code, .acc { font-family: var(--font-mono); font-size: 0.86em; }
+
+.eyebrow { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(1.9rem, 1.3rem + 2.2vw, 2.7rem); line-height: 1.12; letter-spacing: -0.01em; max-width: 22ch; }
+h2 { font-size: 1.55rem; line-height: 1.2; display: flex; gap: 0.6rem; align-items: baseline; }
+h2 .no { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; color: var(--muted); }
+h3 { font-size: 1.12rem; line-height: 1.3; }
+.meta { color: var(--muted); font-size: 0.95rem; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip { display: inline-block; font: 600 0.75rem/1 var(--font-body); padding: 0.32rem 0.6rem; border-radius: 999px; white-space: nowrap; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.info { background: var(--info-soft); color: var(--info); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.stop { background: var(--stop-soft); color: var(--stop); }
+.chip.todo { color: var(--muted); box-shadow: inset 0 0 0 1px var(--rule); }
+
+.toc { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.92rem; padding-top: 14px; border-top: 1px solid var(--rule); }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+.lead { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 24px; display: grid; gap: 14px; }
+.lead p.big { font-family: var(--font-display); font-size: 1.22rem; line-height: 1.45; max-width: 60ch; }
+
+.meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px 32px; }
+.meter-block { display: grid; gap: 8px; min-width: 0; }
+.meter-head { display: flex; justify-content: space-between; gap: 12px; font-size: 0.92rem; }
+.meter-head span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+.meter { display: grid; grid-template-columns: repeat(var(--n), 1fr); gap: 4px; }
+.seg { height: 10px; border-radius: 2px; background: var(--rule); }
+.seg.ok { background: var(--ok); }
+.seg.warn { background: var(--warn); }
+.seg.info { background: var(--info); }
+
+.table-wrap { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.94rem; }
+th { text-align: left; font-weight: 600; font-size: 0.74rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); padding: 0 14px 8px 0; border-bottom: 1px solid var(--rule); vertical-align: bottom; }
+td { padding: 10px 14px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+td.nowrap, th.nowrap { white-space: nowrap; }
+tbody tr:last-child td { border-bottom: none; }
+td .sub { display: block; color: var(--muted); font-size: 0.86rem; margin-top: 2px; }
+.num { font-family: var(--font-mono); font-size: 0.86rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.88rem; color: var(--muted); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 16px 8px; }
+.chart-wrap svg { display: block; width: 100%; min-width: 660px; height: auto; }
+.fp-label { fill: var(--ink); font: 12.5px var(--font-body); }
+.fp-value { fill: var(--muted); font: 11.5px var(--font-mono); }
+.fp-group { fill: var(--muted); font: 600 11.5px var(--font-body); letter-spacing: 0.08em; }
+.fp-tick { fill: var(--muted); font: 11px var(--font-mono); }
+.fp-axis-title { fill: var(--muted); font: 12px var(--font-body); }
+.fp-grid { stroke: var(--rule); stroke-width: 1; }
+.fp-axis { stroke: var(--muted); stroke-width: 1; }
+.fp-chance { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.w-app { stroke: var(--muted); stroke-width: 2; }
+.w-nest { stroke: var(--accent); stroke-width: 2.6; }
+.w-ext { stroke: var(--mag); stroke-width: 2.6; }
+.w-sens { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 3; }
+.p-app { fill: var(--surface); stroke: var(--muted); stroke-width: 2; }
+.p-nest { fill: var(--accent); }
+.p-ext { fill: var(--mag); }
+.p-sens { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+.key { width: 14px; height: 14px; display: inline-block; flex: none; }
+
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.control { border-top: 2px solid var(--ok); padding-top: 10px; display: grid; gap: 4px; min-width: 0; }
+.control .k { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.control .v { font-family: var(--font-mono); font-size: 0.95rem; }
+.control .t { font-size: 0.9rem; color: var(--muted); }
+
+.two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px 40px; }
+.two-col > div { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.title-box { font-family: var(--font-display); font-size: 1.15rem; line-height: 1.4; border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; max-width: 64ch; }
+
+.wp-list { display: grid; gap: 22px; }
+.wp { display: grid; grid-template-columns: 4.2rem 1fr; gap: 4px 18px; }
+.wp .code { font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent); font-weight: 500; padding-top: 2px; }
+.wp .body { display: grid; gap: 8px; min-width: 0; }
+.wp .when { font-size: 0.88rem; color: var(--muted); }
+.wp .out { font-size: 0.9rem; }
+.wp .out b { font-weight: 600; }
+@media (max-width: 520px) { .wp { grid-template-columns: 1fr; } }
+
+.gantt-wrap { overflow-x: auto; min-width: 0; }
+.gantt { display: grid; grid-template-columns: 9.5rem repeat(13, minmax(46px, 1fr)); row-gap: 8px; min-width: 780px; align-items: center; }
+.gantt .lbl { grid-column: 1; font-weight: 600; font-size: 0.88rem; padding-right: 10px; }
+.gantt .wk { font: 0.72rem/1.2 var(--font-mono); color: var(--muted); border-left: 1px solid var(--rule); padding-left: 5px; }
+.gantt .bar { background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 5px 8px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; }
+.gantt .bar.sub { background: var(--mag-soft); color: var(--mag); }
+
+.note { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; max-width: 78ch; }
+.note .k { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+.decisions { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px 40px; }
+.decisions > div { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.decisions ol { gap: 10px; }
+.rec { color: var(--ok); font-weight: 600; font-size: 0.85rem; }
+
+.refs { font-size: 0.9rem; display: grid; gap: 6px; max-width: 86ch; }
+.refs li { padding-left: 2px; }
+.small { font-size: 0.88rem; color: var(--muted); max-width: 86ch; }
+footer { border-top: 1px solid var(--rule); padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<main class="page">
+
+<header>
+  <div class="eyebrow">Cross-tissue senescence hub-gene study · Type 2 diabetes</div>
+  <h1>Status, novelty and the path to publication</h1>
+  <p class="meta">Prepared 12 October 2026 by Claude for Juvas (project lead) and Dr. Thirumurugan (supervisor). Repository state: commit <code>4b67a47</code>, tag <code>analysis-complete-v1</code>.</p>
+  <div class="pills">
+    <span class="chip ok">Pre-registered analysis complete</span>
+    <span class="chip info">Validation scored once and locked, 6 Oct</span>
+    <span class="chip warn">Docking not performed</span>
+    <span class="chip todo">Manuscript not started</span>
+  </div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#bottom-line">1 Bottom line</a>
+    <a href="#progress">2 Progress</a>
+    <a href="#results">3 Results</a>
+    <a href="#novelty">4 Novelty</a>
+    <a href="#scope">5 Scope</a>
+    <a href="#plan">6 Plan</a>
+    <a href="#journals">7 Journals</a>
+    <a href="#decisions">8 Decisions</a>
+    <a href="#risks">9 Risks</a>
+    <a href="#your-part">10 Your part</a>
+    <a href="#sources">11 Sources</a>
+  </nav>
+</header>
+
+<section id="bottom-line">
+  <h2><span class="no">1</span>Bottom line</h2>
+  <div class="lead">
+    <p class="big">The pre-registered analysis is finished, and its biological answer is no. Senescence-gene classifiers for type 2 diabetes did not hold up in independent cohorts in either tissue, and the two tissues share no hub gene. The study is still publishable. Its value lies in how the analysis was done and in what it revealed about the public data.</p>
+    <ul>
+      <li><strong>Islet:</strong> honest AUC 0.66 (95% CI 0.53–0.79), then 0.59 (0.43–0.74) in an independent cohort. <strong>Adipose:</strong> 0.53 (0.38–0.68), then 0.44 (0.14–0.74). Every external interval includes 0.5.</li>
+      <li><strong>Data finding:</strong> <span class="acc">GSE38642</span> is 63 of the same arrays as <span class="acc">GSE41762</span>, byte for byte, and 11 of those donors carry a different diabetes label in each deposit. Published papers still treat the two as independent cohorts.</li>
+      <li><strong>Novelty is real but narrower than first claimed.</strong> A 2018 paper already noted the overlap, and the authors of GSE41762 reported the IL-1 signal behind IL1R1 in 2012. The paper must cite both and claim only what is new.</li>
+      <li><strong>To reach a respected journal,</strong> add three pre-registered pieces of work: a map of shared donors across public islet datasets, an audit of how published papers use them, and a direct demonstration of how the common pipeline inflates AUC. Realistic submission date: mid-January 2027.</li>
+      <li><strong>Leave docking out of this paper.</strong> No target passed the pre-set rule, and docking onto an unvalidated gene would undercut the paper's main message.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="progress">
+  <h2><span class="no">2</span>Where the study stands</h2>
+  <div class="meters">
+    <div class="meter-block">
+      <div class="meter-head"><span>Pre-registered analysis</span><span>11 of 12 stages run, 1 closed by rule</span></div>
+      <div class="meter" style="--n:12" role="img" aria-label="11 of 12 stages run, docking closed by its pre-set rule">
+        <i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg warn"></i>
+      </div>
+    </div>
+    <div class="meter-block">
+      <div class="meter-head"><span>Path to submission</span><span>3 of 10 steps done, 1 in progress</span></div>
+      <div class="meter" style="--n:10" role="img" aria-label="3 of 10 steps done, 1 in progress">
+        <i class="seg ok"></i><i class="seg ok"></i><i class="seg ok"></i><i class="seg info"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i>
+      </div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Stage</th><th>Status</th><th>What it produced</th></tr></thead>
+      <tbody>
+        <tr><td>Protocol and pre-analysis plan</td><td><span class="chip ok">Done</span></td><td>Locked in git before any expression data were opened (tag <code>protocol-v1</code>, 5 Oct, 00:04 IST). Amendments v1.1 and v1.2 were also made before the data they affect were opened.</td></tr>
+        <tr><td>Data acquisition</td><td><span class="chip ok">Done</span></td><td>8 GEO series, sample counts checked against expectations, MD5 checksum for every raw file.</td></tr>
+        <tr><td>Donor-overlap forensics</td><td><span class="chip ok">Done</span></td><td><span class="acc">GSE38642</span> retired (63 of 63 arrays identical to <span class="acc">GSE41762</span>). 4 <span class="acc">GSE76894</span> donors excluded as possible overlaps.</td></tr>
+        <tr><td>Normalisation and QC</td><td><span class="chip ok">Done</span></td><td>Each dataset normalised on its own. 3 <span class="acc">GSE71416</span> arrays failed the pre-set chip-quality rule.</td></tr>
+        <tr><td>Senescence gene universe</td><td><span class="chip ok">Done</span></td><td>1,151 genes from SenMayo, CellAge and GenAge. SenMayo has 124 of the paper's 125 genes.</td></tr>
+        <tr><td>Nested cross-validation</td><td><span class="chip ok">Done</span></td><td>Both arms, shuffled-label and planted-signal controls passed, 4 pre-specified sensitivity runs.</td></tr>
+        <tr><td>WGCNA</td><td><span class="chip ok">Done</span></td><td>Islet: one trait-linked module. Adipose: stopped by the pre-set network-fit rule at n=23.</td></tr>
+        <tr><td>External validation</td><td><span class="chip info">Done, locked</span></td><td>Scored once on 6 Oct. A lock file blocks any second scoring.</td></tr>
+        <tr><td>Cross-tissue, enrichment, single-cell</td><td><span class="chip ok">Done</span></td><td>No shared gene. Enrichment underpowered. Single-cell results inconclusive.</td></tr>
+        <tr><td>Molecular docking</td><td><span class="chip warn">Not performed</span></td><td>No gene reached the 50% fold-stability rule fixed in the protocol.</td></tr>
+        <tr><td>Reproducible report</td><td><span class="chip ok">Done</span></td><td><code>results/report/15_report.html</code></td></tr>
+        <tr><td>OSF deposit</td><td><span class="chip info">In progress</span></td><td>Your action.</td></tr>
+        <tr><td>Supervisor review</td><td><span class="chip todo">Not started</span></td><td>Needs the report, protocol and deviations log.</td></tr>
+        <tr><td>Extensions, manuscript, submission</td><td><span class="chip todo">Not started</span></td><td>See section 6.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="results">
+  <h2><span class="no">3</span>Results at a glance</h2>
+  <p>Each row is an AUC with its 95% confidence interval. The apparent AUC scores a model on the data that built it, so it is always optimistic. The nested cross-validation AUC is the honest estimate from the discovery cohort. The external rows are cohorts the model never saw.</p>
+  <div class="legend" aria-hidden="true">
+    <span><svg class="key" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" class="p-app"></circle></svg>Apparent (optimistic)</span>
+    <span><svg class="key" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" class="p-nest"></circle></svg>Nested cross-validation (honest)</span>
+    <span><svg class="key" viewBox="0 0 14 14"><polygon points="7,1 13,7 7,13 1,7" class="p-ext"></polygon></svg>Independent external cohort</span>
+    <span><svg class="key" viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" class="fp-chance"></line></svg>Chance (0.5)</span>
+  </div>
+  <div class="chart-wrap">
+    <svg viewBox="0 0 860 372" role="img" aria-labelledby="fp-title">
+      <title id="fp-title">Forest plot of AUCs with 95% confidence intervals. Islet: apparent 0.766, nested 0.659, GSE76894 0.591, GSE20966 0.560. Adipose: apparent 0.871, nested 0.532, GSE71416 0.439. Sensitivity: islet nested without label-conflict donors 0.788.</title>
+      <g>
+        <line class="fp-grid" x1="465.56" y1="40" x2="465.56" y2="320"></line>
+        <line class="fp-grid" x1="511.11" y1="40" x2="511.11" y2="320"></line>
+        <line class="fp-grid" x1="556.67" y1="40" x2="556.67" y2="320"></line>
+        <line class="fp-grid" x1="647.78" y1="40" x2="647.78" y2="320"></line>
+        <line class="fp-grid" x1="693.33" y1="40" x2="693.33" y2="320"></line>
+        <line class="fp-grid" x1="738.89" y1="40" x2="738.89" y2="320"></line>
+        <line class="fp-grid" x1="784.44" y1="40" x2="784.44" y2="320"></line>
+        <line class="fp-grid" x1="830" y1="40" x2="830" y2="320"></line>
+        <line class="fp-chance" x1="602.22" y1="40" x2="602.22" y2="320"></line>
+        <line class="fp-axis" x1="420" y1="320" x2="830" y2="320"></line>
+      </g>
+      <g>
+        <text class="fp-tick" x="465.56" y="338" text-anchor="middle">0.2</text>
+        <text class="fp-tick" x="511.11" y="338" text-anchor="middle">0.3</text>
+        <text class="fp-tick" x="556.67" y="338" text-anchor="middle">0.4</text>
+        <text class="fp-tick" x="602.22" y="338" text-anchor="middle">0.5</text>
+        <text class="fp-tick" x="647.78" y="338" text-anchor="middle">0.6</text>
+        <text class="fp-tick" x="693.33" y="338" text-anchor="middle">0.7</text>
+        <text class="fp-tick" x="738.89" y="338" text-anchor="middle">0.8</text>
+        <text class="fp-tick" x="784.44" y="338" text-anchor="middle">0.9</text>
+        <text class="fp-tick" x="830" y="338" text-anchor="middle">1.0</text>
+        <text class="fp-axis-title" x="625" y="362" text-anchor="middle">AUC (95% CI)</text>
+      </g>
+
+      <text class="fp-group" x="0" y="30">ISLET ARM</text>
+      <text class="fp-label" x="0" y="60">Apparent · GSE41762 (n=77)</text>
+      <text class="fp-value" x="398" y="60" text-anchor="end">0.766 (0.625–0.882)</text>
+      <line class="w-app" x1="659.17" y1="56" x2="776.24" y2="56"></line>
+      <circle class="p-app" cx="723.40" cy="56" r="5"></circle>
+
+      <text class="fp-label" x="0" y="84">Nested CV · GSE41762 (n=77)</text>
+      <text class="fp-value" x="398" y="84" text-anchor="end">0.659 (0.528–0.789)</text>
+      <line class="w-nest" x1="614.98" y1="80" x2="733.88" y2="80"></line>
+      <circle class="p-nest" cx="674.66" cy="80" r="5.5"></circle>
+
+      <text class="fp-label" x="0" y="108">External · GSE76894 (n=99)</text>
+      <text class="fp-value" x="398" y="108" text-anchor="end">0.591 (0.435–0.738)</text>
+      <line class="w-ext" x1="572.61" y1="104" x2="710.64" y2="104"></line>
+      <polygon class="p-ext" points="643.68,98 649.68,104 643.68,110 637.68,104"></polygon>
+
+      <text class="fp-label" x="0" y="132">External · GSE20966 (n=20)</text>
+      <text class="fp-value" x="398" y="132" text-anchor="end">0.560 (0.290–0.820)</text>
+      <line class="w-ext" x1="506.56" y1="128" x2="748.00" y2="128"></line>
+      <polygon class="p-ext" points="629.56,122 635.56,128 629.56,134 623.56,128"></polygon>
+
+      <text class="fp-group" x="0" y="164">ADIPOSE ARM</text>
+      <text class="fp-label" x="0" y="194">Apparent · GSE27951 (n=23)</text>
+      <text class="fp-value" x="398" y="194" text-anchor="end">0.871 (0.667–1.000)</text>
+      <line class="w-app" x1="678.30" y1="190" x2="830" y2="190"></line>
+      <circle class="p-app" cx="771.23" cy="190" r="5"></circle>
+
+      <text class="fp-label" x="0" y="218">Nested CV · GSE27951 (n=23)</text>
+      <text class="fp-value" x="398" y="218" text-anchor="end">0.532 (0.384–0.682)</text>
+      <line class="w-nest" x1="549.38" y1="214" x2="685.13" y2="214"></line>
+      <circle class="p-nest" cx="616.80" cy="214" r="5.5"></circle>
+
+      <text class="fp-label" x="0" y="242">External · GSE71416 (n=17)</text>
+      <text class="fp-value" x="398" y="242" text-anchor="end">0.439 (0.136–0.742)</text>
+      <line class="w-ext" x1="436.40" y1="238" x2="712.47" y2="238"></line>
+      <polygon class="p-ext" points="574.43,232 580.43,238 574.43,244 568.43,238"></polygon>
+
+      <text class="fp-group" x="0" y="274">SENSITIVITY · 11 LABEL-CONFLICT DONORS REMOVED</text>
+      <text class="fp-label" x="0" y="304">Nested CV · GSE41762 (n=66)</text>
+      <text class="fp-value" x="398" y="304" text-anchor="end">0.788 (0.686–0.880)</text>
+      <line class="w-sens" x1="686.96" y1="300" x2="775.33" y2="300"></line>
+      <circle class="p-sens" cx="733.42" cy="300" r="5.5"></circle>
+    </svg>
+  </div>
+  <div class="controls">
+    <div class="control"><span class="k">Shuffled labels, islet</span><span class="v">mean 0.495 · 95th pct 0.614</span><span class="t">Limit 0.65. Pass.</span></div>
+    <div class="control"><span class="k">Shuffled labels, adipose</span><span class="v">mean 0.477 · 95th pct 0.642</span><span class="t">Limit 0.65. Pass, narrowly.</span></div>
+    <div class="control"><span class="k">Planted signal</span><span class="v">AUC 0.984 · 9 of 10 genes</span><span class="t">The pipeline finds real signal when it exists.</span></div>
+  </div>
+  <ul>
+    <li>Both final panels are single genes: <strong>IL1R1</strong> in islets (chosen in 42% of folds) and <strong>SNAI1</strong> in adipose (46%). Only SERPINE2 (70%) and NLK (52%) cross 50%, and neither is in the final panel.</li>
+    <li>SNAI1 points the opposite way to discovery in both adipose validation sets.</li>
+    <li>Removing one adipose PCA outlier drops the adipose AUC to 0.42 (0.27–0.56). Adding BMI changes neither arm.</li>
+    <li>Islet WGCNA found one T2D-linked module (hubs GPC3 and FGF2, flagged as possibly BMI-confounded). IL1R1 sits in no module.</li>
+    <li>In the single-cell data (<span class="acc">GSE81608</span>), IL1R1 is lowly expressed and highest in alpha cells. No gene shows a beta-cell-restricted change, with only 5 to 6 T2D donors per tested cell type.</li>
+  </ul>
+</section>
+
+<section id="novelty">
+  <h2><span class="no">4</span>What is new, and what is not</h2>
+  <p>I checked each candidate claim against PubMed and Europe PMC on 12 October 2026. Two claims made earlier in this project do not survive that check, so the paper must cite them as prior work.</p>
+  <h3>Already published: cite, do not claim</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Claim</th><th>Prior work</th></tr></thead>
+      <tbody>
+        <tr><td>Choosing genes outside cross-validation inflates accuracy, and nested cross-validation corrects it.</td><td>Ambroise &amp; McLachlan 2002; Varma &amp; Simon 2006; Whalen et al. 2022; Kapoor &amp; Narayanan 2023</td></tr>
+        <tr><td><span class="acc">GSE38642</span> samples are contained in <span class="acc">GSE41762</span>.</td><td>Li et al. 2018 wrote that "all 63 samples in GSE38642 were included in GSE41762".</td></tr>
+        <tr><td>IL-1 signalling marks T2D islets in <span class="acc">GSE41762</span>.</td><td>Mahdi et al. 2012, the dataset's own paper, reported an IL-1-related module linked to T2D. Our IL1R1 recovers that signal.</td></tr>
+        <tr><td>ARG2 belongs to a T2D islet signature.</td><td>Solimena et al. 2018 (IMIDIA)</td></tr>
+        <tr><td>Beta-cell ageing and senescence contribute to diabetes.</td><td>Aguayo-Mazzucato et al. 2019</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>New, with our evidence</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Contribution</th><th>Evidence</th><th class="nowrap">Strength</th></tr></thead>
+      <tbody>
+        <tr><td>Byte-level proof that <span class="acc">GSE38642</span> is 63 arrays of <span class="acc">GSE41762</span>. Neither GEO record mentions the other.</td><td>MD5 of all 63 decompressed CEL files; GEO series headers</td><td><span class="chip ok">Verified</span></td></tr>
+        <tr><td>Conflicting labels: 11 of 63 shared donors differ in diabetes status. 10 are T2D in <span class="acc">GSE41762</span>, half its T2D group, and 7 of those have HbA1c 6.1–6.4%, below the 6.5% diagnostic cut-off. One donor also differs in recorded sex.</td><td><code>manifest/GSE38642_donor_overlap.csv</code></td><td><span class="chip ok">Verified</span><span class="sub">Definitions to confirm with the submitters</span></td></tr>
+        <tr><td>The duplicate is still used as independent evidence after 2018. Of 9 open-access papers that use both series and whose full text we could read, 7 validate genes across them, call one a replicate, merge them, or count shared DEGs as agreement (2015–2026).</td><td>Europe PMC full text, first screen</td><td><span class="chip warn">Preliminary</span><span class="sub">Every paper needs manual review</span></td></tr>
+        <tr><td>Field practice: Europe PMC lists 270 papers mentioning seven public islet T2D series. 81 use LASSO, random forest, SVM or machine learning, and 123 report ROC or AUC. One mentions nested cross-validation (an unrelated cancer paper). None mentions a shuffled-label test.</td><td>Europe PMC search counts, 12 Oct 2026</td><td><span class="chip warn">Preliminary</span></td></tr>
+        <tr><td>The optimism cascade measured under a locked protocol on the field's own data. Islet 0.77 → 0.66 → 0.59. Adipose 0.87 → 0.53 → 0.44.</td><td>This study</td><td><span class="chip ok">Strong</span></td></tr>
+        <tr><td>A pre-registered negative answer to the cross-tissue senescence question. We found no prior senescence-gene classifier on these islet or adipose cohorts.</td><td>This study; Europe PMC search</td><td><span class="chip info">Moderate</span><span class="sub">Small cohorts</span></td></tr>
+        <tr><td>Label noise may cap accuracy. Removing the 11 conflicting donors raises the islet AUC to 0.79 (0.69–0.88).</td><td>Pre-specified sensitivity run</td><td><span class="chip todo">Hypothesis</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="k">Verdict</span>
+    <p>Novelty is moderate and mainly methodological. As the work stands, it suits a journal that judges soundness rather than novelty. Rows 3 and 4 are the strongest lever. If a systematic audit confirms them, the paper becomes evidence about how a whole literature reuses public islet data, which is the kind of finding respected methods and diabetes journals publish.</p>
+  </div>
+</section>
+
+<section id="scope">
+  <h2><span class="no">5</span>Scope of the paper</h2>
+  <p class="title-box">Duplicated cohorts, conflicting labels and selection bias: a pre-registered test of senescence-gene classifiers for type 2 diabetes in public islet and adipose transcriptomes</p>
+  <p><strong>Core message:</strong> analysed under a locked protocol with nested cross-validation and truly independent validation, senescence-gene classifiers for type 2 diabetes lose most of their apparent accuracy, and some cohorts used as independent validation in the literature are the same arrays.</p>
+  <div class="two-col">
+    <div>
+      <h3>In the paper</h3>
+      <ul>
+        <li>Data provenance, overlap checks and the label-conflict analysis</li>
+        <li>The pre-registered nested pipeline, both tissues</li>
+        <li>Locked external validation and the pre-specified sensitivity runs</li>
+        <li>WGCNA and single-cell results as descriptive context</li>
+        <li>The cross-tissue test</li>
+        <li>The three extensions in section 6</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Left out</h3>
+      <ul>
+        <li>Docking and the phytocompound panel. The ligand files stay ready for a later study.</li>
+        <li>The Drosophila extension</li>
+        <li>Any new biomarker claim</li>
+        <li>Any re-tuning of the locked models</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">
+    <span class="k">For the lab</span>
+    <p>Docking motivated the original proposal. Reviewers of this paper would ask why a compound was docked onto a gene that failed validation, and leaving docking out protects the paper. If a later study finds a validated target, the naringenin, embelin and rutin structures are already in <code>ligands/</code>, and the LSC structure is still needed from the lab.</p>
+  </div>
+</section>
+
+<section id="plan">
+  <h2><span class="no">6</span>Path to a respected journal</h2>
+  <p>Six work packages. WP1 to WP3 are new analyses. Register them on OSF before any new data are opened, so they count as pre-registered in the strict sense.</p>
+  <div class="gantt-wrap">
+    <div class="gantt" role="img" aria-label="Timeline: WP0 week of 12 Oct; WP1 19 Oct to 1 Nov; WP2 19 Oct to 29 Nov; WP3 2 to 15 Nov; WP4 16 Nov to 13 Dec; WP5 14 Dec to 10 Jan.">
+      <span class="lbl"></span>
+      <span class="wk">12 Oct</span><span class="wk">19 Oct</span><span class="wk">26 Oct</span><span class="wk">2 Nov</span><span class="wk">9 Nov</span><span class="wk">16 Nov</span><span class="wk">23 Nov</span><span class="wk">30 Nov</span><span class="wk">7 Dec</span><span class="wk">14 Dec</span><span class="wk">21 Dec</span><span class="wk">28 Dec</span><span class="wk">4 Jan</span>
+      <span class="lbl">WP0 Integrity</span><span class="bar" style="grid-column: 2 / 3">both</span>
+      <span class="lbl">WP1 Overlap map</span><span class="bar" style="grid-column: 3 / 5">me</span>
+      <span class="lbl">WP2 Audit</span><span class="bar" style="grid-column: 3 / 9">you + a labmate · me first pass</span>
+      <span class="lbl">WP3 Leakage demo</span><span class="bar" style="grid-column: 5 / 7">me</span>
+      <span class="lbl">WP4 Manuscript</span><span class="bar" style="grid-column: 7 / 11">you write · me draft</span>
+      <span class="lbl">WP5 Review, submit</span><span class="bar sub" style="grid-column: 11 / 15">all · submit mid-Jan</span>
+    </div>
+  </div>
+
+  <div class="wp-list">
+    <div class="wp">
+      <div class="code">WP0</div>
+      <div class="body">
+        <h3>Integrity and housekeeping</h3>
+        <div class="when">Week of 12 Oct · you and me</div>
+        <ul>
+          <li>Deposit the protocol and pre-analysis plan on OSF (you). State that they were locked in git on 5 October and deposited later.</li>
+          <li>Register the extension protocol for WP1 to WP3 on OSF before any new data are opened.</li>
+          <li>Close the small items: the SenMayo supplement (125th gene), the script name in the deviations log, the proposal text (n=21 and ComBat), and a note on the one vacuous assertion.</li>
+          <li>Re-run the whole pipeline from a clean copy of the repository and confirm identical checksums.</li>
+          <li>Push the repository to a private GitHub repo.</li>
+        </ul>
+        <p class="out"><b>Output:</b> OSF links and a clean re-run log.</p>
+      </div>
+    </div>
+    <div class="wp">
+      <div class="code">WP1</div>
+      <div class="body">
+        <h3>Overlap map of public islet datasets</h3>
+        <div class="when">19 Oct – 1 Nov · me, you review</div>
+        <ul>
+          <li>Run the checksum and covariate checks on every public islet T2D series in common use. Start with <span class="acc">GSE50397</span> (89 Lund donors from the same programme on the same platform, overlap not yet checked) and the IMIDIA pair <span class="acc">GSE76894</span> and <span class="acc">GSE76895</span>.</li>
+          <li>I draft polite emails to the Lund submitters, Anders Rosengren (<span class="acc">GSE41762</span>) and Joao Fadista (<span class="acc">GSE38642</span>), asking them to confirm the shared donors and their T2D definitions. You send them.</li>
+          <li>After they reply, ask GEO to cross-reference the series.</li>
+        </ul>
+        <p class="out"><b>Output:</b> Figure 1, a map of which public series share donors.</p>
+      </div>
+    </div>
+    <div class="wp">
+      <div class="code">WP2</div>
+      <div class="body">
+        <h3>Literature audit</h3>
+        <div class="when">19 Oct – 29 Nov · you and a labmate, me for the first pass</div>
+        <ul>
+          <li>Pre-registered search of PubMed and Europe PMC for papers that build or validate T2D genes or classifiers on these islet series.</li>
+          <li>Extract for each paper: dataset roles, whether an overlapping series served as validation or was merged, whether gene selection sat inside cross-validation, the reported AUCs and CIs, and code availability. Rate risk of bias with PROBAST+AI items.</li>
+          <li>Two people extract independently and report agreement (Cohen's kappa). I can pre-fill the forms, and a person must check every paper.</li>
+        </ul>
+        <p class="out"><b>Output:</b> the audit figures and a supplementary table of every paper.</p>
+      </div>
+    </div>
+    <div class="wp">
+      <div class="code">WP3</div>
+      <div class="body">
+        <h3>Leakage demonstration</h3>
+        <div class="when">2 – 15 Nov · me</div>
+        <ul>
+          <li>Rebuild the common pipeline as written in two or three audited papers: genes chosen on the full cohort, ROC on the same data, then "validation" in <span class="acc">GSE38642</span>. Compare it with our locked nested pipeline.</li>
+          <li>Use <span class="acc">GSE76895</span> (IMIDIA pancreatectomy cohort, 36 T2D and 32 non-diabetic, never opened in this study) as a fresh independent test for both pipelines, registered before opening. It also gives the frozen IL1R1 model one more honest test.</li>
+          <li><span class="acc">GSE76894</span> stays locked. Using <span class="acc">GSE38642</span> and <span class="acc">GSE76895</span> needs protocol amendment v2.0 and a CLAUDE.md update, approved before work starts.</li>
+        </ul>
+        <p class="out"><b>Output:</b> the optimism-cascade figure with the common pipeline beside ours.</p>
+      </div>
+    </div>
+    <div class="wp">
+      <div class="code">WP4</div>
+      <div class="body">
+        <h3>Manuscript and figures</h3>
+        <div class="when">16 Nov – 13 Dec · you write, I draft and check</div>
+        <ul>
+          <li>Report the prediction-model parts to TRIPOD+AI and the audit with a PRISMA-style flow diagram.</li>
+          <li>Five main figures: provenance and overlap map, optimism cascade, label conflicts, audit results, sensitivity runs. WGCNA, enrichment and single-cell go to the supplement.</li>
+          <li>Statements: AI use, CRediT author roles, and data and code availability (GitHub plus a Zenodo DOI).</li>
+        </ul>
+        <p class="out"><b>Output:</b> a full draft.</p>
+      </div>
+    </div>
+    <div class="wp">
+      <div class="code">WP5</div>
+      <div class="body">
+        <h3>Review, preprint, submission</h3>
+        <div class="when">14 Dec – 10 Jan · everyone</div>
+        <ul>
+          <li>Dr. Thirumurugan reviews the draft, and I run a hostile-reviewer pass.</li>
+          <li>Post a preprint on bioRxiv.</li>
+          <li>Send presubmission enquiries to the first two journals, then submit.</li>
+        </ul>
+        <p class="out"><b>Output:</b> submission by mid-January 2027.</p>
+      </div>
+    </div>
+  </div>
+  <div class="note">
+    <span class="k">Fast-track alternative</span>
+    <p>Skip WP1 to WP3 and submit the current analysis to PLOS ONE in about four weeks. Acceptance is more likely, but the paper would read as one negative result. I recommend the full plan.</p>
+  </div>
+</section>
+
+<section id="journals">
+  <h2><span class="no">7</span>Where to submit</h2>
+  <p>Write one integrated paper. Try a journal that publishes work on data reuse and leakage first, and keep a sound-science journal as the fallback.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th class="nowrap">Order</th><th>Journal</th><th>Why it fits</th><th>Fee model</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1st</td><td><strong>Patterns</strong> (Cell Press)</td><td>Interdisciplinary data-science journal that published Kapoor &amp; Narayanan's leakage paper in 2023. Best fit for the full paper. Send a presubmission enquiry once WP2 has numbers.</td><td>Open access with a publication fee</td></tr>
+        <tr><td class="num">2nd</td><td><strong>Diabetologia</strong></td><td>Read by islet researchers, and it published the IMIDIA study we use. Choose it first if Dr. Thirumurugan prefers a diabetes audience. Competitive. A short-communication format exists (about 1,500 words and two display items, per a third-party guide).</td><td>Hybrid, so publishing without a fee is possible</td></tr>
+        <tr><td class="num">3rd</td><td><strong>Briefings in Bioinformatics</strong></td><td>Read by the people who run these pipelines. Fits a "pitfalls" framing.</td><td>Hybrid</td></tr>
+        <tr><td class="num">Fallback</td><td><strong>PLOS ONE</strong> or <strong>PeerJ</strong></td><td>Judge soundness rather than novelty and publish negative results. Highest acceptance odds.</td><td>Open access with a publication fee</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small">Fees, waivers and article types change. Check each journal's current author guidelines before choosing, and ask the lab or VIT about fee support early.</p>
+</section>
+
+<section id="decisions">
+  <h2><span class="no">8</span>Decisions needed</h2>
+  <div class="decisions">
+    <div>
+      <h3>For Juvas</h3>
+      <ol>
+        <li>Approve WP1 to WP3 and their OSF registration before any new data are opened. <span class="rec">Recommended</span></li>
+        <li>Approve <span class="acc">GSE76895</span> as a new pre-registered external test, and <span class="acc">GSE38642</span> for the leakage demonstration only (protocol v2.0). <span class="rec">Recommended</span></li>
+        <li>Confirm that docking is out of this paper. <span class="rec">Recommended</span></li>
+        <li>Ask a labmate to be the second audit extractor.</li>
+        <li>Find out whether the lab or VIT can pay a publication fee.</li>
+      </ol>
+    </div>
+    <div>
+      <h3>For Dr. Thirumurugan</h3>
+      <ol>
+        <li>Review the protocol, the deviations log and the HTML report.</li>
+        <li>Agree the author order and the AI-use statement.</li>
+        <li>Agree the target journal and the docking decision.</li>
+        <li>Approve contacting the Lund submitters and GEO.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="risks">
+  <h2><span class="no">9</span>Risks and how to handle them</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Risk</th><th>Response</th></tr></thead>
+      <tbody>
+        <tr><td>Reviewers call it a negative result with limited novelty.</td><td>WP1 to WP3 turn it into evidence about a literature. Frame the paper around data reuse.</td></tr>
+        <tr><td>The overlap was already noted in 2018.</td><td>Cite Li et al. 2018 prominently. Claim only the byte-level proof, the label conflicts and the continued reuse.</td></tr>
+        <tr><td>Small cohorts and wide intervals.</td><td>Write "no evidence of a generalisable classifier at these sample sizes". Never write "no effect".</td></tr>
+        <tr><td>The OSF deposit came after the analysis.</td><td>Say so. The git tags are the timestamp, and WP1 to WP3 are registered before they start.</td></tr>
+        <tr><td>Criticising named papers.</td><td>Describe what the papers did without judging their authors. Keep the tone factual, and let the supervisor read the audit before submission.</td></tr>
+        <tr><td>Heavy AI assistance in the analysis.</td><td>Disclose it in Methods. The authors check every result and take responsibility for it, and you re-run the pipeline yourself.</td></tr>
+        <tr><td>The "common pipeline" looks like a straw man.</td><td>Rebuild it from the audited papers' own methods sections.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="your-part">
+  <h2><span class="no">10</span>Your part in this work</h2>
+  <p>As first author you will be asked to explain and defend every choice in the paper, by your supervisor and by reviewers. Before writing, do three things.</p>
+  <ol>
+    <li>Re-run the pipeline from a clean copy, script by script, reading each script's header and log as you go.</li>
+    <li>Read the protocol and <code>logs/deviations.md</code> until you can explain each deviation in one sentence.</li>
+    <li>Practise explaining three ideas in your own words: why gene selection must sit inside cross-validation, why the apparent AUC is optimistic, and why <span class="acc">GSE38642</span> cannot validate <span class="acc">GSE41762</span>.</li>
+  </ol>
+  <p>Your contributions to claim under CRediT are conceptualisation, methodology (the study design and its decisions), interpretation and writing. The formal analysis and software were run with AI assistance under your direction. The AI-use statement must say so, and you remain responsible for both.</p>
+</section>
+
+<section id="sources">
+  <h2><span class="no">11</span>Sources</h2>
+  <p class="small">Bibliographic details retrieved from PubMed and Europe PMC on 12 October 2026. Usage notes for the screened papers come from their open-access full text and still need manual verification.</p>
+  <h3>Prior work</h3>
+  <ol class="refs">
+    <li>Ambroise C, McLachlan GJ. Selection bias in gene extraction on the basis of microarray gene-expression data. <i>PNAS</i> 2002. <a href="https://doi.org/10.1073/pnas.102102699">doi:10.1073/pnas.102102699</a></li>
+    <li>Varma S, Simon R. Bias in error estimation when using cross-validation for model selection. <i>BMC Bioinformatics</i> 2006. <a href="https://doi.org/10.1186/1471-2105-7-91">doi:10.1186/1471-2105-7-91</a></li>
+    <li>Whalen S et al. Navigating the pitfalls of applying machine learning in genomics. <i>Nat Rev Genet</i> 2022. <a href="https://doi.org/10.1038/s41576-021-00434-9">doi:10.1038/s41576-021-00434-9</a></li>
+    <li>Kapoor S, Narayanan A. Leakage and the reproducibility crisis in machine-learning-based science. <i>Patterns</i> 2023. <a href="https://doi.org/10.1016/j.patter.2023.100804">doi:10.1016/j.patter.2023.100804</a></li>
+    <li>Li L et al. Identification of key gene pathways and coexpression networks of islets in human type 2 diabetes. <i>Diabetes Metab Syndr Obes</i> 2018. <a href="https://doi.org/10.2147/dmso.s178894">doi:10.2147/dmso.s178894</a></li>
+    <li>Mahdi T et al. Secreted frizzled-related protein 4 reduces insulin secretion and is overexpressed in type 2 diabetes. <i>Cell Metab</i> 2012 (<span class="acc">GSE41762</span>). <a href="https://doi.org/10.1016/j.cmet.2012.10.009">doi:10.1016/j.cmet.2012.10.009</a></li>
+    <li>Taneera J et al. A systems genetics approach identifies genes and pathways for type 2 diabetes in human islets. <i>Cell Metab</i> 2012 (<span class="acc">GSE38642</span>). <a href="https://doi.org/10.1016/j.cmet.2012.06.006">doi:10.1016/j.cmet.2012.06.006</a></li>
+    <li>Solimena M et al. Systems biology of the IMIDIA biobank defines a novel transcriptomic signature of islets from individuals with type 2 diabetes. <i>Diabetologia</i> 2018 (<span class="acc">GSE76894</span>, <span class="acc">GSE76895</span>). <a href="https://doi.org/10.1007/s00125-017-4500-3">doi:10.1007/s00125-017-4500-3</a></li>
+    <li>Marselli L et al. Gene expression profiles of beta-cell enriched tissue obtained by laser capture microdissection from subjects with type 2 diabetes. <i>PLoS One</i> 2010 (<span class="acc">GSE20966</span>). <a href="https://doi.org/10.1371/journal.pone.0011499">doi:10.1371/journal.pone.0011499</a></li>
+    <li>Saul D et al. A new gene set identifies senescent cells and predicts senescence-associated pathways across tissues (SenMayo). <i>Nat Commun</i> 2022. <a href="https://doi.org/10.1038/s41467-022-32552-1">doi:10.1038/s41467-022-32552-1</a></li>
+    <li>Aguayo-Mazzucato C et al. Acceleration of β cell aging determines diabetes and senolysis improves disease outcomes. <i>Cell Metab</i> 2019. <a href="https://doi.org/10.1016/j.cmet.2019.05.006">doi:10.1016/j.cmet.2019.05.006</a></li>
+    <li>Collins GS et al. TRIPOD+AI statement. <i>BMJ</i> 2024. <a href="https://doi.org/10.1136/bmj-2023-078378">doi:10.1136/bmj-2023-078378</a></li>
+    <li>Moons KGM et al. PROBAST+AI. <i>BMJ</i> 2025. <a href="https://doi.org/10.1136/bmj-2024-082505">doi:10.1136/bmj-2024-082505</a></li>
+  </ol>
+  <h3>First screen: papers that use both <span class="acc">GSE38642</span> and <span class="acc">GSE41762</span></h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Paper</th><th>How the two series are used</th></tr></thead>
+      <tbody>
+        <tr><td>Yu et al. 2015, <i>BMC Genomics</i> <a href="https://doi.org/10.1186/s12864-015-2188-7">doi</a></td><td>GSE38642 described as the replicate dataset for GSE41762</td></tr>
+        <tr><td>Li et al. 2018, <i>Diabetes Metab Syndr Obes</i> <a href="https://doi.org/10.2147/dmso.s178894">doi</a></td><td>Noted the overlap and analysed GSE41762 only</td></tr>
+        <tr><td>Yang &amp; Yu 2021, <i>Biomed Res Int</i> <a href="https://doi.org/10.1155/2021/3947350">doi</a></td><td>Hub genes from GSE41762 validated in GSE38642 (and GSE50397)</td></tr>
+        <tr><td>Ye et al. 2022, <i>Front Endocrinol</i> <a href="https://doi.org/10.3389/fendo.2022.904312">doi</a></td><td>Common DEGs counted across GSE38642, GSE41762 and GSE76894</td></tr>
+        <tr><td>Yin et al. 2022, <i>Front Endocrinol</i> <a href="https://doi.org/10.3389/fendo.2022.946492">doi</a></td><td>Excluded both series</td></tr>
+        <tr><td>Shen et al. 2023, <i>J Transl Med</i> <a href="https://doi.org/10.1186/s12967-023-04356-4">doi</a></td><td>Hub genes from GSE41762 verified in GSE38642</td></tr>
+        <tr><td>Han et al. 2024, <i>PLoS One</i> <a href="https://doi.org/10.1371/journal.pone.0304404">doi</a></td><td>Network built on GSE38642, GSE41762 used as the T2D validation set</td></tr>
+        <tr><td>Xuan et al. 2025, <i>Front Endocrinol</i> <a href="https://doi.org/10.3389/fendo.2025.1501159">doi</a></td><td>GSE41762 and GSE38642 merged with ComBat into one training set</td></tr>
+        <tr><td>Xin et al. 2026, <i>Clin Exp Med</i> <a href="https://doi.org/10.1007/s10238-026-02211-6">doi</a></td><td>Network built on GSE38642, genes evaluated in both as separate cohorts</td></tr>
+        <tr><td>Li et al. 2016, <i>Pac Symp Biocomput</i> <a href="https://doi.org/10.1142/9789814749411_0035">doi</a></td><td>Full text not available to the screen</td></tr>
+        <tr><td>Liu et al. 2026, preprint <a href="https://doi.org/10.21203/rs.3.rs-10335102/v1">doi</a></td><td>Abstract only; roles unclear</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p class="small">Numbers in sections 2 and 3 come from the repository's result files (<code>results/stage5/08_final_panels.csv</code>, <code>results/stage5/09_validation_results.csv</code>, <code>results/stage3/06b_sensitivity_comparison.csv</code>). Literature counts are searches of Europe PMC run on 12 October 2026 and will change over time.</p>
+</footer>
+
+</main>
+
+</html>
