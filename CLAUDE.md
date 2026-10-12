@@ -14,7 +14,7 @@ Reference documents in this repo:
 
 1. **No feature selection outside a CV fold.** Differential expression, senescence filtering, LASSO, SVM-RFE and Random Forest all run on training folds only. Any script that selects features using the full labelled discovery cohort and then reports CV performance on that same cohort is wrong and must be rejected.
 
-2. **Validation sets are touched exactly once.** GSE76894, GSE20966, GSE71416 and GSE16415 are never used for tuning, threshold selection, model choice, or any decision. They are scored once with a frozen model.
+2. **Validation sets are touched exactly once.** GSE76894, GSE20966, GSE71416, GSE16415 and (from protocol v2.0) GSE76895 are never used for tuning, threshold selection, model choice, or any decision. They are scored once with a frozen model.
 
 3. **Never batch-correct a validation set using training data.** Normalise independently, then apply the frozen model.
 
@@ -26,7 +26,8 @@ Reference documents in this repo:
 
 7. **Never silently change a parameter.** If a threshold has to be relaxed, log the deviation in `logs/deviations.md` with date, reason and the original value.
 
-8. **GSE38642 is not used at all.** Task 2 showed all 63 of its CEL files are byte-identical to GSE41762 arrays (protocol v1.1). Islet validation is GSE76894 (primary) and GSE20966 (secondary).
+8. **GSE38642 is not used in any of this study's own models.** All 63 of its CEL files are byte-identical to GSE41762 arrays (protocol v1.1). Protocol v2.0 allows it in one place only: as the 'validation' set of the common-practice pipeline inside the WP3 leakage demonstration (`docs/Extension_Protocol_v2.md`). Islet validation of our models is GSE76894 (primary), GSE20966 (secondary) and, in WP3 only, GSE76895.
+9. **Extension work (WP1-WP3) follows `docs/Extension_Protocol_v2.md`.** It is registered on OSF before any new dataset's expression values are opened. Each frozen model is scored once on a validation set; a lock file blocks a second scoring.
 
 ## Environment
 
